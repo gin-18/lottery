@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "@catppuccin/tailwindcss": "^0.1.6",
+    "@iconify-json/material-symbols": "^1.2.1",
+    "@iconify/tailwind": "^1.1.3",
     "@vitejs/plugin-vue": "^5.0.5",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",

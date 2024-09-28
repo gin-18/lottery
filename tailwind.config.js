@@ -1,3 +1,5 @@
+const { addDynamicIconSelectors } = require('@iconify/tailwind');
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -8,6 +10,7 @@ export default {
     extend: {},
   },
   plugins: [
+    addDynamicIconSelectors(),
     require("@catppuccin/tailwindcss")({
       prefix: "ctp",
       defaultFlavour: "mocha",

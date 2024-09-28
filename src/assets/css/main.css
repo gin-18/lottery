@@ -1,9 +1,0 @@
-@import './font.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  @apply text-ctp-text font-[zpix] bg-ctp-base
-}
