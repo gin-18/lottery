@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-  @apply text-ctp-text bg-ctp-crust
+  @apply text-ctp-subtext0 bg-ctp-crust
 }
