@@ -4,6 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-#app {
-  font-family: 'zpix';
+body {
+  @apply text-ctp-text font-[zpix] bg-ctp-base
 }

@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+import Header from '@/components/Header.vue'
+</script>
 
 <template>
-  <h1>快乐 8</h1>
-</template>
+  <Header />
 
-<style scoped></style>
+  <main>
+    <RouterView />
+  </main>
+</template>
