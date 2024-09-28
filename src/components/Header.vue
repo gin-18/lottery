@@ -1,10 +1,10 @@
 <script setup>
 import Logo from '@/components/Logo.vue'
-import NavBar from '@/components/nav/NavBar.vue'
+import NavBar from '@/components/NavBar.vue'
 </script>
 
 <template>
-  <div>
+  <div class="flex justify-between items-center p-2 bg-ctp-base">
     <Logo />
     <NavBar />
   </div>
