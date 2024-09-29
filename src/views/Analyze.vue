@@ -4,9 +4,9 @@ import { getDataByNum, getDataByCode } from '@/assets/request.js'
 import SingleTitle from '@/components/analyze/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
 
-const intervalNums = [5, 10, 20]
+// TODO: 设置区域范围
 const intervalNum = ref(10)
-const intervalBallNum = ref([])
+const ballInterval = ref([])
 const currentData = ref({})
 const intervalCategory = [
   {
@@ -29,10 +29,10 @@ const intervalCategory = [
 
 onMounted(() => {
   setCurrentData()
-  intervalBallNum.value = getIntervalBallNum(intervalNum.value)
+  setBallInterval(intervalNum.value)
 })
 
-function getIntervalBallNum(size) {
+function setBallInterval(size) {
   const chunkedArray = [];
   const balls = Array.from({ length: 80 }, (_, index) => {
     const paddedIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
@@ -43,12 +43,12 @@ function getIntervalBallNum(size) {
     chunkedArray.push(balls.slice(i, i + size));
   }
 
-  return chunkedArray;
+  ballInterval.value = chunkedArray
 }
 
 function setHotBallBackgroundColor(num) {
   const isHot = checkBall(num)
-  return isHot ? 'bg-ctp-red' : 'bg-ctp-surface2'
+  return isHot ? 'bg-ctp-red' : 'bg-ctp-overlay0'
 }
 
 function checkBall(num) {
@@ -87,16 +87,17 @@ async function setCurrentData(code = 0) {
         <p class="text-ctp-overlay2">{{ currentData.day }}</p>
       </div>
 
-      <table class="border-collapse border border-ctp-surface1">
+      <table>
         <thead>
           <tr>
-            <th>区域</th>
-            <th>号码</th>
+            <th class="border-r border-ctp-surface1" scope="col">区域</th>
+            <th scope="col">号码</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="num in intervalBallNum" :key="num">
-            <td>{{ num[0] }}-{{ num[num.length - 1] }}</td>
+          <tr v-for="num in ballInterval" :key="num">
+            <th class="border-r border-ctp-surface1" scope="row">{{ num[0] }}-{{ num[num.length - 1] }}</th>
+            <!-- TODO: 设置区域范围 -->
             <td class="flex justify-center gap-1">
               <Ball v-for="n in num" :key="n" :num="n" :bgColor="setHotBallBackgroundColor(n)" />
             </td>
@@ -118,8 +119,15 @@ table {
   @apply border-collapse border border-ctp-surface1
 }
 
-th,
+tr {
+  @apply border-b border-ctp-surface1
+}
+
 td {
-  @apply p-2 border border-ctp-surface1
+  @apply p-2 text-center
+}
+
+th {
+  @apply p-2 font-normal
 }
 </style>

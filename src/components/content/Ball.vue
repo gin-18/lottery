@@ -1,5 +1,5 @@
 <script setup>
-const ballClass = 'flex justify-center items-center w-6 h-6 rounded-full text-xs text-ctp-crust'
+const ballClass = 'flex justify-center items-center w-6 h-6 rounded-full text-xs font-semibold text-ctp-crust'
 const props = defineProps({
   num: [String, Number],
   bgColor: {
