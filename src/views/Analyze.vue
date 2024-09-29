@@ -6,8 +6,8 @@ import Ball from '@/components/content/Ball.vue'
 
 // TODO: 设置区域范围
 const intervalNum = ref(10)
-const ballInterval = ref([])
 const currentData = ref({})
+const ballInterval = ref([])
 const intervalCategory = [
   {
     title: '热',
@@ -63,6 +63,7 @@ function checkBall(num) {
   return isHot
 }
 
+// TODO: 选择当前的期次
 async function setCurrentData(code = 0) {
   const res = await getDataByCode(code)
 
@@ -75,8 +76,8 @@ async function setCurrentData(code = 0) {
 </script>
 
 <template>
-  <main class="p-2">
-    <div class="flex flex-col gap-2">
+  <main class="p-3">
+    <div class="flex flex-col gap-3">
       <div class="flex justify-between">
         <SingleTitle title="区域统计" />
         <span class="icon-[material-symbols--tv-options-input-settings-rounded] text-2xl text-ctp-blue"></span>
@@ -105,7 +106,7 @@ async function setCurrentData(code = 0) {
         </tbody>
       </table>
       <div class="flex justify-around">
-        <div class="flex items-center gap-2" v-for="category in intervalCategory" :key="category.title">
+        <div class="flex items-center gap-3" v-for="category in intervalCategory" :key="category.title">
           <p>{{ category.title }}:</p>
           <p :class="[category.color, 'w-6 h-4 rounded-sm']"></p>
         </div>

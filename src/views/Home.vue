@@ -24,16 +24,16 @@ function changeCode(code) {
 </script>
 
 <template>
-  <main class="p-2">
-    <div class="flex justify-around pt-2 pb-4">
+  <main class="p-3">
+    <div class="flex justify-around pb-6">
       <button :class="[buttonBaseClass, activeCode === code && 'active-code']" v-for="code in codes" :key="code"
         @click="changeCode(code)">
         近{{ code }}期
       </button>
     </div>
 
-    <ul class="flex flex-col gap-2">
-      <li class="flex flex-col gap-6 p-2 rounded-sm bg-ctp-base" v-for="data in dataList" :key="data.code">
+    <ul class="flex flex-col gap-3">
+      <li class="flex flex-col gap-6 p-3 rounded-sm bg-ctp-base" v-for="data in dataList" :key="data.code">
         <div class="flex justify-between">
           <div class="flex gap-4">
             <p class="text-ctp-text">第{{ data.code }}期</p>
@@ -43,7 +43,7 @@ function changeCode(code) {
           <!-- TODO: 跳转分析页面 -->
           <button class="text-ctp-blue">详情</button>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-3">
           <p class="flex justify-between">
             <Ball :num="data.one" />
             <Ball :num="data.two" />
