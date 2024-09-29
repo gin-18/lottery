@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { getData } from '@/assets/request.js'
 import Ball from '@/components/content/Ball.vue'
 
 const codes = [15, 30, 50, 100]
@@ -11,12 +12,9 @@ onMounted(() => {
   setDataList(activeCode.value)
 })
 
-function setDataList(num) {
-  fetch(`http://api.huiniao.top/interface/home/lotteryHistory?type=klb&page=1&limit=${num}`)
-    .then(res => res.json())
-    .then(res => {
-      dataList.value = res.data.data.list
-    })
+async function setDataList(num) {
+  const res = await getData(num)
+  dataList.value = res.data.list
 }
 
 function changeCode(code) {
@@ -42,6 +40,7 @@ function changeCode(code) {
             <p>{{ data.day }}</p>
           </div>
 
+          <!-- TODO: 跳转分析页面 -->
           <button class="text-ctp-blue">详情</button>
         </div>
         <div class="flex flex-col gap-2">
