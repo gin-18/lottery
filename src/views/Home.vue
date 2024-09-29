@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getData } from '@/assets/request.js'
+import { getDataByNum } from '@/assets/request.js'
 import Ball from '@/components/content/Ball.vue'
 
 const codes = [15, 30, 50, 100]
@@ -13,7 +13,7 @@ onMounted(() => {
 })
 
 async function setDataList(num) {
-  const res = await getData(num)
+  const res = await getDataByNum(num)
   dataList.value = res.data.list
 }
 
@@ -37,7 +37,7 @@ function changeCode(code) {
         <div class="flex justify-between">
           <div class="flex gap-4">
             <p class="text-ctp-text">第{{ data.code }}期</p>
-            <p>{{ data.day }}</p>
+            <p class="text-ctp-overlay2">{{ data.day }}</p>
           </div>
 
           <!-- TODO: 跳转分析页面 -->
