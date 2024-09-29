@@ -1,10 +1,11 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import Ball from '@/components/content/Ball.vue'
 
 const codes = [15, 30, 50, 100]
 const activeCode = ref(15)
 const dataList = ref([])
-const buttonBaseClass = 'p-2 border border-ctp-overlay1 rounded-sm text-ctp-overlay1'
+const buttonBaseClass = 'px-2 py-1 border border-ctp-overlay1 rounded-sm text-ctp-overlay1'
 
 onMounted(() => {
   setDataList(activeCode.value)
@@ -43,30 +44,30 @@ function changeCode(code) {
 
           <button class="text-ctp-blue">详情</button>
         </div>
-        <div>
+        <div class="flex flex-col gap-2">
           <p class="flex justify-between">
-            <span>{{ data.one }}</span>
-            <span>{{ data.two }}</span>
-            <span>{{ data.three }}</span>
-            <span>{{ data.four }}</span>
-            <span>{{ data.five }}</span>
-            <span>{{ data.six }}</span>
-            <span>{{ data.seven }}</span>
-            <span>{{ data.eight }}</span>
-            <span>{{ data.nine }}</span>
-            <span>{{ data.ten }}</span>
+            <Ball :num="data.one" />
+            <Ball :num="data.two" />
+            <Ball :num="data.three" />
+            <Ball :num="data.four" />
+            <Ball :num="data.five" />
+            <Ball :num="data.six" />
+            <Ball :num="data.seven" />
+            <Ball :num="data.eight" />
+            <Ball :num="data.nine" />
+            <Ball :num="data.ten" />
           </p>
           <p class="flex justify-between">
-            <span>{{ data.eleven }}</span>
-            <span>{{ data.twelve }}</span>
-            <span>{{ data.thirteen }}</span>
-            <span>{{ data.fourteen }}</span>
-            <span>{{ data.fifteen }}</span>
-            <span>{{ data.sixteen }}</span>
-            <span>{{ data.seventeen }}</span>
-            <span>{{ data.eighteen }}</span>
-            <span>{{ data.nineteen }}</span>
-            <span>{{ data.twenty }}</span>
+            <Ball :num="data.eleven" />
+            <Ball :num="data.twelve" />
+            <Ball :num="data.thirteen" />
+            <Ball :num="data.fourteen" />
+            <Ball :num="data.fifteen" />
+            <Ball :num="data.sixteen" />
+            <Ball :num="data.seventeen" />
+            <Ball :num="data.eighteen" />
+            <Ball :num="data.nineteen" />
+            <Ball :num="data.twenty" />
           </p>
         </div>
       </li>
