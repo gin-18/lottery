@@ -4,38 +4,40 @@ import { getDataByNum, getDataByCode } from '@/assets/request.js'
 import SingleTitle from '@/components/analyze/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
 
-// TODO: 设置区域范围
 const intervalNum = ref(10)
 const currentData = ref({})
-const ballInterval = ref([])
+const intervalArea = ref([])
 const intervalCategory = [
   {
     title: '热',
-    color: 'bg-ctp-mauve',
+    weight: 3,
+    backgroundColor: 'bg-ctp-red',
+    textColor: 'text-ctp-red',
   },
   {
     title: '温',
-    color: 'bg-ctp-yellow',
+    weight: 2,
+    backgroundColor: 'bg-ctp-yellow',
+    textColor: 'text-ctp-yellow',
   },
   {
     title: '冷',
-    color: 'bg-ctp-blue',
-  },
-  {
-    title: '冻',
-    color: 'bg-ctp-lavender',
-  },
+    weight: 0,
+    backgroundColor: 'bg-ctp-sky',
+    textColor: 'text-ctp-sky',
+  }
 ]
 
-onMounted(() => {
-  setCurrentData()
-  setBallInterval(intervalNum.value)
+onMounted(async () => {
+  await setCurrentData()
+  setIntervalAreaColor()
+  setIntervalArea(intervalNum.value)
 })
 
-function setBallInterval(size) {
+function setIntervalArea(size) {
   const chunkedArray = [];
   const balls = Array.from({ length: 80 }, (_, index) => {
-    const paddedIndex = index + 1 < 10 ? `0${index + 1}` : index + 1;
+    const paddedIndex = index + 1 < 10 ? `0${index + 1}` : (index + 1).toString();
     return paddedIndex;
   });
 
@@ -43,24 +45,64 @@ function setBallInterval(size) {
     chunkedArray.push(balls.slice(i, i + size));
   }
 
-  ballInterval.value = chunkedArray
+  intervalArea.value = chunkedArray
 }
 
 function setHotBallBackgroundColor(num) {
   const isHot = checkBall(num)
-  return isHot ? 'bg-ctp-red' : 'bg-ctp-overlay0'
+  return isHot ? 'bg-ctp-maroon' : 'bg-ctp-overlay0'
+}
+
+function setIntervalAreaColor(index) {
+  const ballNum = getBallNumInCurrentData()
+  const countObj = countSubarrays(intervalArea.value, ballNum)
+
+  if (countObj[index] >= intervalCategory[0].weight) {
+    return intervalCategory[0].textColor
+  } else if (countObj[index] >= intervalCategory[1].weight) {
+    return intervalCategory[1].textColor
+  } else {
+    return intervalCategory[2].textColor
+  }
 }
 
 function checkBall(num) {
   let isHot = false
 
   Object.values(currentData.value).forEach(item => {
-    if (item === num.toString()) {
+    if (item === num) {
       isHot = true
     }
   })
 
   return isHot
+}
+
+function countSubarrays(array2D, targetArray) {
+  const countObj = {};
+
+  targetArray.forEach(num => {
+    array2D.forEach((subArray, index) => {
+      if (subArray.includes(num)) {
+        countObj[index] = (countObj[index] || 0) + 1;
+      }
+    });
+  });
+
+  return countObj;
+}
+
+function getBallNumInCurrentData() {
+  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const ballList = []
+
+  Object.keys(currentData.value).forEach(item => {
+    if (numberKey.includes(item)) {
+      ballList.push(currentData.value[item])
+    }
+  })
+
+  return ballList
 }
 
 // TODO: 选择当前的期次
@@ -69,7 +111,7 @@ async function setCurrentData(code = 0) {
 
   if (!code) {
     currentData.value = res.last
-    console.log(res.last)
+    // console.log(res.last)
     return
   }
 }
@@ -96,19 +138,19 @@ async function setCurrentData(code = 0) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="num in ballInterval" :key="num">
-            <th class="border-r border-ctp-surface1" scope="row">{{ num[0] }}-{{ num[num.length - 1] }}</th>
-            <!-- TODO: 设置区域范围 -->
+          <tr v-for="(area, index) in intervalArea" :key="area">
+            <th :class="['border-r border-ctp-surface1', setIntervalAreaColor(index)]" scope="row">{{ area[0] }}-{{
+              area[area.length - 1] }}</th>
             <td class="flex justify-center gap-1">
-              <Ball v-for="n in num" :key="n" :num="n" :bgColor="setHotBallBackgroundColor(n)" />
+              <Ball v-for="num in area" :key="num" :num="num" :bgColor="setHotBallBackgroundColor(num)" />
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-around">
-        <div class="flex items-center gap-3" v-for="category in intervalCategory" :key="category.title">
-          <p>{{ category.title }}:</p>
-          <p :class="[category.color, 'w-6 h-4 rounded-sm']"></p>
+      <div class="flex justify-between">
+        <div class="flex items-center gap-1" v-for="category in intervalCategory" :key="category.title">
+          <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
+          <p :class="['w-6 h-4 rounded-sm', category.backgroundColor]"></p>
         </div>
       </div>
     </div>

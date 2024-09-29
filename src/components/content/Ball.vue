@@ -1,10 +1,10 @@
 <script setup>
 const ballClass = 'flex justify-center items-center w-6 h-6 rounded-full text-xs font-semibold text-ctp-crust'
 const props = defineProps({
-  num: [String, Number],
+  num: String,
   bgColor: {
     type: String,
-    default: 'bg-ctp-red'
+    default: 'bg-ctp-maroon'
   }
 })
 </script>
