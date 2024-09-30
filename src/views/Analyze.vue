@@ -4,9 +4,20 @@ import { getDataByNum, getDataByCode } from '@/assets/request.js'
 import SingleTitle from '@/components/analyze/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
 
-const intervalNum = ref(10)
-const currentData = ref({})
-const intervalArea = ref([])
+const intervalNum = ref(10) // 区间统计的分区范围
+const intervalArea = ref([]) // 区间统计的区间
+
+const repeatCodeNum = ref(3) // 重号统计的期数
+const repeatNum = ref(2) // 重号统计的重号个数
+// TODO: 设置在store中
+const currentData = ref({}) // 当前期次
+
+const repeatArea = ref([]) // 重号统计的区间数据
+const repeatStartCode = ref({}) // 重号统计的开始期次
+const repeatEndCode = ref({}) // 重号统计的结束期次
+const repeatData = ref({}) // 重号统计的数据
+
+// TODO: 设置区间权重
 const intervalCategory = [
   {
     title: '热',
@@ -29,8 +40,9 @@ const intervalCategory = [
 ]
 
 onMounted(async () => {
-  await setCurrentData()
+  await setData(repeatCodeNum.value)
   setIntervalAreaColor()
+  countRepeatBall()
   setIntervalArea(intervalNum.value)
 })
 
@@ -54,7 +66,7 @@ function setHotBallBackgroundColor(num) {
 }
 
 function setIntervalAreaColor(index) {
-  const ballNum = getBallNumInCurrentData()
+  const ballNum = getBallNum(currentData.value)
   const countObj = countSubarrays(intervalArea.value, ballNum)
 
   if (countObj[index] >= intervalCategory[0].weight) {
@@ -92,37 +104,80 @@ function countSubarrays(array2D, targetArray) {
   return countObj;
 }
 
-function getBallNumInCurrentData() {
+function countDuplicates(array) {
+  const countMap = {};
+
+  array.forEach(obj => {
+    obj.list.forEach(item => {
+      if (countMap[item]) {
+        countMap[item].count++;
+        countMap[item].codes.add(obj.code);
+      } else {
+        countMap[item] = { count: 1, codes: new Set([obj.code]) };
+      }
+    });
+  });
+
+  const duplicates = {};
+
+  Object.keys(countMap).forEach(key => {
+    if (countMap[key].count >= repeatNum.value) {
+      const codesArray = Array.from(countMap[key].codes);
+      if (codesArray.length > 1) {
+        duplicates[key] = { count: countMap[key].count, codes: codesArray };
+      }
+    }
+  });
+
+  return duplicates;
+}
+
+function getBallNum(obj) {
   const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
   const ballList = []
 
-  Object.keys(currentData.value).forEach(item => {
+  Object.keys(obj).forEach(item => {
     if (numberKey.includes(item)) {
-      ballList.push(currentData.value[item])
+      ballList.push(obj[item])
     }
   })
 
   return ballList
 }
 
-// TODO: 选择当前的期次
-async function setCurrentData(code = 0) {
-  const res = await getDataByCode(code)
+function countRepeatBall() {
+  const repeatBallList = []
 
-  if (!code) {
-    currentData.value = res.last
-    // console.log(res.last)
-    return
+  for (let i = 0; i < repeatArea.value.length; i++) {
+    const ballList = getBallNum(repeatArea.value[i])
+
+    repeatBallList.push({
+      code: repeatArea.value[i].code,
+      list: ballList
+    })
   }
+
+  const result = countDuplicates(repeatBallList)
+
+  repeatData.value = result
+}
+
+async function setData(num) {
+  const res = await getDataByNum(num)
+
+  currentData.value = res.last
+  repeatArea.value = res.data.list
+  repeatStartCode.value = res.data.list[res.data.list.length - 1]
+  repeatEndCode.value = res.data.list[0]
 }
 </script>
 
 <template>
-  <main class="p-3">
+  <main class="flex flex-col gap-16 p-3">
     <div class="flex flex-col gap-3">
       <div class="flex justify-between">
         <SingleTitle title="区域统计" />
-        <span class="icon-[material-symbols--tv-options-input-settings-rounded] text-2xl text-ctp-blue"></span>
+        <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
       </div>
 
       <div class="flex gap-6">
@@ -147,12 +202,43 @@ async function setCurrentData(code = 0) {
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-between">
-        <div class="flex items-center gap-1" v-for="category in intervalCategory" :key="category.title">
+      <div class="flex justify-around">
+        <div class="flex items-center gap-1 text-sm" v-for="category in intervalCategory" :key="category.title">
           <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
-          <p :class="['w-6 h-4 rounded-sm', category.backgroundColor]"></p>
+          <p :class="['w-5 h-3 rounded-sm', category.backgroundColor]"></p>
         </div>
       </div>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <div class="flex justify-between">
+        <SingleTitle title="重号统计" />
+        <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
+      </div>
+
+      <p class="text-ctp-text">第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="border-r border-ctp-surface1" scope="col">号码</th>
+            <th class="border-r border-ctp-surface1" scope="col">出现次数</th>
+            <th scope="col">出现期次</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="data in Object.keys(repeatData).sort((a, b) => a - b)" :key="data.code">
+            <th align="center" class="border-r border-ctp-surface1" scope="row">
+              <Ball :num="data" />
+            </th>
+            <td class="border-r border-ctp-surface1">{{ repeatData[data].count }}</td>
+            <td>
+              <p v-for="code in repeatData[data].codes" :key="code">{{ code }}</p>
+            </td>
+          </tr>
+        </tbody>
+        <caption class="caption-bottom p-3 text-sm">只统计出现过2次及以上的号码</caption>
+      </table>
     </div>
   </main>
 </template>

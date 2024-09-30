@@ -25,7 +25,7 @@ function changeCode(code) {
 
 <template>
   <main class="p-3">
-    <div class="flex justify-around pb-6">
+    <div class="flex justify-between pb-6">
       <button :class="[buttonBaseClass, activeCode === code && 'active-code']" v-for="code in codes" :key="code"
         @click="changeCode(code)">
         近{{ code }}期

@@ -4,7 +4,7 @@ import NavBar from './NavBar.vue'
 </script>
 
 <template>
-  <div class="flex justify-between items-center p-2 bg-ctp-crust">
+  <div class="flex justify-between items-center px-3 py-5 bg-ctp-crust">
     <Logo />
     <NavBar />
   </div>
