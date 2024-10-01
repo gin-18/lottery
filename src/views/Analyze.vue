@@ -1,8 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDataByNum, getDataByCode } from '@/assets/request.js'
-import SingleTitle from '@/components/analyze/SingleTitle.vue'
+import { getDataByNum, getDataByCode } from '@/assets/js/request.js'
+import { formatDay } from '@/assets/js/formatDay.js'
+import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
+import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
+import Dougnut from '@/components/content/Dougnut.vue'
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
@@ -60,11 +63,6 @@ function setIntervalArea(size) {
   intervalArea.value = chunkedArray
 }
 
-function setHotBallBackgroundColor(num) {
-  const isHot = checkBall(num)
-  return isHot ? 'bg-ctp-maroon' : 'bg-ctp-overlay0'
-}
-
 function setIntervalAreaColor(index) {
   const ballNum = getBallNum(currentData.value)
   const countObj = countSubarrays(intervalArea.value, ballNum)
@@ -78,7 +76,11 @@ function setIntervalAreaColor(index) {
   }
 }
 
-function checkBall(num) {
+function setHotBallBackgroundColor(num) {
+  return checkBallIsHot(num) ? 'bg-ctp-red' : 'bg-ctp-surface0'
+}
+
+function checkBallIsHot(num) {
   let isHot = false
 
   Object.values(currentData.value).forEach(item => {
@@ -90,48 +92,7 @@ function checkBall(num) {
   return isHot
 }
 
-function countSubarrays(array2D, targetArray) {
-  const countObj = {};
-
-  targetArray.forEach(num => {
-    array2D.forEach((subArray, index) => {
-      if (subArray.includes(num)) {
-        countObj[index] = (countObj[index] || 0) + 1;
-      }
-    });
-  });
-
-  return countObj;
-}
-
-function countDuplicates(array) {
-  const countMap = {};
-
-  array.forEach(obj => {
-    obj.list.forEach(item => {
-      if (countMap[item]) {
-        countMap[item].count++;
-        countMap[item].codes.add(obj.code);
-      } else {
-        countMap[item] = { count: 1, codes: new Set([obj.code]) };
-      }
-    });
-  });
-
-  const duplicates = {};
-
-  Object.keys(countMap).forEach(key => {
-    if (countMap[key].count >= repeatNum.value) {
-      const codesArray = Array.from(countMap[key].codes);
-      if (codesArray.length > 1) {
-        duplicates[key] = { count: countMap[key].count, codes: codesArray };
-      }
-    }
-  });
-
-  return duplicates;
-}
-
+// 获取当前期次的号码
 function getBallNum(obj) {
   const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
   const ballList = []
@@ -157,7 +118,7 @@ function countRepeatBall() {
     })
   }
 
-  const result = countDuplicates(repeatBallList)
+  const result = countDuplicates(repeatBallList, repeatNum.value)
 
   repeatData.value = result
 }
@@ -173,16 +134,13 @@ async function setData(num) {
 </script>
 
 <template>
-  <main class="flex flex-col gap-16 p-3">
+  <main class="flex flex-col gap-8 p-3">
     <div class="flex flex-col gap-3">
-      <div class="flex justify-between">
-        <SingleTitle title="区域统计" />
-        <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
-      </div>
+      <SingleTitle title="区域统计" />
 
       <div class="flex gap-6">
         <p class="text-ctp-text">第{{ currentData.code }}期</p>
-        <p class="text-ctp-overlay2">{{ currentData.day }}</p>
+        <p class="text-ctp-overlay2">{{ formatDay(currentData.day) }}</p>
       </div>
 
       <table>
@@ -211,10 +169,7 @@ async function setData(num) {
     </div>
 
     <div class="flex flex-col gap-3">
-      <div class="flex justify-between">
-        <SingleTitle title="重号统计" />
-        <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
-      </div>
+      <SingleTitle title="重号统计" />
 
       <p class="text-ctp-text">第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期</p>
 
@@ -237,8 +192,14 @@ async function setData(num) {
             </td>
           </tr>
         </tbody>
-        <caption class="caption-bottom p-3 text-sm">只统计出现过2次及以上的号码</caption>
+        <caption class="caption-bottom pt-3 text-sm">只统计出现过2次及以上的号码</caption>
       </table>
+    </div>
+
+    <div>
+      <SingleTitle title="号码统计" />
+
+      <Dougnut />
     </div>
   </main>
 </template>
