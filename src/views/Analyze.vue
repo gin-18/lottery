@@ -3,22 +3,28 @@ import { ref, onMounted } from 'vue'
 import { getDataByNum, getDataByCode } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
+import Chart from 'chart.js/auto'
 import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
-import Dougnut from '@/components/content/Dougnut.vue'
+
+// TODO: 设置在store中
+const currentData = ref({}) // 当前期次
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
 
 const repeatCodeNum = ref(3) // 重号统计的期数
 const repeatNum = ref(2) // 重号统计的重号个数
-// TODO: 设置在store中
-const currentData = ref({}) // 当前期次
-
-const repeatArea = ref([]) // 重号统计的区间数据
+const repeatData = ref([]) // 重号统计的区间数据
+const repeatResultData = ref({}) // 重号统计的数据
 const repeatStartCode = ref({}) // 重号统计的开始期次
 const repeatEndCode = ref({}) // 重号统计的结束期次
-const repeatData = ref({}) // 重号统计的数据
+
+const ballCountNum = ref(7)
+const ballCountData = ref([])
+const ballCountStartCode = ref({})
+const ballCountEndCode = ref({})
+const ballResultData = ref([])
 
 // TODO: 设置区间权重
 const intervalCategory = [
@@ -43,10 +49,13 @@ const intervalCategory = [
 ]
 
 onMounted(async () => {
-  await setData(repeatCodeNum.value)
+  const dataNum = ballCountNum.value > repeatCodeNum.value ? ballCountNum.value : repeatCodeNum.value
+  await setData(dataNum)
   setIntervalAreaColor()
-  countRepeatBall()
   setIntervalArea(intervalNum.value)
+  countRepeatBall()
+  countBall()
+  showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -109,27 +118,88 @@ function getBallNum(obj) {
 function countRepeatBall() {
   const repeatBallList = []
 
-  for (let i = 0; i < repeatArea.value.length; i++) {
-    const ballList = getBallNum(repeatArea.value[i])
+  for (let i = 0; i < repeatData.value.length; i++) {
+    const ballList = getBallNum(repeatData.value[i])
 
     repeatBallList.push({
-      code: repeatArea.value[i].code,
+      code: repeatData.value[i].code,
       list: ballList
     })
   }
 
   const result = countDuplicates(repeatBallList, repeatNum.value)
 
-  repeatData.value = result
+  repeatResultData.value = result
+}
+
+function countBall() {
+  const data = new Array(80).fill(null).map((item, index) => ({ num: (index + 1).toString().padStart(2, '0'), count: 0 }));
+  const ballList = ballCountData.value.map(item => getBallNum(item)).flatMap(item => item)
+
+  data.forEach(obj => {
+    obj.count = ballList.filter(item => item === obj.num).length
+  })
+
+  ballResultData.value = data
+}
+
+function showBallCount() {
+  const GRIDCOLOR = '#6c7086'
+  const DATACOLOR = '#89b4fa'
+
+  new Chart(
+    document.getElementById('my-canvas'),
+    {
+      type: 'line',
+      data: {
+        labels: ballResultData.value.map(row => row.num),
+        datasets: [
+          {
+            label: '号码',
+            borderWidth: 2,
+            borderColor: DATACOLOR,
+            pointBackgroundColor: DATACOLOR,
+            data: ballResultData.value.map(row => row.count),
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: {
+            ticks: {
+              color: GRIDCOLOR,
+            },
+            grid: {
+              color: GRIDCOLOR
+            }
+          },
+          y: {
+            ticks: {
+              color: GRIDCOLOR,
+            },
+            grid: {
+              color: GRIDCOLOR
+            },
+          }
+        }
+      }
+    }
+  )
 }
 
 async function setData(num) {
   const res = await getDataByNum(num)
 
   currentData.value = res.last
-  repeatArea.value = res.data.list
-  repeatStartCode.value = res.data.list[res.data.list.length - 1]
+
+  repeatData.value = res.data.list.slice(0, repeatCodeNum.value)
+  repeatStartCode.value = res.data.list[repeatNum.value - 1]
   repeatEndCode.value = res.data.list[0]
+
+  ballCountData.value = res.data.list.slice(0, ballCountNum.value)
+  ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
+  ballCountEndCode.value = res.data.list[0]
 }
 </script>
 
@@ -171,7 +241,7 @@ async function setData(num) {
     <div class="flex flex-col gap-3">
       <SingleTitle title="重号统计" />
 
-      <p class="text-ctp-text">第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期</p>
+      <p class="text-ctp-text">第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
 
       <table>
         <thead>
@@ -182,24 +252,26 @@ async function setData(num) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="data in Object.keys(repeatData).sort((a, b) => a - b)" :key="data.code">
+          <tr v-for="data in Object.keys(repeatResultData).sort((a, b) => a - b)" :key="data.code">
             <th align="center" class="border-r border-ctp-surface1" scope="row">
               <Ball :num="data" />
             </th>
-            <td class="border-r border-ctp-surface1">{{ repeatData[data].count }}</td>
+            <td class="border-r border-ctp-surface1">{{ repeatResultData[data].count }}</td>
             <td>
-              <p v-for="code in repeatData[data].codes" :key="code">{{ code }}</p>
+              <p v-for="code in repeatResultData[data].codes" :key="code">{{ code }}</p>
             </td>
           </tr>
         </tbody>
-        <caption class="caption-bottom pt-3 text-sm">只统计出现过2次及以上的号码</caption>
+        <caption class="caption-bottom pt-3 text-sm">只统计出现过{{ repeatNum }}次及以上的号码</caption>
       </table>
     </div>
 
-    <div>
+    <div class="flex flex-col gap-3">
       <SingleTitle title="号码统计" />
 
-      <Dougnut />
+      <p class="text-ctp-text">第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
+
+      <canvas id="my-canvas" height="420vh" width="100vw"></canvas>
     </div>
   </main>
 </template>
