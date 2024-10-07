@@ -42,7 +42,7 @@ function changeCode(code) {
           </div>
 
           <!-- TODO: 跳转分析页面 -->
-          <button class="text-ctp-blue">详情</button>
+          <!-- <button class="text-ctp-blue">详情</button> -->
         </div>
         <div class="flex flex-col gap-3">
           <p class="flex justify-between">

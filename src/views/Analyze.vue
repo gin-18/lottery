@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useAnalyzeStore } from '@/stores/analyze.js'
 import { getDataByNum, getDataByCode } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
+import Setting from '@/components/analyze/Setting.vue'
+
+const analyze = useAnalyzeStore()
 
 // TODO: 设置在store中
 const currentData = ref({}) // 当前期次
@@ -143,6 +147,10 @@ function countBall() {
   ballResultData.value = data
 }
 
+function toggleSetting() {
+  console.log('show setting')
+}
+
 function showBallCount() {
   const GRIDCOLOR = '#6c7086'
   const DATACOLOR = '#89b4fa'
@@ -206,7 +214,12 @@ async function setData(num) {
 <template>
   <main class="flex flex-col gap-8 p-3">
     <div class="flex flex-col gap-3">
-      <SingleTitle title="区域统计" />
+      <div class="flex justify-between items-center">
+        <SingleTitle title="区域统计" />
+        <button class="flex justify-center items-center" @click="toggleSetting">
+          <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
+        </button>
+      </div>
 
       <div class="flex gap-6">
         <p class="text-ctp-text">第{{ currentData.code }}期</p>
@@ -273,6 +286,9 @@ async function setData(num) {
 
       <canvas id="my-canvas" height="420vh" width="100vw"></canvas>
     </div>
+
+
+    <Setting />
   </main>
 </template>
 
