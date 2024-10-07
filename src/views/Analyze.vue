@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia';
 import { useAnalyzeStore } from '@/stores/analyze.js'
 import { getDataByNum, getDataByCode } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
@@ -10,6 +11,7 @@ import Ball from '@/components/content/Ball.vue'
 import Setting from '@/components/analyze/Setting.vue'
 
 const analyze = useAnalyzeStore()
+const { showAnalyzeSetting } = storeToRefs(analyze)
 
 // TODO: 设置在store中
 const currentData = ref({}) // 当前期次
@@ -148,7 +150,7 @@ function countBall() {
 }
 
 function toggleSetting() {
-  console.log('show setting')
+  showAnalyzeSetting.value = !showAnalyzeSetting.value
 }
 
 function showBallCount() {
