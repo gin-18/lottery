@@ -1,16 +1,19 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { usePaletteStore } from '@/stores/palette.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import Ball from '@/components/content/Ball.vue'
 
+const { activeColor } = storeToRefs(usePaletteStore())
+
 const codes = [15, 30, 50, 100]
-const activeCode = ref(15)
+const activeCodeButton = ref(15)
 const dataList = ref([])
-const buttonBaseClass = 'px-2 py-1 border border-ctp-overlay1 rounded-sm text-ctp-overlay1'
 
 onMounted(() => {
-  setDataList(activeCode.value)
+  setDataList(activeCodeButton.value)
 })
 
 async function setDataList(num) {
@@ -19,7 +22,7 @@ async function setDataList(num) {
 }
 
 function changeCode(code) {
-  activeCode.value = code
+  activeCodeButton.value = code
   setDataList(code)
 }
 </script>
@@ -27,10 +30,10 @@ function changeCode(code) {
 <template>
   <main class="p-3">
     <div class="flex justify-between pb-6">
-      <button :class="[buttonBaseClass, activeCode === code && 'active-code']" v-for="code in codes" :key="code"
-        @click="changeCode(code)">
+      <v-btn v-for="code in codes" :key="code" variant="outlined" :active="activeCodeButton === code"
+        :active-color="activeColor" @click="changeCode(code)">
         近{{ code }}期
-      </button>
+      </v-btn>
     </div>
 
     <ul class="flex flex-col gap-3">

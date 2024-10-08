@@ -1,17 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useAnalyzeStore } from '@/stores/analyze.js'
-import { getDataByNum, getDataByCode } from '@/assets/js/request.js'
+import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
-import Setting from '@/components/analyze/Setting.vue'
-
-const analyze = useAnalyzeStore()
-const { showAnalyzeSetting } = storeToRefs(analyze)
 
 // TODO: 设置在store中
 const currentData = ref({}) // 当前期次
@@ -19,7 +13,7 @@ const currentData = ref({}) // 当前期次
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
 
-const repeatCodeNum = ref(3) // 重号统计的期数
+const repeatCodeNum = ref(2) // 重号统计的期数
 const repeatNum = ref(2) // 重号统计的重号个数
 const repeatData = ref([]) // 重号统计的区间数据
 const repeatResultData = ref({}) // 重号统计的数据
@@ -149,10 +143,6 @@ function countBall() {
   ballResultData.value = data
 }
 
-function toggleSetting() {
-  showAnalyzeSetting.value = !showAnalyzeSetting.value
-}
-
 function showBallCount() {
   const GRIDCOLOR = '#6c7086'
   const DATACOLOR = '#89b4fa'
@@ -218,7 +208,7 @@ async function setData(num) {
     <div class="flex flex-col gap-3">
       <div class="flex justify-between items-center">
         <SingleTitle title="区域统计" />
-        <button class="flex justify-center items-center" @click="toggleSetting">
+        <button class="flex justify-center items-center">
           <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
         </button>
       </div>
@@ -288,9 +278,6 @@ async function setData(num) {
 
       <canvas id="my-canvas" height="420vh" width="100vw"></canvas>
     </div>
-
-
-    <Setting />
   </main>
 </template>
 

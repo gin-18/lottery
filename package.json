@@ -11,8 +11,10 @@
   "dependencies": {
     "chart.js": "^4.4.4",
     "pinia": "^2.2.2",
+    "vite-plugin-vuetify": "^2.0.4",
     "vue": "^3.4.29",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vuetify": "^3.7.2"
   },
   "devDependencies": {
     "@catppuccin/tailwindcss": "^0.1.6",
