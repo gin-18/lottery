@@ -1,14 +1,20 @@
 <script setup>
-const ballClass = 'flex justify-center items-center w-6 h-6 rounded-full text-xs font-semibold text-ctp-crust'
 const props = defineProps({
   num: String,
-  bgColor: {
+  color: {
     type: String,
-    default: 'bg-ctp-maroon'
+    default: 'bg-red-lighten-1'
   }
 })
 </script>
 
 <template>
-  <p :class="[ballClass, bgColor]">{{ num }}</p>
+  <p class="d-flex justify-center align-center rounded-circle text-overline" :class="color">{{ num }}</p>
 </template>
+
+<style scoped>
+p {
+  width: 26px;
+  height: 26px;
+}
+</style>

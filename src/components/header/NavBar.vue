@@ -1,33 +1,28 @@
 <script setup>
-const navItems = [
+const items = [
   {
-    name: 'Home',
+    name: 'LIST',
     path: '/',
-    icon: 'icon-[material-symbols--list-alt-rounded]'
+    icon: 'subject',
   },
   {
-    name: 'Analyze',
+    name: 'ANALYZE',
     path: '/analyze',
-    icon: 'icon-[material-symbols--analytics-rounded]'
+    icon: 'equalizer',
   }
 ]
 </script>
 
 <template>
-  <nav class="flex gap-4">
-    <RouterLink class="flex justify-center items-center text-ctp-overlay1" activeClass="link-active"
-      v-for="item in navItems" :key="item.name" :to="item.path">
-      <span :class="item.icon"></span>
+  <nav class="d-flex ga-2">
+    <RouterLink class="text-black" activeClass="link-active" v-for="item in items" :key="item.name" :to="item.path">
+      <v-icon :icon="item.icon" />
     </RouterLink>
   </nav>
 </template>
 
 <style scoped>
-span {
-  @apply text-2xl
-}
-
 .link-active {
-  @apply text-ctp-text
+  color: red !important;
 }
 </style>

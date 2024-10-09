@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
-  <h1 class="icon-[material-symbols--counter-8-outline] text-5xl"></h1>
+  <h1 class="text-h4">快乐8</h1>
 </template>

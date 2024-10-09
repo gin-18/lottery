@@ -28,27 +28,27 @@ function changeCode(code) {
 </script>
 
 <template>
-  <main class="p-3">
-    <div class="flex justify-between pb-6">
+  <main class="px-2 pb-2">
+    <div class="d-flex justify-space-between">
       <v-btn v-for="code in codes" :key="code" variant="outlined" :active="activeCodeButton === code"
-        :active-color="activeColor" @click="changeCode(code)">
+        @click="changeCode(code)">
         近{{ code }}期
       </v-btn>
     </div>
 
-    <ul class="flex flex-col gap-3">
-      <li class="flex flex-col gap-6 p-3 rounded-sm bg-ctp-base" v-for="data in dataList" :key="data.code">
-        <div class="flex justify-between">
-          <div class="flex gap-4">
-            <p class="text-ctp-text">第{{ data.code }}期</p>
-            <p class="text-ctp-overlay2">{{ formatDay(data.day) }}</p>
+    <ul>
+      <li v-for="data in dataList" :key="data.code">
+        <div>
+          <div>
+            <p>第{{ data.code }}期</p>
+            <p>{{ formatDay(data.day) }}</p>
           </div>
 
           <!-- TODO: 跳转分析页面 -->
           <!-- <button class="text-ctp-blue">详情</button> -->
         </div>
-        <div class="flex flex-col gap-3">
-          <p class="flex justify-between">
+        <div>
+          <p>
             <Ball :num="data.one" />
             <Ball :num="data.two" />
             <Ball :num="data.three" />
@@ -60,7 +60,7 @@ function changeCode(code) {
             <Ball :num="data.nine" />
             <Ball :num="data.ten" />
           </p>
-          <p class="flex justify-between">
+          <p>
             <Ball :num="data.eleven" />
             <Ball :num="data.twelve" />
             <Ball :num="data.thirteen" />
@@ -77,9 +77,3 @@ function changeCode(code) {
     </ul>
   </main>
 </template>
-
-<style scoped>
-.active-code {
-  @apply border-ctp-blue text-ctp-blue
-}
-</style>

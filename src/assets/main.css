@@ -1,7 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-body {
-  @apply text-ctp-subtext0 bg-ctp-crust
-}

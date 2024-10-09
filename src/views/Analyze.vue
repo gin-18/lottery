@@ -204,97 +204,79 @@ async function setData(num) {
 </script>
 
 <template>
-  <main class="flex flex-col gap-8 p-3">
-    <div class="flex flex-col gap-3">
-      <div class="flex justify-between items-center">
+  <main>
+    <div>
+      <div>
         <SingleTitle title="区域统计" />
-        <button class="flex justify-center items-center">
-          <span class="icon-[material-symbols--settings-rounded] text-xl"></span>
+        <button>
+          <span class="icon-[material-symbols--settings-rounded]"></span>
         </button>
       </div>
 
-      <div class="flex gap-6">
-        <p class="text-ctp-text">第{{ currentData.code }}期</p>
-        <p class="text-ctp-overlay2">{{ formatDay(currentData.day) }}</p>
+      <div>
+        <p>第{{ currentData.code }}期</p>
+        <p>{{ formatDay(currentData.day) }}</p>
       </div>
 
       <table>
         <thead>
           <tr>
-            <th class="border-r border-ctp-surface1" scope="col">区域</th>
+            <th scope="col">区域</th>
             <th scope="col">号码</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(area, index) in intervalArea" :key="area">
-            <th :class="['border-r border-ctp-surface1', setIntervalAreaColor(index)]" scope="row">{{ area[0] }}-{{
+            <th scope="row">{{ area[0] }}-{{
               area[area.length - 1] }}</th>
-            <td class="flex justify-center gap-1">
+            <td>
               <Ball v-for="num in area" :key="num" :num="num" :bgColor="setHotBallBackgroundColor(num)" />
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="flex justify-around">
-        <div class="flex items-center gap-1 text-sm" v-for="category in intervalCategory" :key="category.title">
+      <div>
+        <div v-for="category in intervalCategory" :key="category.title">
           <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
-          <p :class="['w-5 h-3 rounded-sm', category.backgroundColor]"></p>
+          <p>color</p>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div>
       <SingleTitle title="重号统计" />
 
-      <p class="text-ctp-text">第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
+      <p>第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
 
       <table>
         <thead>
           <tr>
-            <th class="border-r border-ctp-surface1" scope="col">号码</th>
-            <th class="border-r border-ctp-surface1" scope="col">出现次数</th>
+            <th scope="col">号码</th>
+            <th scope="col">出现次数</th>
             <th scope="col">出现期次</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="data in Object.keys(repeatResultData).sort((a, b) => a - b)" :key="data.code">
-            <th align="center" class="border-r border-ctp-surface1" scope="row">
+            <th scope="row">
               <Ball :num="data" />
             </th>
-            <td class="border-r border-ctp-surface1">{{ repeatResultData[data].count }}</td>
+            <td>{{ repeatResultData[data].count }}</td>
             <td>
               <p v-for="code in repeatResultData[data].codes" :key="code">{{ code }}</p>
             </td>
           </tr>
         </tbody>
-        <caption class="caption-bottom pt-3 text-sm">只统计出现过{{ repeatNum }}次及以上的号码</caption>
+        <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
       </table>
     </div>
 
-    <div class="flex flex-col gap-3">
+    <div>
       <SingleTitle title="号码统计" />
 
-      <p class="text-ctp-text">第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
+      <p>第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
 
       <canvas id="my-canvas" height="420vh" width="100vw"></canvas>
     </div>
   </main>
 </template>
-
-<style scoped>
-table {
-  @apply border-collapse border border-ctp-surface1
-}
-
-tr {
-  @apply border-b border-ctp-surface1
-}
-
-td {
-  @apply p-2 text-center
-}
-
-th {
-  @apply p-2 font-normal
-}
-</style>
