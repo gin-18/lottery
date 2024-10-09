@@ -1,13 +1,16 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useThemeStore } from '@/stores/theme.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
-import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
 
-const tab = ref()
+const { isDark } = storeToRefs(useThemeStore())
+
+const tab = ref(null)
 // TODO: 设置在store中
 const currentData = ref({}) // 当前期次
 
@@ -87,7 +90,13 @@ function setIntervalAreaColor(index) {
 }
 
 function setHotBallBackgroundColor(num) {
-  return checkBallIsHot(num) ? 'bg-red-lighten-1' : 'bg-grey-lighten-1'
+  let ballNotHotColor = 'bg-blue-grey-lighten-4'
+
+  if (isDark.value) {
+    ballNotHotColor = 'bg-blue-grey-lighten-2'
+  }
+
+  return checkBallIsHot(num) ? 'bg-red-lighten-1' : ballNotHotColor
 }
 
 function checkBallIsHot(num) {
@@ -144,49 +153,49 @@ function countBall() {
   ballResultData.value = data
 }
 
+// TODO: set color for dark mode
 function showBallCount() {
-  const GRIDCOLOR = '#6c7086'
-  const DATACOLOR = '#89b4fa'
+  const GRIDCOLOR = '#000000'
+  const DATACOLOR = '#3f51b5'
 
   new Chart(
-    document.getElementById('my-canvas'),
-    {
-      type: 'line',
-      data: {
-        labels: ballResultData.value.map(row => row.num),
-        datasets: [
-          {
-            label: '号码',
-            borderWidth: 2,
-            borderColor: DATACOLOR,
-            pointBackgroundColor: DATACOLOR,
-            data: ballResultData.value.map(row => row.count),
-          }
-        ]
-      },
-      options: {
-        indexAxis: 'y',
-        scales: {
-          x: {
-            ticks: {
-              color: GRIDCOLOR,
-            },
-            grid: {
-              color: GRIDCOLOR
-            }
+    document.getElementById('my-canvas'), {
+    type: 'line',
+    data: {
+      labels: ballResultData.value.map(row => row.num),
+      datasets: [
+        {
+          label: '号码',
+          borderWidth: 2,
+          borderColor: DATACOLOR,
+          backgroundColor: DATACOLOR,
+          pointBackgroundColor: DATACOLOR,
+          data: ballResultData.value.map(row => row.count),
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: {
+          ticks: {
+            color: GRIDCOLOR
           },
-          y: {
-            ticks: {
-              color: GRIDCOLOR,
-            },
-            grid: {
-              color: GRIDCOLOR
-            },
+          grid: {
+            color: GRIDCOLOR
           }
+        },
+        y: {
+          ticks: {
+            color: GRIDCOLOR
+          },
+          grid: {
+            color: GRIDCOLOR
+          },
         }
       }
     }
-  )
+  })
 }
 
 async function setData(num) {
@@ -208,14 +217,22 @@ async function setData(num) {
   <main class="px-2 pb-2">
     <v-card>
       <v-tabs align-tabs="center" v-model="tab">
-        <v-tab value="one">区域分析</v-tab>
-        <v-tab value="two">重号分析</v-tab>
-        <v-tab value="three">号码分析</v-tab>
+        <v-tab value="one">号码分析</v-tab>
+        <v-tab value="two">区域分析</v-tab>
+        <v-tab value="three">重号分析</v-tab>
       </v-tabs>
 
       <v-card-text class="px-2 py-3">
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="one">
+            <div>
+              <p>第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
+              <canvas id="my-canvas" width="100vw" height="600vh"></canvas>
+            </div>
+          </v-tabs-window-item>
+
+
+          <v-tabs-window-item value="two">
             <div class="d-flex justify-space-between">
               <v-icon icon="keyboard_arrow_left"></v-icon>
               <div class="d-flex ga-6">
@@ -252,12 +269,10 @@ async function setData(num) {
             </div>
           </v-tabs-window-item>
 
-          <v-tabs-window-item value="two">
-            <SingleTitle title="重号统计" />
-
+          <v-tabs-window-item value="three">
             <p>第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
 
-            <table>
+            <v-table>
               <thead>
                 <tr>
                   <th scope="col">号码</th>
@@ -277,24 +292,11 @@ async function setData(num) {
                 </tr>
               </tbody>
               <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
-            </table>
-          </v-tabs-window-item>
-
-          <v-tabs-window-item value="three">
-            Three
+            </v-table>
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>
     </v-card>
-
-
-    <div>
-      <SingleTitle title="号码统计" />
-
-      <p>第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
-
-      <canvas id="my-canvas" height="420vh" width="100vw"></canvas>
-    </div>
   </main>
 </template>
 
@@ -302,5 +304,9 @@ async function setData(num) {
 .area-color-box {
   width: 18px;
   height: 18px;
+}
+
+caption {
+  caption-side: bottom;
 }
 </style>
