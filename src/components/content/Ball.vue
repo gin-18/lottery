@@ -3,7 +3,7 @@ const props = defineProps({
   num: String,
   color: {
     type: String,
-    default: 'bg-red-lighten-1'
+    default: 'bg-ball-hot'
   }
 })
 </script>

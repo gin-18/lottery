@@ -31,8 +31,8 @@ function toggleTheme() {
 </script>
 
 <template>
-  <nav class="d-flex justify-center align-center ga-2">
-    <RouterLink activeClass="link-active" v-for="item in items" :key="item.name" :to="item.path">
+  <nav class="d-flex justify-center align-center ga-4">
+    <RouterLink class="text-text" activeClass="link-active" v-for="item in items" :key="item.name" :to="item.path">
       <v-icon :icon="item.icon" />
     </RouterLink>
 
@@ -40,8 +40,9 @@ function toggleTheme() {
   </nav>
 </template>
 
+<!-- TODO: set active color for link -->
 <style scoped>
 .link-active {
-  color: red !important;
+  color: #f38ba8 !important;
 }
 </style>
