@@ -1,13 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { usePaletteStore } from '@/stores/palette.js'
+import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import Ball from '@/components/content/Ball.vue'
 
-const { activeColor } = storeToRefs(usePaletteStore())
-
+const { mode } = storeToRefs(useAppStore())
 const codes = [15, 30, 50, 100]
 const activeCodeButton = ref(15)
 const dataList = ref([])
@@ -29,50 +28,52 @@ function changeCode(code) {
 
 <template>
   <main class="px-2 pb-2">
-    <div class="d-flex justify-space-between">
+    <div class="d-flex justify-space-between py-2">
       <v-btn v-for="code in codes" :key="code" variant="outlined" :active="activeCodeButton === code"
         @click="changeCode(code)">
         近{{ code }}期
       </v-btn>
     </div>
 
-    <ul>
+    <ul class="d-flex flex-column ga-2">
       <li v-for="data in dataList" :key="data.code">
-        <div>
-          <div>
-            <p>第{{ data.code }}期</p>
-            <p>{{ formatDay(data.day) }}</p>
-          </div>
+        <v-card class="pa-2" :theme="mode">
+          <div class="mb-2">
+            <div class="d-flex ga-6">
+              <p>第{{ data.code }}期</p>
+              <p>{{ formatDay(data.day) }}</p>
+            </div>
 
-          <!-- TODO: 跳转分析页面 -->
-          <!-- <button class="text-ctp-blue">详情</button> -->
-        </div>
-        <div>
-          <p>
-            <Ball :num="data.one" />
-            <Ball :num="data.two" />
-            <Ball :num="data.three" />
-            <Ball :num="data.four" />
-            <Ball :num="data.five" />
-            <Ball :num="data.six" />
-            <Ball :num="data.seven" />
-            <Ball :num="data.eight" />
-            <Ball :num="data.nine" />
-            <Ball :num="data.ten" />
-          </p>
-          <p>
-            <Ball :num="data.eleven" />
-            <Ball :num="data.twelve" />
-            <Ball :num="data.thirteen" />
-            <Ball :num="data.fourteen" />
-            <Ball :num="data.fifteen" />
-            <Ball :num="data.sixteen" />
-            <Ball :num="data.seventeen" />
-            <Ball :num="data.eighteen" />
-            <Ball :num="data.nineteen" />
-            <Ball :num="data.twenty" />
-          </p>
-        </div>
+            <!-- TODO: 跳转分析页面 -->
+            <!-- <button>详情</button> -->
+          </div>
+          <div class="d-flex flex-column ga-2">
+            <p class="d-flex justify-space-between">
+              <Ball :num="data.one" />
+              <Ball :num="data.two" />
+              <Ball :num="data.three" />
+              <Ball :num="data.four" />
+              <Ball :num="data.five" />
+              <Ball :num="data.six" />
+              <Ball :num="data.seven" />
+              <Ball :num="data.eight" />
+              <Ball :num="data.nine" />
+              <Ball :num="data.ten" />
+            </p>
+            <p class="d-flex justify-space-between">
+              <Ball :num="data.eleven" />
+              <Ball :num="data.twelve" />
+              <Ball :num="data.thirteen" />
+              <Ball :num="data.fourteen" />
+              <Ball :num="data.fifteen" />
+              <Ball :num="data.sixteen" />
+              <Ball :num="data.seventeen" />
+              <Ball :num="data.eighteen" />
+              <Ball :num="data.nineteen" />
+              <Ball :num="data.twenty" />
+            </p>
+          </div>
+        </v-card>
       </li>
     </ul>
   </main>

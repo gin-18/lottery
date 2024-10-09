@@ -9,12 +9,12 @@ const props = defineProps({
 </script>
 
 <template>
-  <p class="d-flex justify-center align-center rounded-circle text-overline" :class="color">{{ num }}</p>
+  <p class="d-flex justify-center align-center rounded-circle" :class="color">{{ num }}</p>
 </template>
 
 <style scoped>
 p {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 </style>
