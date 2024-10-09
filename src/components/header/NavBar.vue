@@ -1,10 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useAppStore } from '@/stores/app';
 import { useTheme } from 'vuetify'
 
-const { mode } = storeToRefs(useAppStore())
 const theme = useTheme()
 const modeIcon = ref('light_mode')
 const items = [
@@ -25,7 +22,6 @@ function toggleTheme() {
   const darkIcon = 'dark_mode'
 
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-  mode.value = theme.global.current.value.dark ? 'dark' : 'light'
   modeIcon.value = theme.global.current.value.dark ? darkIcon : lightIcon
 }
 </script>

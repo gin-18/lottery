@@ -1,12 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import Ball from '@/components/content/Ball.vue'
 
-const { mode } = storeToRefs(useAppStore())
 const codes = [15, 30, 50, 100]
 const activeCodeButton = ref(15)
 const dataList = ref([])
@@ -37,7 +34,7 @@ function changeCode(code) {
 
     <ul class="d-flex flex-column ga-2">
       <li v-for="data in dataList" :key="data.code">
-        <v-card class="pa-2" :theme="mode">
+        <v-card class="pa-2">
           <div class="mb-2">
             <div class="d-flex ga-6">
               <p>第{{ data.code }}期</p>

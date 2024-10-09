@@ -7,6 +7,7 @@ import Chart from 'chart.js/auto'
 import SingleTitle from '@/components/content/SingleTitle.vue'
 import Ball from '@/components/content/Ball.vue'
 
+const tab = ref()
 // TODO: 设置在store中
 const currentData = ref({}) // 当前期次
 
@@ -31,20 +32,20 @@ const intervalCategory = [
   {
     title: '热',
     weight: 3,
-    backgroundColor: 'bg-ctp-red',
-    textColor: 'text-ctp-red',
+    backgroundColor: 'bg-red',
+    textColor: 'text-red',
   },
   {
     title: '温',
     weight: 2,
-    backgroundColor: 'bg-ctp-yellow',
-    textColor: 'text-ctp-yellow',
+    backgroundColor: 'bg-amber',
+    textColor: 'text-amber',
   },
   {
     title: '冷',
     weight: 0,
-    backgroundColor: 'bg-ctp-sky',
-    textColor: 'text-ctp-sky',
+    backgroundColor: 'bg-indigo',
+    textColor: 'text-indigo',
   }
 ]
 
@@ -86,7 +87,7 @@ function setIntervalAreaColor(index) {
 }
 
 function setHotBallBackgroundColor(num) {
-  return checkBallIsHot(num) ? 'bg-ctp-red' : 'bg-ctp-surface0'
+  return checkBallIsHot(num) ? 'bg-red-lighten-1' : 'bg-grey-lighten-1'
 }
 
 function checkBallIsHot(num) {
@@ -204,72 +205,88 @@ async function setData(num) {
 </script>
 
 <template>
-  <main>
-    <div>
-      <div>
-        <SingleTitle title="区域统计" />
-        <button>
-          <span class="icon-[material-symbols--settings-rounded]"></span>
-        </button>
-      </div>
+  <main class="px-2 pb-2">
+    <v-card>
+      <v-tabs align-tabs="center" v-model="tab">
+        <v-tab value="one">区域分析</v-tab>
+        <v-tab value="two">重号分析</v-tab>
+        <v-tab value="three">号码分析</v-tab>
+      </v-tabs>
 
-      <div>
-        <p>第{{ currentData.code }}期</p>
-        <p>{{ formatDay(currentData.day) }}</p>
-      </div>
+      <v-card-text class="px-2 py-3">
+        <v-tabs-window v-model="tab">
+          <v-tabs-window-item value="one">
+            <div class="d-flex justify-space-between">
+              <v-icon icon="keyboard_arrow_left"></v-icon>
+              <div class="d-flex ga-6">
+                <p>第{{ currentData.code }}期</p>
+                <p>{{ formatDay(currentData.day) }}</p>
+              </div>
+              <v-icon icon="keyboard_arrow_right"></v-icon>
+            </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">区域</th>
-            <th scope="col">号码</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(area, index) in intervalArea" :key="area">
-            <th scope="row">{{ area[0] }}-{{
-              area[area.length - 1] }}</th>
-            <td>
-              <Ball v-for="num in area" :key="num" :num="num" :bgColor="setHotBallBackgroundColor(num)" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div>
-        <div v-for="category in intervalCategory" :key="category.title">
-          <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
-          <p>color</p>
-        </div>
-      </div>
-    </div>
+            <v-table>
+              <thead>
+                <tr>
+                  <th scope="col">区域</th>
+                  <th scope="col">号码</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(area, index) in intervalArea" :key="area">
+                  <td :class="setIntervalAreaColor(index)">
+                    [{{ area[0] }},{{ area[area.length - 1] }}]
+                  </td>
+                  <td class="d-flex align-center ga-1">
+                    <Ball v-for="num in area" :key="num" :num="num" :color="setHotBallBackgroundColor(num)" />
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
 
-    <div>
-      <SingleTitle title="重号统计" />
+            <div class="d-flex justify-space-around">
+              <div class="d-flex ga-2" v-for="category in intervalCategory" :key="category.title">
+                <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
+                <p class="rounded area-color-box" :class="category.backgroundColor"></p>
+              </div>
+            </div>
+          </v-tabs-window-item>
 
-      <p>第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
+          <v-tabs-window-item value="two">
+            <SingleTitle title="重号统计" />
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">号码</th>
-            <th scope="col">出现次数</th>
-            <th scope="col">出现期次</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="data in Object.keys(repeatResultData).sort((a, b) => a - b)" :key="data.code">
-            <th scope="row">
-              <Ball :num="data" />
-            </th>
-            <td>{{ repeatResultData[data].count }}</td>
-            <td>
-              <p v-for="code in repeatResultData[data].codes" :key="code">{{ code }}</p>
-            </td>
-          </tr>
-        </tbody>
-        <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
-      </table>
-    </div>
+            <p>第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">号码</th>
+                  <th scope="col">出现次数</th>
+                  <th scope="col">出现期次</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="data in Object.keys(repeatResultData).sort((a, b) => a - b)" :key="data.code">
+                  <th scope="row">
+                    <Ball :num="data" />
+                  </th>
+                  <td>{{ repeatResultData[data].count }}</td>
+                  <td>
+                    <p v-for="code in repeatResultData[data].codes" :key="code">{{ code }}</p>
+                  </td>
+                </tr>
+              </tbody>
+              <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
+            </table>
+          </v-tabs-window-item>
+
+          <v-tabs-window-item value="three">
+            Three
+          </v-tabs-window-item>
+        </v-tabs-window>
+      </v-card-text>
+    </v-card>
+
 
     <div>
       <SingleTitle title="号码统计" />
@@ -280,3 +297,10 @@ async function setData(num) {
     </div>
   </main>
 </template>
+
+<style scoped>
+.area-color-box {
+  width: 18px;
+  height: 18px;
+}
+</style>
