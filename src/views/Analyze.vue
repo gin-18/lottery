@@ -4,20 +4,21 @@ import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
+import { paletteLight, paletteDark } from '@/assets/js/palette.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
 const { isDark } = storeToRefs(useAppStore())
 
-const tab = ref(null)
+const tab = ref(null) // 选项卡
 
-let chart = null
-const LIGHT_GRID_COLOR = '#5c5f77'
-const LIGHT_DATA_COLOR = '#1e66f5'
+let chart = null // 图表实例
+const LIGHT_GRID_COLOR = paletteLight.border // 亮色模式网格颜色
+const LIGHT_DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 
-const DARK_GRID_COLOR = '#bac2de'
-const DARK_DATA_COLOR = '#89b4fa'
+const DARK_GRID_COLOR = paletteDark.border // 暗色模式网格颜色
+const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 
 const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
@@ -35,10 +36,12 @@ const repeatData = ref([]) // 重号统计的区间数据
 const repeatResultData = ref({}) // 重号统计的数据
 const repeatStartCode = ref({}) // 重号统计的开始期次
 
-const ballCountNum = ref(7)
-const ballCountData = ref([])
-const ballCountStartCode = ref({})
-const ballResultData = ref([])
+const ballCountNum = ref(7) // 号码统计的期数
+const ballCountData = ref([]) // 号码统计的区间数据
+const ballCountStartCode = ref({}) // 号码统计的开始期次
+const ballResultData = ref([]) // 号码统计的数据
+
+const showBallCountSetting = ref(false)
 
 // TODO: 设置区间权重
 const intervalCategory = [
@@ -67,31 +70,21 @@ watch(currentDataIndex, () => {
 })
 
 watch(isDark, (newValue) => {
-  if (newValue) {
-    chart.data.datasets[0].borderColor = DARK_DATA_COLOR
-    chart.data.datasets[0].backgroundColor = DARK_DATA_COLOR
-    chart.data.datasets[0].pointBackgroundColor = DARK_DATA_COLOR
+  const dataColor = newValue ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
+  const gridColor = newValue ? DARK_GRID_COLOR : LIGHT_GRID_COLOR
 
-    chart.options.scales.x.grid.color = DARK_GRID_COLOR
-    chart.options.scales.x.ticks.color = DARK_GRID_COLOR
+  const datasets = chart.data.datasets[0]
+  datasets.borderColor = dataColor
+  datasets.backgroundColor = dataColor
+  datasets.pointBackgroundColor = dataColor
 
-    chart.options.scales.y.grid.color = DARK_GRID_COLOR
-    chart.options.scales.y.ticks.color = DARK_GRID_COLOR
+  const options = chart.options
+  options.scales.x.grid.color = gridColor
+  options.scales.x.ticks.color = gridColor
+  options.scales.y.grid.color = gridColor
+  options.scales.y.ticks.color = gridColor
+  options.plugins.legend.labels.color = gridColor
 
-    chart.options.plugins.legend.labels.color = DARK_GRID_COLOR
-  } else {
-    chart.data.datasets[0].borderColor = LIGHT_DATA_COLOR
-    chart.data.datasets[0].backgroundColor = LIGHT_DATA_COLOR
-    chart.data.datasets[0].pointBackgroundColor = LIGHT_DATA_COLOR
-
-    chart.options.scales.x.grid.color = LIGHT_GRID_COLOR
-    chart.options.scales.x.ticks.color = LIGHT_GRID_COLOR
-
-    chart.options.scales.y.grid.color = LIGHT_GRID_COLOR
-    chart.options.scales.y.ticks.color = LIGHT_GRID_COLOR
-
-    chart.options.plugins.legend.labels.color = LIGHT_GRID_COLOR
-  }
   chart.update()
 })
 
@@ -192,7 +185,6 @@ function countBall() {
   ballResultData.value = data
 }
 
-// TODO: set color for dark mode
 function showBallCount() {
   return new Chart(
     document.getElementById('my-canvas'), {
@@ -268,6 +260,10 @@ function getPreviousData() {
   currentData.value = dataList.value[currentDataIndex.value]
 }
 
+function setBallCountSetting() {
+  showBallCountSetting.value = !showBallCountSetting.value
+}
+
 async function setData(num) {
   const res = await getDataByNum(num)
 
@@ -296,10 +292,9 @@ async function setData(num) {
       <v-tabs-window-item value="one">
         <div class="d-flex justify-space-between align-center py-3">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期（共{{ ballCountNum }}期）</p>
-          <v-icon icon="settings" size="16px" />
+          <v-icon icon="settings" size="16px" @click="setBallCountSetting" />
         </div>
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
-        <v-overlay></v-overlay>
       </v-tabs-window-item>
 
 
