@@ -12,7 +12,7 @@ function toggleTheme() {
   const lightIcon = 'light_mode'
   const darkIcon = 'dark_mode'
 
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  theme.global.name.value = theme.global.current.value.dark ? 'customLightTheme' : 'customDarkTheme'
   modeIcon.value = theme.global.current.value.dark ? darkIcon : lightIcon
   isDark.value = theme.global.current.value.dark
 }

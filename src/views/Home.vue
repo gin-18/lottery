@@ -24,7 +24,7 @@ function changeCode(code) {
 </script>
 
 <template>
-  <main class="w-screen h-screen px-2 pb-2 text-text bg-background">
+  <main class="px-2 pb-2 text-text bg-background">
     <div class="d-flex justify-space-between py-2">
       <v-btn base-color="inactive" active-color="text-text" v-for="code in codes" :key="code" variant="outlined"
         :active="activeCodeButton === code" @click="changeCode(code)">
