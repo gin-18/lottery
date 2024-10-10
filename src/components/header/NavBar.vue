@@ -15,10 +15,10 @@ const items = [
 
 <template>
   <nav class="d-flex justify-center align-center">
-    <v-breadcrumbs :items="items" active-color="area-cold">
+    <v-breadcrumbs :items="items" divider="" active-color="area-cold">
       <template slot="item" #item="{ item }">
         <v-breadcrumbs-item :to="item.path">
-          <v-icon :icon="item.icon" size="18px" />
+          <v-icon :icon="item.icon" size="22px" />
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>

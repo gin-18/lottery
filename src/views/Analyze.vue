@@ -267,7 +267,7 @@ async function setData(num) {
           <v-icon icon="keyboard_arrow_right" :disabled="!rightArrowEnable" @click="getNextData" />
         </div>
 
-        <v-table class="text-text bg-background">
+        <v-table class="border-border text-text bg-background">
           <thead>
             <tr>
               <th scope="col">区域</th>
@@ -297,7 +297,7 @@ async function setData(num) {
       <v-tabs-window-item value="three">
         <p class="py-3">第{{ repeatStartCode.code }}期 - 第{{ lastData.code }}期（共{{ repeatCodeNum }}期）</p>
 
-        <v-table class="text-text bg-background">
+        <v-table class="border-border text-text bg-background">
           <thead>
             <tr>
               <th scope="col">号码</th>
@@ -327,6 +327,10 @@ async function setData(num) {
 .area-color-box {
   width: 18px;
   height: 18px;
+}
+
+th {
+  font-weight: bold !important;
 }
 
 caption {

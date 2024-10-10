@@ -20,6 +20,6 @@ function toggleTheme() {
 
 <template>
   <div>
-    <v-icon :icon="modeIcon" size="16px" @click="toggleTheme" />
+    <v-icon :icon="modeIcon" size="18px" @click="toggleTheme" />
   </div>
 </template>
