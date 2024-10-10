@@ -1,18 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useThemeStore } from '@/stores/theme.js'
+import { ref, watch, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
-const { isDark } = storeToRefs(useThemeStore())
-
 const tab = ref(null)
-// TODO: 设置在store中
-const currentData = ref({}) // 当前期次
+
+const dataList = ref([])
+const lastData = ref({}) // 最新期次数据
+const currentData = ref({}) // 当前期次数据
+const currentDataIndex = ref(0) // 当前期次数据下标
+const rightArrowEnable = ref(true)
+const leftArrowEnable = ref(true)
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
@@ -22,12 +23,10 @@ const repeatNum = ref(2) // 重号统计的重号个数
 const repeatData = ref([]) // 重号统计的区间数据
 const repeatResultData = ref({}) // 重号统计的数据
 const repeatStartCode = ref({}) // 重号统计的开始期次
-const repeatEndCode = ref({}) // 重号统计的结束期次
 
 const ballCountNum = ref(7)
 const ballCountData = ref([])
 const ballCountStartCode = ref({})
-const ballCountEndCode = ref({})
 const ballResultData = ref([])
 
 // TODO: 设置区间权重
@@ -52,6 +51,10 @@ const intervalCategory = [
   }
 ]
 
+watch(currentDataIndex, () => {
+  checkArrowStatus()
+})
+
 onMounted(async () => {
   const dataNum = ballCountNum.value > repeatCodeNum.value ? ballCountNum.value : repeatCodeNum.value
   await setData(dataNum)
@@ -60,6 +63,7 @@ onMounted(async () => {
   countRepeatBall()
   countBall()
   showBallCount()
+  checkArrowStatus()
 })
 
 function setIntervalArea(size) {
@@ -192,18 +196,46 @@ function showBallCount() {
   })
 }
 
+function checkArrowStatus() {
+  if (currentDataIndex.value === 0) {
+    rightArrowEnable.value = false
+    leftArrowEnable.value = true
+    return
+  }
+
+  if (currentDataIndex.value === dataList.value.length - 1) {
+    leftArrowEnable.value = false
+    rightArrowEnable.value = true
+    return
+  }
+
+  leftArrowEnable.value = true
+  rightArrowEnable.value = true
+}
+
+function getNextData() {
+  currentDataIndex.value -= 1
+  currentData.value = dataList.value[currentDataIndex.value]
+}
+
+function getPreviousData() {
+  currentDataIndex.value += 1
+  currentData.value = dataList.value[currentDataIndex.value]
+}
+
 async function setData(num) {
   const res = await getDataByNum(num)
 
-  currentData.value = res.last
+  dataList.value = res.data.list
+
+  lastData.value = res.data.list[0]
+  currentData.value = res.data.list[currentDataIndex.value]
 
   repeatData.value = res.data.list.slice(0, repeatCodeNum.value)
   repeatStartCode.value = res.data.list[repeatNum.value - 1]
-  repeatEndCode.value = res.data.list[0]
 
   ballCountData.value = res.data.list.slice(0, ballCountNum.value)
   ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
-  ballCountEndCode.value = res.data.list[0]
 }
 </script>
 
@@ -217,19 +249,22 @@ async function setData(num) {
 
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
-        <p class="pt-2">第{{ ballCountStartCode.code }}期 - 第{{ ballCountEndCode.code }}期（共{{ ballCountNum }}期）</p>
+        <div class="d-flex justify-space-between align-center py-3">
+          <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期（共{{ ballCountNum }}期）</p>
+          <v-icon icon="settings" size="18px" />
+        </div>
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
       </v-tabs-window-item>
 
 
       <v-tabs-window-item value="two">
-        <div class="d-flex justify-space-between">
-          <v-icon icon="keyboard_arrow_left"></v-icon>
-          <div class="d-flex ga-6 pt-2">
+        <div class="d-flex justify-space-between align-center py-3">
+          <v-icon icon="keyboard_arrow_left" :disabled="!leftArrowEnable" @click="getPreviousData" />
+          <div class="d-flex ga-6">
             <p>第{{ currentData.code }}期</p>
             <p>{{ formatDay(currentData.day) }}</p>
           </div>
-          <v-icon icon="keyboard_arrow_right"></v-icon>
+          <v-icon icon="keyboard_arrow_right" :disabled="!rightArrowEnable" @click="getNextData" />
         </div>
 
         <v-table class="text-text bg-background">
@@ -252,7 +287,7 @@ async function setData(num) {
         </v-table>
 
         <div class="d-flex justify-space-around mt-2">
-          <div class="d-flex ga-2" v-for="category in intervalCategory" :key="category.title">
+          <div class="d-flex align-center ga-2" v-for="category in intervalCategory" :key="category.title">
             <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
             <p class="rounded area-color-box" :class="category.backgroundColor"></p>
           </div>
@@ -260,7 +295,7 @@ async function setData(num) {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
-        <p>第{{ repeatStartCode.code }}期 - 第{{ repeatEndCode.code }}期（共{{ repeatCodeNum }}期）</p>
+        <p class="py-3">第{{ repeatStartCode.code }}期 - 第{{ lastData.code }}期（共{{ repeatCodeNum }}期）</p>
 
         <v-table class="text-text bg-background">
           <thead>
