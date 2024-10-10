@@ -14,7 +14,7 @@ function toggleTheme() {
 
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   modeIcon.value = theme.global.current.value.dark ? darkIcon : lightIcon
-  isDark.value = theme.global.current.value.darkIcon
+  isDark.value = theme.global.current.value.dark
 }
 </script>
 

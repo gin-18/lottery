@@ -1,14 +1,25 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
+const { isDark } = storeToRefs(useAppStore())
+
 const tab = ref(null)
 
-const dataList = ref([])
+let chart = null
+const LIGHT_GRID_COLOR = '#5c5f77'
+const LIGHT_DATA_COLOR = '#1e66f5'
+
+const DARK_GRID_COLOR = '#bac2de'
+const DARK_DATA_COLOR = '#89b4fa'
+
+const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
 const currentData = ref({}) // 当前期次数据
 const currentDataIndex = ref(0) // 当前期次数据下标
@@ -55,6 +66,35 @@ watch(currentDataIndex, () => {
   checkArrowStatus()
 })
 
+watch(isDark, (newValue) => {
+  if (newValue) {
+    chart.data.datasets[0].borderColor = DARK_DATA_COLOR
+    chart.data.datasets[0].backgroundColor = DARK_DATA_COLOR
+    chart.data.datasets[0].pointBackgroundColor = DARK_DATA_COLOR
+
+    chart.options.scales.x.grid.color = DARK_GRID_COLOR
+    chart.options.scales.x.ticks.color = DARK_GRID_COLOR
+
+    chart.options.scales.y.grid.color = DARK_GRID_COLOR
+    chart.options.scales.y.ticks.color = DARK_GRID_COLOR
+
+    chart.options.plugins.legend.labels.color = DARK_GRID_COLOR
+  } else {
+    chart.data.datasets[0].borderColor = LIGHT_DATA_COLOR
+    chart.data.datasets[0].backgroundColor = LIGHT_DATA_COLOR
+    chart.data.datasets[0].pointBackgroundColor = LIGHT_DATA_COLOR
+
+    chart.options.scales.x.grid.color = LIGHT_GRID_COLOR
+    chart.options.scales.x.ticks.color = LIGHT_GRID_COLOR
+
+    chart.options.scales.y.grid.color = LIGHT_GRID_COLOR
+    chart.options.scales.y.ticks.color = LIGHT_GRID_COLOR
+
+    chart.options.plugins.legend.labels.color = LIGHT_GRID_COLOR
+  }
+  chart.update()
+})
+
 onMounted(async () => {
   const dataNum = ballCountNum.value > repeatCodeNum.value ? ballCountNum.value : repeatCodeNum.value
   await setData(dataNum)
@@ -62,8 +102,9 @@ onMounted(async () => {
   setIntervalArea(intervalNum.value)
   countRepeatBall()
   countBall()
-  showBallCount()
   checkArrowStatus()
+
+  chart = showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -153,10 +194,7 @@ function countBall() {
 
 // TODO: set color for dark mode
 function showBallCount() {
-  const GRIDCOLOR = '#000000'
-  const DATACOLOR = '#3f51b5'
-
-  new Chart(
+  return new Chart(
     document.getElementById('my-canvas'), {
     type: 'line',
     data: {
@@ -165,9 +203,9 @@ function showBallCount() {
         {
           label: '号码',
           borderWidth: 2,
-          borderColor: DATACOLOR,
-          backgroundColor: DATACOLOR,
-          pointBackgroundColor: DATACOLOR,
+          borderColor: LIGHT_DATA_COLOR,
+          backgroundColor: LIGHT_DATA_COLOR,
+          pointBackgroundColor: LIGHT_DATA_COLOR,
           data: ballResultData.value.map(row => row.count),
         }
       ]
@@ -177,19 +215,26 @@ function showBallCount() {
       scales: {
         x: {
           ticks: {
-            color: GRIDCOLOR
+            color: LIGHT_GRID_COLOR
           },
           grid: {
-            color: GRIDCOLOR
+            color: LIGHT_GRID_COLOR
           }
         },
         y: {
           ticks: {
-            color: GRIDCOLOR
+            color: LIGHT_GRID_COLOR
           },
           grid: {
-            color: GRIDCOLOR
+            color: LIGHT_GRID_COLOR
           },
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: LIGHT_GRID_COLOR
+          }
         }
       }
     }
@@ -251,9 +296,10 @@ async function setData(num) {
       <v-tabs-window-item value="one">
         <div class="d-flex justify-space-between align-center py-3">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期（共{{ ballCountNum }}期）</p>
-          <v-icon icon="settings" size="18px" />
+          <v-icon icon="settings" size="16px" />
         </div>
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
+        <v-overlay></v-overlay>
       </v-tabs-window-item>
 
 
