@@ -9,7 +9,7 @@ import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
-const { isDark, dataList } = storeToRefs(useAppStore())
+const { isDark } = storeToRefs(useAppStore())
 
 const tab = ref(null) // 选项卡
 
@@ -20,6 +20,7 @@ const LIGHT_DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 const DARK_GRID_COLOR = paletteDark.border // 暗色模式网格颜色
 const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 
+const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
 const currentData = ref({}) // 当前期次数据
 const currentDataIndex = ref(0) // 当前期次数据下标
@@ -91,21 +92,21 @@ watch(ballCountNum, () => {
   ballCountData.value = dataList.value.slice(0, ballCountNum.value)
   ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
 
-  ballResultData.value = setBallResultData()
+  countBall()
 
   chart.destroy()
   chart = showBallCount()
 })
 
-onMounted(() => {
-  setData()
+onMounted(async () => {
+  await setData()
   setIntervalAreaColor()
   setIntervalArea(intervalNum.value)
   countRepeatBall()
+  countBall()
   checkArrowStatus()
 
-  ballResultData.value = setBallResultData()
-  // chart = showBallCount()
+  chart = showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -151,6 +152,20 @@ function checkBallIsHot(num) {
   return isHot
 }
 
+// 获取当前期次的号码
+function getBallNum(obj) {
+  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const ballList = []
+
+  Object.keys(obj).forEach(item => {
+    if (numberKey.includes(item)) {
+      ballList.push(obj[item])
+    }
+  })
+
+  return ballList
+}
+
 function countRepeatBall() {
   const repeatBallList = []
 
@@ -168,7 +183,7 @@ function countRepeatBall() {
   repeatResultData.value = result
 }
 
-function setBallResultData() {
+function countBall() {
   const data = new Array(80).fill(null).map((item, index) => ({ num: (index + 1).toString().padStart(2, '0'), count: 0 }));
   const ballList = ballCountData.value.map(item => getBallNum(item)).flatMap(item => item)
 
@@ -176,7 +191,7 @@ function setBallResultData() {
     obj.count = ballList.filter(item => item === obj.num).length
   })
 
-  return data
+  ballResultData.value = data
 }
 
 function showBallCount() {
@@ -266,29 +281,19 @@ function toggleBallCountSetting() {
   showBallCountSetting.value = !showBallCountSetting.value
 }
 
-function setData() {
-  lastData.value = dataList.value[0]
-  currentData.value = dataList.value[currentDataIndex.value]
+async function setData() {
+  const res = await getDataByNum(100)
 
-  repeatData.value = dataList.value.slice(0, repeatCodeNum.value)
-  repeatStartCode.value = dataList.value[repeatNum.value - 1]
+  dataList.value = res.data.list
 
-  ballCountData.value = dataList.value.slice(0, ballCountNum.value)
-  ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
-}
+  lastData.value = res.data.list[0]
+  currentData.value = res.data.list[currentDataIndex.value]
 
-// 获取当前期次的号码
-function getBallNum(obj) {
-  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
-  const ballList = []
+  repeatData.value = res.data.list.slice(0, repeatCodeNum.value)
+  repeatStartCode.value = res.data.list[repeatNum.value - 1]
 
-  Object.keys(obj).forEach(item => {
-    if (numberKey.includes(item)) {
-      ballList.push(obj[item])
-    }
-  })
-
-  return ballList
+  ballCountData.value = res.data.list.slice(0, ballCountNum.value)
+  ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
 }
 </script>
 

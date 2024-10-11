@@ -1,30 +1,26 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
-import { storeToRefs } from 'pinia';
-import { useAppStore } from '@/stores/app.js';
+import { ref, onMounted } from 'vue'
+import { getDataByNum } from '@/assets/js/request.js';
 import { formatDay } from '@/assets/js/formatDay.js'
 import Ball from '@/components/content/Ball.vue'
 
-const { dataList } = storeToRefs(useAppStore())
+let datas = []
 const nums = [15, 30, 50, 100]
 const activeCodeButton = ref(15)
-const currentDataList = ref([])
+const dataList = ref([])
 
-watch([dataList, activeCodeButton], () => {
-  currentDataList.value = setCurrentDataList(activeCodeButton.value)
+onMounted(async () => {
+  datas = await getDataByNum(100)
+  setDataList(activeCodeButton.value)
 })
 
-onMounted(() => {
-  currentDataList.value = setCurrentDataList(activeCodeButton.value)
-})
-
-function setCurrentDataList(num) {
-  return dataList.value.slice(0, num)
+function setDataList(num) {
+  dataList.value = datas.data.list.slice(0, num)
 }
 
 function changeCode(num) {
   activeCodeButton.value = num
-  setCurrentDataList(num)
+  setDataList(num)
 }
 </script>
 
@@ -38,7 +34,7 @@ function changeCode(num) {
     </div>
 
     <ul class="d-flex flex-column ga-2">
-      <li class="pa-2 rounded text-text bg-sub-background" v-for="data in currentDataList" :key="data.code">
+      <li class="pa-2 rounded text-text bg-sub-background" v-for="data in dataList" :key="data.code">
         <div class="mb-3">
           <div class="d-flex ga-6">
             <p>第{{ data.code }}期</p>
