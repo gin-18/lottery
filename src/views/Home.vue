@@ -1,39 +1,44 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request.js'
+import { ref, watch, onMounted } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useAppStore } from '@/stores/app.js';
 import { formatDay } from '@/assets/js/formatDay.js'
 import Ball from '@/components/content/Ball.vue'
 
-const codes = [15, 30, 50, 100]
+const { dataList } = storeToRefs(useAppStore())
+const nums = [15, 30, 50, 100]
 const activeCodeButton = ref(15)
-const dataList = ref([])
+const currentDataList = ref([])
 
-onMounted(() => {
-  setDataList(activeCodeButton.value)
+watch([dataList, activeCodeButton], () => {
+  currentDataList.value = setCurrentDataList(activeCodeButton.value)
 })
 
-async function setDataList(num) {
-  const res = await getDataByNum(num)
-  dataList.value = res.data.list
+onMounted(() => {
+  currentDataList.value = setCurrentDataList(activeCodeButton.value)
+})
+
+function setCurrentDataList(num) {
+  return dataList.value.slice(0, num)
 }
 
-function changeCode(code) {
-  activeCodeButton.value = code
-  setDataList(code)
+function changeCode(num) {
+  activeCodeButton.value = num
+  setCurrentDataList(num)
 }
 </script>
 
 <template>
   <main class="px-2 pb-2 text-text bg-background">
     <div class="d-flex justify-space-between py-2">
-      <v-btn base-color="inactive" active-color="text-text" v-for="code in codes" :key="code" variant="outlined"
+      <v-btn base-color="inactive" active-color="text-text" v-for="code in nums" :key="code" variant="outlined"
         :active="activeCodeButton === code" @click="changeCode(code)">
         近{{ code }}期
       </v-btn>
     </div>
 
     <ul class="d-flex flex-column ga-2">
-      <li class="pa-2 rounded text-text bg-sub-background" v-for="data in dataList" :key="data.code">
+      <li class="pa-2 rounded text-text bg-sub-background" v-for="data in currentDataList" :key="data.code">
         <div class="mb-3">
           <div class="d-flex ga-6">
             <p>第{{ data.code }}期</p>

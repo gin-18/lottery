@@ -9,7 +9,7 @@ import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
-const { isDark } = storeToRefs(useAppStore())
+const { isDark, dataList } = storeToRefs(useAppStore())
 
 const tab = ref(null) // 选项卡
 
@@ -20,7 +20,6 @@ const LIGHT_DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 const DARK_GRID_COLOR = paletteDark.border // 暗色模式网格颜色
 const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 
-const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
 const currentData = ref({}) // 当前期次数据
 const currentDataIndex = ref(0) // 当前期次数据下标
@@ -88,16 +87,25 @@ watch(isDark, (newValue) => {
   chart.update()
 })
 
-onMounted(async () => {
-  const dataNum = ballCountNum.value > repeatCodeNum.value ? ballCountNum.value : repeatCodeNum.value
-  await setData(dataNum)
+watch(ballCountNum, () => {
+  ballCountData.value = dataList.value.slice(0, ballCountNum.value)
+  ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
+
+  ballResultData.value = setBallResultData()
+
+  chart.destroy()
+  chart = showBallCount()
+})
+
+onMounted(() => {
+  setData()
   setIntervalAreaColor()
   setIntervalArea(intervalNum.value)
   countRepeatBall()
-  countBall()
   checkArrowStatus()
 
-  chart = showBallCount()
+  ballResultData.value = setBallResultData()
+  // chart = showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -143,20 +151,6 @@ function checkBallIsHot(num) {
   return isHot
 }
 
-// 获取当前期次的号码
-function getBallNum(obj) {
-  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
-  const ballList = []
-
-  Object.keys(obj).forEach(item => {
-    if (numberKey.includes(item)) {
-      ballList.push(obj[item])
-    }
-  })
-
-  return ballList
-}
-
 function countRepeatBall() {
   const repeatBallList = []
 
@@ -174,7 +168,7 @@ function countRepeatBall() {
   repeatResultData.value = result
 }
 
-function countBall() {
+function setBallResultData() {
   const data = new Array(80).fill(null).map((item, index) => ({ num: (index + 1).toString().padStart(2, '0'), count: 0 }));
   const ballList = ballCountData.value.map(item => getBallNum(item)).flatMap(item => item)
 
@@ -182,7 +176,7 @@ function countBall() {
     obj.count = ballList.filter(item => item === obj.num).length
   })
 
-  ballResultData.value = data
+  return data
 }
 
 function showBallCount() {
@@ -233,6 +227,14 @@ function showBallCount() {
   })
 }
 
+function addBallCountNum() {
+  ballCountNum.value += 1
+}
+
+function reduceBallCountNum() {
+  ballCountNum.value -= 1
+}
+
 function checkArrowStatus() {
   if (currentDataIndex.value === 0) {
     rightArrowEnable.value = false
@@ -260,23 +262,33 @@ function getPreviousData() {
   currentData.value = dataList.value[currentDataIndex.value]
 }
 
-function setBallCountSetting() {
+function toggleBallCountSetting() {
   showBallCountSetting.value = !showBallCountSetting.value
 }
 
-async function setData(num) {
-  const res = await getDataByNum(num)
+function setData() {
+  lastData.value = dataList.value[0]
+  currentData.value = dataList.value[currentDataIndex.value]
 
-  dataList.value = res.data.list
+  repeatData.value = dataList.value.slice(0, repeatCodeNum.value)
+  repeatStartCode.value = dataList.value[repeatNum.value - 1]
 
-  lastData.value = res.data.list[0]
-  currentData.value = res.data.list[currentDataIndex.value]
+  ballCountData.value = dataList.value.slice(0, ballCountNum.value)
+  ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
+}
 
-  repeatData.value = res.data.list.slice(0, repeatCodeNum.value)
-  repeatStartCode.value = res.data.list[repeatNum.value - 1]
+// 获取当前期次的号码
+function getBallNum(obj) {
+  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const ballList = []
 
-  ballCountData.value = res.data.list.slice(0, ballCountNum.value)
-  ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
+  Object.keys(obj).forEach(item => {
+    if (numberKey.includes(item)) {
+      ballList.push(obj[item])
+    }
+  })
+
+  return ballList
 }
 </script>
 
@@ -292,9 +304,25 @@ async function setData(num) {
       <v-tabs-window-item value="one">
         <div class="d-flex justify-space-between align-center py-3">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期（共{{ ballCountNum }}期）</p>
-          <v-icon icon="settings" size="16px" @click="setBallCountSetting" />
+          <v-icon icon="settings" size="16px" @click="toggleBallCountSetting" />
         </div>
+
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
+
+        <v-dialog v-model="showBallCountSetting">
+          <v-card title="号码分析设置">
+            <template v-slot:default>
+              <div class="d-flex justify-space-between align-center ga-2 px-6 py-4">
+                <p>分析期数：</p>
+                <div class="d-flex flex-grow-1 justify-space-between align-center">
+                  <v-icon icon="keyboard_arrow_left" size="16px" @click="reduceBallCountNum" />
+                  <p>{{ ballCountNum }}</p>
+                  <v-icon icon="keyboard_arrow_right" size="16px" @click="addBallCountNum" />
+                </div>
+              </div>
+            </template>
+          </v-card>
+        </v-dialog>
       </v-tabs-window-item>
 
 
