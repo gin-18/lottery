@@ -5,7 +5,7 @@ import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { paletteLight, paletteDark } from '@/assets/js/palette.js'
-import { countSubarrays, countDuplicates } from '@/assets/js/count.js'
+import { getBallNum, countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 
@@ -23,7 +23,7 @@ const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
 
-const ballCountNum = ref(7) // 号码统计的期数
+const ballCountCodes = ref(7) // 号码统计的期数
 const ballCountData = ref([]) // 号码统计的区间数据
 
 const ballCountStartCode = ref({}) // 号码统计的开始期次
@@ -38,11 +38,16 @@ const currentDataIndex = ref(0) // 当前期次数据下标
 const areaRightArrowEnable = ref(true)
 const areaLeftArrowEnable = ref(true)
 
-const repeatCodeNum = ref(2) // 重号统计的期数
+const repeatCodes = ref(2) // 重号统计的期数
 const repeatNum = ref(2) // 重号统计的重号个数
 const repeatData = ref([]) // 重号统计的区间数据
 const repeatResultData = ref({}) // 重号统计的数据
-const repeatStartCode = ref({}) // 重号统计的开始期次
+const repeatStartData = ref({}) // 重号统计的开始期次
+const showRepeatSetting = ref(false)
+const repeatCodesLeftArrowEnable = ref(true)
+const repeatCodesRightArrowEnable = ref(true)
+const repeatNumLeftArrowEnable = ref(true)
+const repeatNumRightArrowEnable = ref(true)
 
 // TODO: 设置区间权重
 const intervalCategory = [
@@ -66,14 +71,6 @@ const intervalCategory = [
   }
 ]
 
-watch(ballCountNum, () => {
-  checkBallCountArrowStatus()
-})
-
-watch(currentDataIndex, () => {
-  checkAreaArrowStatus()
-})
-
 // 切换主题后重绘图表
 watch(isDark, (newValue) => {
   const dataColor = newValue ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
@@ -94,12 +91,35 @@ watch(isDark, (newValue) => {
   chart.update()
 })
 
-watch(ballCountNum, () => {
-  ballCountData.value = dataList.value.slice(0, ballCountNum.value)
-  ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
+watch(currentDataIndex, () => {
+  currentData.value = dataList.value[currentDataIndex.value];
+})
+
+watch(ballCountCodes, () => {
+  checkBallCountArrowStatus()
+})
+
+watch(currentDataIndex, () => {
+  checkAreaArrowStatus()
+})
+
+watch(ballCountCodes, () => {
+  ballCountData.value = dataList.value.slice(0, ballCountCodes.value)
+  ballCountStartCode.value = dataList.value[ballCountCodes.value - 1]
   countBall()
   chart.destroy()
   showBallCount()
+})
+
+watch([repeatCodes, repeatNum], () => {
+  if (repeatNum.value > repeatCodes.value) {
+    repeatNum.value = repeatCodes.value
+  }
+  repeatData.value = dataList.value.slice(0, repeatCodes.value)
+  repeatStartData.value = dataList.value[repeatCodes.value - 1]
+  checkRepeatCodesArrowStatus()
+  checkRepeatNumArrowStatus()
+  countRepeatBall()
 })
 
 onMounted(async () => {
@@ -110,6 +130,7 @@ onMounted(async () => {
   countBall()
   checkAreaArrowStatus()
   checkBallCountArrowStatus()
+  checkRepeatCodesArrowStatus()
   showBallCount()
 })
 
@@ -232,22 +253,22 @@ function showBallCount() {
   })
 }
 
-function addBallCountNum() {
-  ballCountNum.value += 1
+function addBallCountCodes() {
+  ballCountCodes.value += 1
 }
 
-function reduceBallCountNum() {
-  ballCountNum.value -= 1
+function reduceBallCountCodes() {
+  ballCountCodes.value -= 1
 }
 
 function checkBallCountArrowStatus() {
-  if (ballCountNum.value === 1) {
+  if (ballCountCodes.value === 1) {
     ballCountLeftArrowEnable.value = false
     ballCountRightArrowEnable.value = true
     return
   }
 
-  if (ballCountNum.value === dataList.value.length) {
+  if (ballCountCodes.value === dataList.value.length) {
     ballCountLeftArrowEnable.value = true
     ballCountRightArrowEnable.value = false
     return
@@ -258,17 +279,11 @@ function checkBallCountArrowStatus() {
 }
 
 function getNextData() {
-  updateCurrentData(-1);
+  currentDataIndex.value -= 1;
 }
 
 function getPreviousData() {
-  updateCurrentData(1);
-}
-
-function updateCurrentData(offset) {
-  if (currentDataIndex.value + offset < 0 || currentDataIndex.value + offset > dataList.value.length - 1) return
-  currentDataIndex.value += offset;
-  currentData.value = dataList.value[currentDataIndex.value];
+  currentDataIndex.value += 1
 }
 
 function checkAreaArrowStatus() {
@@ -288,6 +303,60 @@ function checkAreaArrowStatus() {
   areaRightArrowEnable.value = true
 }
 
+function addRepeatCodes() {
+  repeatCodes.value += 1
+}
+
+function reduceRepeatCodes() {
+  repeatCodes.value -= 1
+}
+
+function addRepeatNum() {
+  repeatNum.value += 1
+}
+
+function reduceRepeatNum() {
+  repeatNum.value -= 1
+}
+
+function checkRepeatCodesArrowStatus() {
+  if (repeatCodes.value === 1) {
+    repeatCodesLeftArrowEnable.value = false
+    repeatCodesRightArrowEnable.value = true
+    return
+  }
+
+  if (repeatCodes.value === dataList.value.length) {
+    repeatCodesLeftArrowEnable.value = true
+    repeatCodesRightArrowEnable.value = false
+    return
+  }
+
+  repeatCodesLeftArrowEnable.value = true
+  repeatCodesRightArrowEnable.value = true
+}
+
+function checkRepeatNumArrowStatus() {
+  if (repeatNum.value === 1) {
+    repeatNumLeftArrowEnable.value = false
+    repeatNumRightArrowEnable.value = true
+    return
+  }
+
+  if (repeatNum.value === repeatCodes.value) {
+    repeatNumLeftArrowEnable.value = true
+    repeatNumRightArrowEnable.value = false
+    return
+  }
+
+  repeatNumLeftArrowEnable.value = true
+  repeatNumRightArrowEnable.value = true
+}
+
+function toggleRepeatSetting() {
+  showRepeatSetting.value = !showRepeatSetting.value
+}
+
 async function setData() {
   const res = await getDataByNum(100) // 获取近100期次的数据
 
@@ -296,25 +365,11 @@ async function setData() {
   lastData.value = res.data.list[0]
   currentData.value = res.data.list[currentDataIndex.value]
 
-  repeatData.value = res.data.list.slice(0, repeatCodeNum.value)
-  repeatStartCode.value = res.data.list[repeatNum.value - 1]
+  ballCountData.value = res.data.list.slice(0, ballCountCodes.value)
+  ballCountStartCode.value = res.data.list[ballCountCodes.value - 1]
 
-  ballCountData.value = res.data.list.slice(0, ballCountNum.value)
-  ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
-}
-
-// 获取当前期次的号码
-function getBallNum(obj) {
-  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
-  const ballList = []
-
-  Object.keys(obj).forEach(item => {
-    if (numberKey.includes(item)) {
-      ballList.push(obj[item])
-    }
-  })
-
-  return ballList
+  repeatData.value = res.data.list.slice(0, repeatCodes.value)
+  repeatStartData.value = res.data.list[repeatCodes.value - 1]
 }
 </script>
 
@@ -331,15 +386,14 @@ function getBallNum(obj) {
         <div class="d-flex justify-space-between align-center py-3">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
           <div class="d-flex justify-space-between align-center">
-            <v-icon icon="keyboard_arrow_left" :disabled="!ballCountLeftArrowEnable" @click="reduceBallCountNum" />
-            <p>（共 {{ ballCountNum }} 期）</p>
-            <v-icon icon="keyboard_arrow_right" :disabled="!ballCountRightArrowEnable" @click="addBallCountNum" />
+            <v-icon icon="keyboard_arrow_left" :disabled="!ballCountLeftArrowEnable" @click="reduceBallCountCodes" />
+            <p>（共 {{ ballCountCodes }} 期）</p>
+            <v-icon icon="keyboard_arrow_right" :disabled="!ballCountRightArrowEnable" @click="addBallCountCodes" />
           </div>
         </div>
 
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
       </v-tabs-window-item>
-
 
       <v-tabs-window-item value="two">
         <div class="d-flex justify-space-between align-center py-3">
@@ -379,7 +433,10 @@ function getBallNum(obj) {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
-        <p class="py-3">第{{ repeatStartCode.code }}期 - 第{{ lastData.code }}期（共{{ repeatCodeNum }}期）</p>
+        <div class="d-flex justify-space-between align-center py-3">
+          <p class="py-3">第{{ repeatStartData.code }}期 - 第{{ lastData.code }}期（共{{ repeatCodes }}期）</p>
+          <v-icon icon="settings" size="16px" @click="toggleRepeatSetting" />
+        </div>
 
         <v-table class="border-border text-text bg-background">
           <thead>
@@ -402,6 +459,30 @@ function getBallNum(obj) {
           </tbody>
           <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
         </v-table>
+
+        <v-overlay v-model="showRepeatSetting" class="justify-center align-center">
+          <div class="d-flex flex-column justify-center align-center ga-6 pa-6 rounded text-text bg-background">
+            <h3>重号分析设置</h3>
+
+            <div class="d-flex justify-space-between align-center ga-6">
+              <p>统计的期次：</p>
+              <div class="d-flex ga-8">
+                <v-icon icon="keyboard_arrow_left" :disabled="!repeatCodesLeftArrowEnable" @click="reduceRepeatCodes" />
+                <p>{{ repeatCodes }}</p>
+                <v-icon icon="keyboard_arrow_right" :disabled="!repeatCodesRightArrowEnable" @click="addRepeatCodes" />
+              </div>
+            </div>
+
+            <div class="d-flex justify-space-between align-center ga-6">
+              <p>重复的次数：</p>
+              <div class="d-flex ga-8">
+                <v-icon icon="keyboard_arrow_left" :disabled="!repeatNumLeftArrowEnable" @click="reduceRepeatNum" />
+                <p>{{ repeatNum }}</p>
+                <v-icon icon="keyboard_arrow_right" :disabled="!repeatNumRightArrowEnable" @click="addRepeatNum" />
+              </div>
+            </div>
+          </div>
+        </v-overlay>
       </v-tabs-window-item>
     </v-tabs-window>
   </main>

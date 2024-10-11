@@ -1,3 +1,17 @@
+// 获取一份数据中的中奖号码
+export function getBallNum(obj) {
+  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const ballList = []
+
+  Object.keys(obj).forEach(item => {
+    if (numberKey.includes(item)) {
+      ballList.push(obj[item])
+    }
+  })
+
+  return ballList
+}
+
 /*
  * 统计一个数组中的元素落在一个二维数组中的次数
  * 返回一个以元素为key，次数为value的对象
