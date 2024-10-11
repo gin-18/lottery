@@ -72,23 +72,8 @@ const intervalCategory = [
 ]
 
 // 切换主题后重绘图表
-watch(isDark, (newValue) => {
-  const dataColor = newValue ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
-  const gridColor = newValue ? DARK_GRID_COLOR : LIGHT_GRID_COLOR
-
-  const datasets = chart.data.datasets[0]
-  datasets.borderColor = dataColor
-  datasets.backgroundColor = dataColor
-  datasets.pointBackgroundColor = dataColor
-
-  const options = chart.options
-  options.scales.x.grid.color = gridColor
-  options.scales.x.ticks.color = gridColor
-  options.scales.y.grid.color = gridColor
-  options.scales.y.ticks.color = gridColor
-  options.plugins.legend.labels.color = gridColor
-
-  chart.update()
+watch(isDark, () => {
+  updateLineChart()
 })
 
 watch(currentDataIndex, () => {
@@ -132,6 +117,7 @@ onMounted(async () => {
   checkBallCountArrowStatus()
   checkRepeatCodesArrowStatus()
   showBallCount()
+  updateLineChart()
 })
 
 function setIntervalArea(size) {
@@ -251,6 +237,25 @@ function showBallCount() {
       }
     }
   })
+}
+
+function updateLineChart() {
+  const dataColor = isDark.value ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
+  const gridColor = isDark.value ? DARK_GRID_COLOR : LIGHT_GRID_COLOR
+
+  const datasets = chart.data.datasets[0]
+  datasets.borderColor = dataColor
+  datasets.backgroundColor = dataColor
+  datasets.pointBackgroundColor = dataColor
+
+  const options = chart.options
+  options.scales.x.grid.color = gridColor
+  options.scales.x.ticks.color = gridColor
+  options.scales.y.grid.color = gridColor
+  options.scales.y.ticks.color = gridColor
+  options.plugins.legend.labels.color = gridColor
+
+  chart.update()
 }
 
 function addBallCountCodes() {
