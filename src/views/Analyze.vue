@@ -22,26 +22,27 @@ const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 
 const dataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
-const currentData = ref({}) // 当前期次数据
-const currentDataIndex = ref(0) // 当前期次数据下标
-const rightArrowEnable = ref(true)
-const leftArrowEnable = ref(true)
+
+const ballCountNum = ref(7) // 号码统计的期数
+const ballCountData = ref([]) // 号码统计的区间数据
+
+const ballCountStartCode = ref({}) // 号码统计的开始期次
+const ballResultData = ref([]) // 号码统计的数据
+const ballCountLeftArrowEnable = ref(true)
+const ballCountRightArrowEnable = ref(true)
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
+const currentData = ref({}) // 当前期次数据
+const currentDataIndex = ref(0) // 当前期次数据下标
+const areaRightArrowEnable = ref(true)
+const areaLeftArrowEnable = ref(true)
 
 const repeatCodeNum = ref(2) // 重号统计的期数
 const repeatNum = ref(2) // 重号统计的重号个数
 const repeatData = ref([]) // 重号统计的区间数据
 const repeatResultData = ref({}) // 重号统计的数据
 const repeatStartCode = ref({}) // 重号统计的开始期次
-
-const ballCountNum = ref(7) // 号码统计的期数
-const ballCountData = ref([]) // 号码统计的区间数据
-const ballCountStartCode = ref({}) // 号码统计的开始期次
-const ballResultData = ref([]) // 号码统计的数据
-
-const showBallCountSetting = ref(false)
 
 // TODO: 设置区间权重
 const intervalCategory = [
@@ -65,10 +66,15 @@ const intervalCategory = [
   }
 ]
 
-watch(currentDataIndex, () => {
-  checkArrowStatus()
+watch(ballCountNum, () => {
+  checkBallCountArrowStatus()
 })
 
+watch(currentDataIndex, () => {
+  checkAreaArrowStatus()
+})
+
+// 切换主题后重绘图表
 watch(isDark, (newValue) => {
   const dataColor = newValue ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
   const gridColor = newValue ? DARK_GRID_COLOR : LIGHT_GRID_COLOR
@@ -91,11 +97,9 @@ watch(isDark, (newValue) => {
 watch(ballCountNum, () => {
   ballCountData.value = dataList.value.slice(0, ballCountNum.value)
   ballCountStartCode.value = dataList.value[ballCountNum.value - 1]
-
   countBall()
-
   chart.destroy()
-  chart = showBallCount()
+  showBallCount()
 })
 
 onMounted(async () => {
@@ -104,9 +108,9 @@ onMounted(async () => {
   setIntervalArea(intervalNum.value)
   countRepeatBall()
   countBall()
-  checkArrowStatus()
-
-  chart = showBallCount()
+  checkAreaArrowStatus()
+  checkBallCountArrowStatus()
+  showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -152,20 +156,6 @@ function checkBallIsHot(num) {
   return isHot
 }
 
-// 获取当前期次的号码
-function getBallNum(obj) {
-  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
-  const ballList = []
-
-  Object.keys(obj).forEach(item => {
-    if (numberKey.includes(item)) {
-      ballList.push(obj[item])
-    }
-  })
-
-  return ballList
-}
-
 function countRepeatBall() {
   const repeatBallList = []
 
@@ -195,7 +185,7 @@ function countBall() {
 }
 
 function showBallCount() {
-  return new Chart(
+  chart = new Chart(
     document.getElementById('my-canvas'), {
     type: 'line',
     data: {
@@ -250,39 +240,56 @@ function reduceBallCountNum() {
   ballCountNum.value -= 1
 }
 
-function checkArrowStatus() {
+function checkBallCountArrowStatus() {
+  if (ballCountNum.value === 1) {
+    ballCountLeftArrowEnable.value = false
+    ballCountRightArrowEnable.value = true
+    return
+  }
+
+  if (ballCountNum.value === dataList.value.length) {
+    ballCountLeftArrowEnable.value = true
+    ballCountRightArrowEnable.value = false
+    return
+  }
+
+  ballCountLeftArrowEnable.value = true
+  ballCountRightArrowEnable.value = true
+}
+
+function getNextData() {
+  updateCurrentData(-1);
+}
+
+function getPreviousData() {
+  updateCurrentData(1);
+}
+
+function updateCurrentData(offset) {
+  if (currentDataIndex.value + offset < 0 || currentDataIndex.value + offset > dataList.value.length - 1) return
+  currentDataIndex.value += offset;
+  currentData.value = dataList.value[currentDataIndex.value];
+}
+
+function checkAreaArrowStatus() {
   if (currentDataIndex.value === 0) {
-    rightArrowEnable.value = false
-    leftArrowEnable.value = true
+    areaRightArrowEnable.value = false
+    areaLeftArrowEnable.value = true
     return
   }
 
   if (currentDataIndex.value === dataList.value.length - 1) {
-    leftArrowEnable.value = false
-    rightArrowEnable.value = true
+    areaLeftArrowEnable.value = false
+    areaRightArrowEnable.value = true
     return
   }
 
-  leftArrowEnable.value = true
-  rightArrowEnable.value = true
-}
-
-function getNextData() {
-  currentDataIndex.value -= 1
-  currentData.value = dataList.value[currentDataIndex.value]
-}
-
-function getPreviousData() {
-  currentDataIndex.value += 1
-  currentData.value = dataList.value[currentDataIndex.value]
-}
-
-function toggleBallCountSetting() {
-  showBallCountSetting.value = !showBallCountSetting.value
+  areaLeftArrowEnable.value = true
+  areaRightArrowEnable.value = true
 }
 
 async function setData() {
-  const res = await getDataByNum(100)
+  const res = await getDataByNum(100) // 获取近100期次的数据
 
   dataList.value = res.data.list
 
@@ -294,6 +301,20 @@ async function setData() {
 
   ballCountData.value = res.data.list.slice(0, ballCountNum.value)
   ballCountStartCode.value = res.data.list[ballCountNum.value - 1]
+}
+
+// 获取当前期次的号码
+function getBallNum(obj) {
+  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const ballList = []
+
+  Object.keys(obj).forEach(item => {
+    if (numberKey.includes(item)) {
+      ballList.push(obj[item])
+    }
+  })
+
+  return ballList
 }
 </script>
 
@@ -308,37 +329,26 @@ async function setData() {
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
         <div class="d-flex justify-space-between align-center py-3">
-          <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期（共{{ ballCountNum }}期）</p>
-          <v-icon icon="settings" size="16px" @click="toggleBallCountSetting" />
+          <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
+          <div class="d-flex justify-space-between align-center">
+            <v-icon icon="keyboard_arrow_left" :disabled="!ballCountLeftArrowEnable" @click="reduceBallCountNum" />
+            <p>（共 {{ ballCountNum }} 期）</p>
+            <v-icon icon="keyboard_arrow_right" :disabled="!ballCountRightArrowEnable" @click="addBallCountNum" />
+          </div>
         </div>
 
         <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
-
-        <v-dialog v-model="showBallCountSetting">
-          <v-card title="号码分析设置">
-            <template v-slot:default>
-              <div class="d-flex justify-space-between align-center ga-2 px-6 py-4">
-                <p>分析期数：</p>
-                <div class="d-flex flex-grow-1 justify-space-between align-center">
-                  <v-icon icon="keyboard_arrow_left" size="16px" @click="reduceBallCountNum" />
-                  <p>{{ ballCountNum }}</p>
-                  <v-icon icon="keyboard_arrow_right" size="16px" @click="addBallCountNum" />
-                </div>
-              </div>
-            </template>
-          </v-card>
-        </v-dialog>
       </v-tabs-window-item>
 
 
       <v-tabs-window-item value="two">
         <div class="d-flex justify-space-between align-center py-3">
-          <v-icon icon="keyboard_arrow_left" :disabled="!leftArrowEnable" @click="getPreviousData" />
+          <v-icon icon="keyboard_arrow_left" :disabled="!areaLeftArrowEnable" @click="getPreviousData" />
           <div class="d-flex ga-6">
             <p>第{{ currentData.code }}期</p>
             <p>{{ formatDay(currentData.day) }}</p>
           </div>
-          <v-icon icon="keyboard_arrow_right" :disabled="!rightArrowEnable" @click="getNextData" />
+          <v-icon icon="keyboard_arrow_right" :disabled="!areaRightArrowEnable" @click="getNextData" />
         </div>
 
         <v-table class="border-border text-text bg-background">
