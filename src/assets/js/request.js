@@ -1,4 +1,4 @@
-const url = 'http://api.huiniao.top/interface/home/lotteryHistory'
+const url = 'https://api.huiniao.top/interface/home/lotteryHistory'
 
 export async function getDataByNum(num) {
   const response = await fetch(`${url}?type=klb&page=1&limit=${num}`)
