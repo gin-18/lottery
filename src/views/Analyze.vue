@@ -7,6 +7,7 @@ import { formatDay } from '@/assets/js/formatDay.js'
 import { paletteLight, paletteDark } from '@/assets/js/palette.js'
 import { getBallNum, countSubarrays, countDuplicates } from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
+import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 
 const { isDark } = storeToRefs(useAppStore())
@@ -378,6 +379,7 @@ async function setData() {
 </script>
 
 <template>
+  <Header />
   <main class="px-2 pb-2 text-text bg-background">
     <v-tabs align-tabs="center" v-model="tab">
       <v-tab value="one">号码分析</v-tab>

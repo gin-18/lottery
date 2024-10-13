@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request.js';
 import { formatDay } from '@/assets/js/formatDay.js'
+import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 
 let datas = []
@@ -25,6 +26,7 @@ function changeCode(num) {
 </script>
 
 <template>
+  <Header />
   <main class="px-2 pb-2 text-text bg-background">
     <div class="d-flex justify-space-between py-2">
       <v-btn base-color="inactive" active-color="text-text" v-for="code in nums" :key="code" variant="outlined"
