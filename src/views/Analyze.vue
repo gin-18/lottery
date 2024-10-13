@@ -20,7 +20,7 @@ const LIGHT_DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 const DARK_GRID_COLOR = paletteDark.border // 暗色模式网格颜色
 const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
 
-const dataList = ref([]) // 所有数据
+const allDataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
 
 const ballCountCodes = ref(7) // 号码统计的期数
@@ -33,8 +33,8 @@ const ballCountRightArrowEnable = ref(true)
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
-const currentData = ref({}) // 当前期次数据
-const currentDataIndex = ref(0) // 当前期次数据下标
+const areaCurrentData = ref({}) // 当前期次数据
+const areaCurrentDataIndex = ref(0) // 当前期次数据下标
 const areaRightArrowEnable = ref(true)
 const areaLeftArrowEnable = ref(true)
 
@@ -76,21 +76,18 @@ watch(isDark, () => {
   updateLineChart()
 })
 
-watch(currentDataIndex, () => {
-  currentData.value = dataList.value[currentDataIndex.value];
+watch(areaCurrentDataIndex, () => {
+  areaCurrentData.value = allDataList.value[areaCurrentDataIndex.value];
+  checkAreaArrowStatus()
 })
 
 watch(ballCountCodes, () => {
   checkBallCountArrowStatus()
 })
 
-watch(currentDataIndex, () => {
-  checkAreaArrowStatus()
-})
-
 watch(ballCountCodes, () => {
-  ballCountData.value = dataList.value.slice(0, ballCountCodes.value)
-  ballCountStartCode.value = dataList.value[ballCountCodes.value - 1]
+  ballCountData.value = allDataList.value.slice(0, ballCountCodes.value)
+  ballCountStartCode.value = allDataList.value[ballCountCodes.value - 1]
   countBall()
   chart.destroy()
   showBallCount()
@@ -100,8 +97,8 @@ watch([repeatCodes, repeatNum], () => {
   if (repeatNum.value > repeatCodes.value) {
     repeatNum.value = repeatCodes.value
   }
-  repeatData.value = dataList.value.slice(0, repeatCodes.value)
-  repeatStartData.value = dataList.value[repeatCodes.value - 1]
+  repeatData.value = allDataList.value.slice(0, repeatCodes.value)
+  repeatStartData.value = allDataList.value[repeatCodes.value - 1]
   checkRepeatCodesArrowStatus()
   checkRepeatNumArrowStatus()
   countRepeatBall()
@@ -135,7 +132,7 @@ function setIntervalArea(size) {
 }
 
 function setIntervalAreaColor(index) {
-  const ballNum = getBallNum(currentData.value)
+  const ballNum = getBallNum(areaCurrentData.value)
   const countObj = countSubarrays(intervalArea.value, ballNum)
 
   if (countObj[index] >= intervalCategory[0].weight) {
@@ -154,7 +151,7 @@ function setHotBallBackgroundColor(num) {
 function checkBallIsHot(num) {
   let isHot = false
 
-  Object.values(currentData.value).forEach(item => {
+  Object.values(areaCurrentData.value).forEach(item => {
     if (item === num) {
       isHot = true
     }
@@ -163,6 +160,7 @@ function checkBallIsHot(num) {
   return isHot
 }
 
+// 统计重复的号码
 function countRepeatBall() {
   const repeatBallList = []
 
@@ -180,6 +178,7 @@ function countRepeatBall() {
   repeatResultData.value = result
 }
 
+// 统计所有的号码出现的次数
 function countBall() {
   const data = new Array(80).fill(null).map((item, index) => ({ num: (index + 1).toString().padStart(2, '0'), count: 0 }));
   const ballList = ballCountData.value.map(item => getBallNum(item)).flatMap(item => item)
@@ -199,7 +198,7 @@ function showBallCount() {
       labels: ballResultData.value.map(row => row.num),
       datasets: [
         {
-          label: '号码',
+          label: '号码出现次数',
           borderWidth: 2,
           borderColor: LIGHT_DATA_COLOR,
           backgroundColor: LIGHT_DATA_COLOR,
@@ -273,7 +272,7 @@ function checkBallCountArrowStatus() {
     return
   }
 
-  if (ballCountCodes.value === dataList.value.length) {
+  if (ballCountCodes.value === allDataList.value.length) {
     ballCountLeftArrowEnable.value = true
     ballCountRightArrowEnable.value = false
     return
@@ -284,21 +283,21 @@ function checkBallCountArrowStatus() {
 }
 
 function getNextData() {
-  currentDataIndex.value -= 1;
+  areaCurrentDataIndex.value -= 1;
 }
 
 function getPreviousData() {
-  currentDataIndex.value += 1
+  areaCurrentDataIndex.value += 1
 }
 
 function checkAreaArrowStatus() {
-  if (currentDataIndex.value === 0) {
+  if (areaCurrentDataIndex.value === 0) {
     areaRightArrowEnable.value = false
     areaLeftArrowEnable.value = true
     return
   }
 
-  if (currentDataIndex.value === dataList.value.length - 1) {
+  if (areaCurrentDataIndex.value === allDataList.value.length - 1) {
     areaLeftArrowEnable.value = false
     areaRightArrowEnable.value = true
     return
@@ -331,7 +330,7 @@ function checkRepeatCodesArrowStatus() {
     return
   }
 
-  if (repeatCodes.value === dataList.value.length) {
+  if (repeatCodes.value === allDataList.value.length) {
     repeatCodesLeftArrowEnable.value = true
     repeatCodesRightArrowEnable.value = false
     return
@@ -365,10 +364,10 @@ function toggleRepeatSetting() {
 async function setData() {
   const res = await getDataByNum(100) // 获取近100期次的数据
 
-  dataList.value = res.data.list
+  allDataList.value = res.data.list
 
   lastData.value = res.data.list[0]
-  currentData.value = res.data.list[currentDataIndex.value]
+  areaCurrentData.value = res.data.list[areaCurrentDataIndex.value]
 
   ballCountData.value = res.data.list.slice(0, ballCountCodes.value)
   ballCountStartCode.value = res.data.list[ballCountCodes.value - 1]
@@ -404,8 +403,8 @@ async function setData() {
         <div class="d-flex justify-space-between align-center py-3">
           <v-icon icon="keyboard_arrow_left" :disabled="!areaLeftArrowEnable" @click="getPreviousData" />
           <div class="d-flex ga-6">
-            <p>第{{ currentData.code }}期</p>
-            <p>{{ formatDay(currentData.day) }}</p>
+            <p>第{{ areaCurrentData.code }}期</p>
+            <p>{{ formatDay(areaCurrentData.day) }}</p>
           </div>
           <v-icon icon="keyboard_arrow_right" :disabled="!areaRightArrowEnable" @click="getNextData" />
         </div>
