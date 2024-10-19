@@ -19,8 +19,8 @@ export const vuetify = createVuetify({
     defaultTheme: 'customLightTheme',
     themes: {
       customLightTheme,
-      customDarkTheme
-    }
+      customDarkTheme,
+    },
   },
   icons: {
     defaultSet: 'md',
@@ -28,5 +28,5 @@ export const vuetify = createVuetify({
     sets: {
       md,
     },
-  }
+  },
 })

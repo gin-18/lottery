@@ -1,9 +1,30 @@
 // 获取一份数据中的中奖号码
 export function getBallNum(obj) {
-  const numberKey = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty']
+  const numberKey = [
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten',
+    'eleven',
+    'twelve',
+    'thirteen',
+    'fourteen',
+    'fifteen',
+    'sixteen',
+    'seventeen',
+    'eighteen',
+    'nineteen',
+    'twenty',
+  ]
   const ballList = []
 
-  Object.keys(obj).forEach(item => {
+  Object.keys(obj).forEach((item) => {
     if (numberKey.includes(item)) {
       ballList.push(obj[item])
     }
@@ -20,17 +41,17 @@ export function getBallNum(obj) {
  * 返回以二维数组的子数组下标为key，统计次数为value的对象
  */
 export function countSubarrays(array2D, targetArray) {
-  const countObj = {};
+  const countObj = {}
 
-  targetArray.forEach(num => {
+  targetArray.forEach((num) => {
     array2D.forEach((subArray, index) => {
       if (subArray.includes(num)) {
-        countObj[index] = (countObj[index] || 0) + 1;
+        countObj[index] = (countObj[index] || 0) + 1
       }
-    });
-  });
+    })
+  })
 
-  return countObj;
+  return countObj
 }
 
 /*
@@ -58,28 +79,28 @@ export function countSubarrays(array2D, targetArray) {
  * }
  */
 export function countDuplicates(array, weight) {
-  const countObj = {};
-  const duplicates = {};
+  const countObj = {}
+  const duplicates = {}
 
-  array.forEach(obj => {
-    obj.list.forEach(item => {
+  array.forEach((obj) => {
+    obj.list.forEach((item) => {
       if (countObj[item]) {
-        countObj[item].count++;
-        countObj[item].codes.add(obj.code);
+        countObj[item].count++
+        countObj[item].codes.add(obj.code)
       } else {
-        countObj[item] = { count: 1, codes: new Set([obj.code]) };
+        countObj[item] = { count: 1, codes: new Set([obj.code]) }
       }
-    });
-  });
+    })
+  })
 
-  Object.keys(countObj).forEach(key => {
+  Object.keys(countObj).forEach((key) => {
     if (countObj[key].count >= weight) {
-      const codesArray = Array.from(countObj[key].codes);
+      const codesArray = Array.from(countObj[key].codes)
       if (codesArray.length > 1) {
-        duplicates[key] = { count: countObj[key].count, codes: codesArray };
+        duplicates[key] = { count: countObj[key].count, codes: codesArray }
       }
     }
-  });
+  })
 
-  return duplicates;
+  return duplicates
 }

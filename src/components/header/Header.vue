@@ -5,7 +5,9 @@ import ToggleTheme from './ToggleTheme.vue'
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center px-2 text-text bg-background">
+  <div
+    class="d-flex justify-space-between align-center px-2 text-text bg-background"
+  >
     <Logo />
     <div class="d-flex justify-space-between align-center">
       <NavBar />

@@ -5,7 +5,11 @@ import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { paletteLight, paletteDark } from '@/assets/js/palette.js'
-import { getBallNum, countSubarrays, countDuplicates } from '@/assets/js/count.js'
+import {
+  getBallNum,
+  countSubarrays,
+  countDuplicates,
+} from '@/assets/js/count.js'
 import Chart from 'chart.js/auto'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
@@ -69,7 +73,7 @@ const intervalCategory = [
     weight: 0,
     backgroundColor: 'bg-area-cold',
     textColor: 'text-area-cold',
-  }
+  },
 ]
 
 // 切换主题后重绘图表
@@ -78,7 +82,7 @@ watch(isDark, () => {
 })
 
 watch(areaCurrentDataIndex, () => {
-  areaCurrentData.value = allDataList.value[areaCurrentDataIndex.value];
+  areaCurrentData.value = allDataList.value[areaCurrentDataIndex.value]
   checkAreaArrowStatus()
 })
 
@@ -119,14 +123,15 @@ onMounted(async () => {
 })
 
 function setIntervalArea(size) {
-  const chunkedArray = [];
+  const chunkedArray = []
   const balls = Array.from({ length: 80 }, (_, index) => {
-    const paddedIndex = index + 1 < 10 ? `0${index + 1}` : (index + 1).toString();
-    return paddedIndex;
-  });
+    const paddedIndex =
+      index + 1 < 10 ? `0${index + 1}` : (index + 1).toString()
+    return paddedIndex
+  })
 
   for (let i = 0; i < balls.length; i += size) {
-    chunkedArray.push(balls.slice(i, i + size));
+    chunkedArray.push(balls.slice(i, i + size))
   }
 
   intervalArea.value = chunkedArray
@@ -152,7 +157,7 @@ function setHotBallBackgroundColor(num) {
 function checkBallIsHot(num) {
   let isHot = false
 
-  Object.values(areaCurrentData.value).forEach(item => {
+  Object.values(areaCurrentData.value).forEach((item) => {
     if (item === num) {
       isHot = true
     }
@@ -170,7 +175,7 @@ function countRepeatBall() {
 
     repeatBallList.push({
       code: repeatData.value[i].code,
-      list: ballList
+      list: ballList,
     })
   }
 
@@ -181,22 +186,26 @@ function countRepeatBall() {
 
 // 统计所有的号码出现的次数
 function countBall() {
-  const data = new Array(80).fill(null).map((item, index) => ({ num: (index + 1).toString().padStart(2, '0'), count: 0 }));
-  const ballList = ballCountData.value.map(item => getBallNum(item)).flatMap(item => item)
+  const data = new Array(80).fill(null).map((item, index) => ({
+    num: (index + 1).toString().padStart(2, '0'),
+    count: 0,
+  }))
+  const ballList = ballCountData.value
+    .map((item) => getBallNum(item))
+    .flatMap((item) => item)
 
-  data.forEach(obj => {
-    obj.count = ballList.filter(item => item === obj.num).length
+  data.forEach((obj) => {
+    obj.count = ballList.filter((item) => item === obj.num).length
   })
 
   ballResultData.value = data
 }
 
 function showBallCount() {
-  chart = new Chart(
-    document.getElementById('my-canvas'), {
+  chart = new Chart(document.getElementById('my-canvas'), {
     type: 'line',
     data: {
-      labels: ballResultData.value.map(row => row.num),
+      labels: ballResultData.value.map((row) => row.num),
       datasets: [
         {
           label: '号码出现次数',
@@ -204,38 +213,38 @@ function showBallCount() {
           borderColor: LIGHT_DATA_COLOR,
           backgroundColor: LIGHT_DATA_COLOR,
           pointBackgroundColor: LIGHT_DATA_COLOR,
-          data: ballResultData.value.map(row => row.count),
-        }
-      ]
+          data: ballResultData.value.map((row) => row.count),
+        },
+      ],
     },
     options: {
       indexAxis: 'y',
       scales: {
         x: {
           ticks: {
-            color: LIGHT_GRID_COLOR
+            color: LIGHT_GRID_COLOR,
           },
           grid: {
-            color: LIGHT_GRID_COLOR
-          }
+            color: LIGHT_GRID_COLOR,
+          },
         },
         y: {
           ticks: {
-            color: LIGHT_GRID_COLOR
+            color: LIGHT_GRID_COLOR,
           },
           grid: {
-            color: LIGHT_GRID_COLOR
+            color: LIGHT_GRID_COLOR,
           },
-        }
+        },
       },
       plugins: {
         legend: {
           labels: {
-            color: LIGHT_GRID_COLOR
-          }
-        }
-      }
-    }
+            color: LIGHT_GRID_COLOR,
+          },
+        },
+      },
+    },
   })
 }
 
@@ -284,7 +293,7 @@ function checkBallCountArrowStatus() {
 }
 
 function getNextData() {
-  areaCurrentDataIndex.value -= 1;
+  areaCurrentDataIndex.value -= 1
 }
 
 function getPreviousData() {
@@ -392,23 +401,44 @@ async function setData() {
         <div class="d-flex justify-space-between align-center py-3">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
           <div class="d-flex justify-space-between align-center">
-            <v-icon icon="keyboard_arrow_left" :disabled="!ballCountLeftArrowEnable" @click="reduceBallCountCodes" />
+            <v-icon
+              icon="keyboard_arrow_left"
+              :disabled="!ballCountLeftArrowEnable"
+              @click="reduceBallCountCodes"
+            />
             <p>（共 {{ ballCountCodes }} 期）</p>
-            <v-icon icon="keyboard_arrow_right" :disabled="!ballCountRightArrowEnable" @click="addBallCountCodes" />
+            <v-icon
+              icon="keyboard_arrow_right"
+              :disabled="!ballCountRightArrowEnable"
+              @click="addBallCountCodes"
+            />
           </div>
         </div>
 
-        <canvas id="my-canvas" class="bg-background" width="100vw" height="600vh"></canvas>
+        <canvas
+          id="my-canvas"
+          class="bg-background"
+          width="100vw"
+          height="600vh"
+        ></canvas>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
         <div class="d-flex justify-space-between align-center py-3">
-          <v-icon icon="keyboard_arrow_left" :disabled="!areaLeftArrowEnable" @click="getPreviousData" />
+          <v-icon
+            icon="keyboard_arrow_left"
+            :disabled="!areaLeftArrowEnable"
+            @click="getPreviousData"
+          />
           <div class="d-flex ga-6">
             <p>第{{ areaCurrentData.code }}期</p>
             <p>{{ formatDay(areaCurrentData.day) }}</p>
           </div>
-          <v-icon icon="keyboard_arrow_right" :disabled="!areaRightArrowEnable" @click="getNextData" />
+          <v-icon
+            icon="keyboard_arrow_right"
+            :disabled="!areaRightArrowEnable"
+            @click="getNextData"
+          />
         </div>
 
         <v-table class="border-border text-text bg-background">
@@ -424,23 +454,39 @@ async function setData() {
                 [{{ area[0] }},{{ area[area.length - 1] }}]
               </td>
               <td class="d-flex align-center ga-1">
-                <Ball v-for="num in area" :key="num" :num="num" :color="setHotBallBackgroundColor(num)" />
+                <Ball
+                  v-for="num in area"
+                  :key="num"
+                  :num="num"
+                  :color="setHotBallBackgroundColor(num)"
+                />
               </td>
             </tr>
           </tbody>
         </v-table>
 
         <div class="d-flex justify-space-around mt-2">
-          <div class="d-flex align-center ga-2" v-for="category in intervalCategory" :key="category.title">
+          <div
+            class="d-flex align-center ga-2"
+            v-for="category in intervalCategory"
+            :key="category.title"
+          >
             <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
-            <p class="rounded area-color-box" :class="category.backgroundColor"></p>
+            <p
+              class="rounded area-color-box"
+              :class="category.backgroundColor"
+            ></p>
           </div>
         </div>
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
         <div class="d-flex justify-space-between align-center py-3">
-          <p class="py-3">第{{ repeatStartData.code }}期 - 第{{ lastData.code }}期（共{{ repeatCodes }}期）</p>
+          <p class="py-3">
+            第{{ repeatStartData.code }}期 - 第{{ lastData.code }}期（共{{
+              repeatCodes
+            }}期）
+          </p>
           <v-icon icon="settings" size="16px" @click="toggleRepeatSetting" />
         </div>
 
@@ -453,38 +499,70 @@ async function setData() {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="data in Object.keys(repeatResultData).sort((a, b) => a - b)" :key="data.code">
+            <tr
+              v-for="data in Object.keys(repeatResultData).sort(
+                (a, b) => a - b,
+              )"
+              :key="data.code"
+            >
               <th scope="row">
                 <Ball :num="data" />
               </th>
               <td>{{ repeatResultData[data].count }}</td>
               <td>
-                <p v-for="code in repeatResultData[data].codes" :key="code">{{ code }}</p>
+                <p v-for="code in repeatResultData[data].codes" :key="code">
+                  {{ code }}
+                </p>
               </td>
             </tr>
           </tbody>
-          <caption>只统计出现过{{ repeatNum }}次及以上的号码</caption>
+          <caption>
+            只统计出现过{{
+              repeatNum
+            }}次及以上的号码
+          </caption>
         </v-table>
 
-        <v-overlay v-model="showRepeatSetting" class="justify-center align-center">
-          <div class="d-flex flex-column justify-center align-center ga-6 pa-6 rounded text-text bg-background">
+        <v-overlay
+          v-model="showRepeatSetting"
+          class="justify-center align-center"
+        >
+          <div
+            class="d-flex flex-column justify-center align-center ga-6 pa-6 rounded text-text bg-background"
+          >
             <h3>重号分析设置</h3>
 
             <div class="d-flex justify-space-between align-center ga-6">
               <p>统计的期次：</p>
               <div class="d-flex ga-8">
-                <v-icon icon="keyboard_arrow_left" :disabled="!repeatCodesLeftArrowEnable" @click="reduceRepeatCodes" />
+                <v-icon
+                  icon="keyboard_arrow_left"
+                  :disabled="!repeatCodesLeftArrowEnable"
+                  @click="reduceRepeatCodes"
+                />
                 <p>{{ repeatCodes }}</p>
-                <v-icon icon="keyboard_arrow_right" :disabled="!repeatCodesRightArrowEnable" @click="addRepeatCodes" />
+                <v-icon
+                  icon="keyboard_arrow_right"
+                  :disabled="!repeatCodesRightArrowEnable"
+                  @click="addRepeatCodes"
+                />
               </div>
             </div>
 
             <div class="d-flex justify-space-between align-center ga-6">
               <p>重复的次数：</p>
               <div class="d-flex ga-8">
-                <v-icon icon="keyboard_arrow_left" :disabled="!repeatNumLeftArrowEnable" @click="reduceRepeatNum" />
+                <v-icon
+                  icon="keyboard_arrow_left"
+                  :disabled="!repeatNumLeftArrowEnable"
+                  @click="reduceRepeatNum"
+                />
                 <p>{{ repeatNum }}</p>
-                <v-icon icon="keyboard_arrow_right" :disabled="!repeatNumRightArrowEnable" @click="addRepeatNum" />
+                <v-icon
+                  icon="keyboard_arrow_right"
+                  :disabled="!repeatNumRightArrowEnable"
+                  @click="addRepeatNum"
+                />
               </div>
             </div>
           </div>

@@ -9,7 +9,7 @@ const items = [
     name: 'ANALYZE',
     path: '/analyze',
     icon: 'equalizer',
-  }
+  },
 ]
 </script>
 

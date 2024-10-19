@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request.js';
+import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
@@ -29,14 +29,25 @@ function changeCode(num) {
   <Header />
   <main class="px-2 pb-2 text-text bg-background">
     <div class="d-flex justify-space-between py-2">
-      <v-btn base-color="inactive" active-color="text-text" v-for="code in nums" :key="code" variant="outlined"
-        :active="activeCodeButton === code" @click="changeCode(code)">
+      <v-btn
+        base-color="inactive"
+        active-color="text-text"
+        v-for="code in nums"
+        :key="code"
+        variant="outlined"
+        :active="activeCodeButton === code"
+        @click="changeCode(code)"
+      >
         近{{ code }}期
       </v-btn>
     </div>
 
     <ul class="d-flex flex-column ga-2">
-      <li class="pa-2 rounded text-text bg-sub-background" v-for="data in dataList" :key="data.code">
+      <li
+        class="pa-2 rounded text-text bg-sub-background"
+        v-for="data in dataList"
+        :key="data.code"
+      >
         <div class="mb-3">
           <div class="d-flex ga-6">
             <p>第{{ data.code }}期</p>
