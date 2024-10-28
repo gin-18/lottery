@@ -3,8 +3,8 @@ const items = [
   {
     name: 'HOME',
     path: '/',
-    icon: 'description',
-    size: '20px',
+    icon: 'home',
+    size: '22px',
   },
   {
     name: 'LIST',

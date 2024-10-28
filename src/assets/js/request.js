@@ -1,7 +1,7 @@
 const url = 'https://api.huiniao.top/interface/home/lotteryHistory'
 
 export async function getTheLatestData() {
-  const response = await fetch(url)
+  const response = await fetch(`${url}?type=klb&page=1&limit=1`)
   const result = await response.json()
   return result.data.last
 }

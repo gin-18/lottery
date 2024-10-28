@@ -8,8 +8,9 @@ function goHome() {
 </script>
 
 <template>
-  <h1 class="d-flex justify-center align-center" @click="goHome">
+  <h1 class="d-flex justify-center align-center ga-2" @click="goHome">
     <img :src="logo" alt="logo" />
+    <p class="text-h5 font-weight-bold">快乐8</p>
   </h1>
 </template>
 
