@@ -1,89 +1,110 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request.js'
-import { formatDay } from '@/assets/js/formatDay.js'
+import { ref, computed, onMounted } from 'vue'
 import Header from '@/components/header/Header.vue'
-import Ball from '@/components/content/Ball.vue'
 
-let datas = []
-const nums = [15, 30, 50, 100]
-const activeCodeButton = ref(15)
-const dataList = ref([])
+const showIndex = ref([0])
+const rewards = ref([
+  {
+    game: '选十',
+    conditions: ['中10', '中9', '中8', '中7', '中6', '中5', '中0'],
+    prices: ['最高500万', '8000', '800', '80', '5', '3', '2'],
+  },
+  {
+    game: '选九',
+    conditions: ['中9', '中8', '中7', '中6', '中5', '中4', '中0'],
+    prices: ['300000', '2000', '200', '20', '5', '3', '2'],
+  },
+  {
+    game: '选八',
+    conditions: ['中8', '中7', '中6', '中5', '中4', '中0'],
+    prices: ['50000', '800', '88', '10', '3', '2'],
+  },
+  {
+    game: '选七',
+    conditions: ['中7', '中6', '中5', '中4', '中0'],
+    prices: ['10000', '288', '28', '4', '2'],
+  },
+  {
+    game: '选六',
+    conditions: ['中6', '中5', '中4', '中3'],
+    prices: ['3000', '30', '10', '3'],
+  },
+  {
+    game: '选五',
+    conditions: ['中5', '中4', '中3'],
+    prices: ['1000', '21', '3'],
+  },
+  {
+    game: '选四',
+    conditions: ['中4', '中3', '中2'],
+    prices: ['100', '5', '3'],
+  },
+  {
+    game: '选三',
+    conditions: ['中3', '中2'],
+    prices: ['53', '3'],
+  },
+  {
+    game: '选二',
+    conditions: ['中2'],
+    prices: ['19'],
+  },
+  {
+    game: '选一',
+    conditions: ['中1'],
+    prices: ['4.6'],
+  },
+])
 
-onMounted(async () => {
-  datas = await getDataByNum(100)
-  setDataList(activeCodeButton.value)
+const tables = computed(() =>
+  rewards.value
+    .map((reward) => {
+      return reward.conditions.map((condition, index) => ({
+        game: reward.game,
+        condition: condition,
+        price: reward.prices[index],
+        size: reward.conditions.length,
+      }))
+    })
+    .flat(),
+)
+
+function getShowIndex() {
+  rewards.value.forEach((item, index) => {
+    if (index > 0) {
+      showIndex.value.push(
+        showIndex.value[index - 1] + rewards.value[index - 1].conditions.length,
+      )
+    }
+  })
+}
+
+onMounted(() => {
+  getShowIndex()
 })
-
-function setDataList(num) {
-  dataList.value = datas.data.list.slice(0, num)
-}
-
-function changeCode(num) {
-  activeCodeButton.value = num
-  setDataList(num)
-}
 </script>
 
 <template>
   <Header />
   <main class="px-2 pb-2 text-text bg-background">
-    <div class="d-flex justify-space-between py-2">
-      <v-btn
-        base-color="inactive"
-        active-color="text-text"
-        v-for="code in nums"
-        :key="code"
-        variant="outlined"
-        :active="activeCodeButton === code"
-        @click="changeCode(code)"
-      >
-        近{{ code }}期
-      </v-btn>
-    </div>
-
-    <ul class="d-flex flex-column ga-2">
-      <li
-        class="pa-2 rounded text-text bg-sub-background"
-        v-for="data in dataList"
-        :key="data.code"
-      >
-        <div class="mb-3">
-          <div class="d-flex ga-6">
-            <p>第{{ data.code }}期</p>
-            <p class="text-subtext">{{ formatDay(data.day) }}</p>
-          </div>
-
-          <!-- TODO: 跳转分析页面 -->
-          <!-- <button>详情</button> -->
-        </div>
-        <div class="d-flex flex-column ga-4">
-          <p class="d-flex justify-space-between">
-            <Ball :num="data.one" />
-            <Ball :num="data.two" />
-            <Ball :num="data.three" />
-            <Ball :num="data.four" />
-            <Ball :num="data.five" />
-            <Ball :num="data.six" />
-            <Ball :num="data.seven" />
-            <Ball :num="data.eight" />
-            <Ball :num="data.nine" />
-            <Ball :num="data.ten" />
-          </p>
-          <p class="d-flex justify-space-between">
-            <Ball :num="data.eleven" />
-            <Ball :num="data.twelve" />
-            <Ball :num="data.thirteen" />
-            <Ball :num="data.fourteen" />
-            <Ball :num="data.fifteen" />
-            <Ball :num="data.sixteen" />
-            <Ball :num="data.seventeen" />
-            <Ball :num="data.eighteen" />
-            <Ball :num="data.nineteen" />
-            <Ball :num="data.twenty" />
-          </p>
-        </div>
-      </li>
-    </ul>
+    <h3>奖金对照表</h3>
+    <v-table class="border-border text-text bg-background">
+      <thead>
+        <tr>
+          <th scope="col">玩法</th>
+          <th scope="col">中奖条件</th>
+          <th scope="col">奖金</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in tables" :key="index">
+          <td :rowspan="item.size" v-show="showIndex.includes(index)">
+            {{ item.game }}
+          </td>
+          <td>{{ item.condition }}</td>
+          <td>{{ item.price }}</td>
+        </tr>
+      </tbody>
+    </v-table>
   </main>
 </template>

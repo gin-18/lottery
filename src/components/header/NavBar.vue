@@ -1,14 +1,22 @@
 <script setup>
 const items = [
   {
-    name: 'LIST',
+    name: 'HOME',
     path: '/',
+    icon: 'description',
+    size: '20px',
+  },
+  {
+    name: 'LIST',
+    path: '/results',
+    size: '22px',
     icon: 'subject',
   },
   {
     name: 'ANALYZE',
     path: '/analyze',
     icon: 'equalizer',
+    size: '22px',
   },
 ]
 </script>
@@ -18,7 +26,7 @@ const items = [
     <v-breadcrumbs :items="items" divider="" active-color="area-cold">
       <template #item="{ item }">
         <v-breadcrumbs-item :to="item.path">
-          <v-icon :icon="item.icon" size="22px" />
+          <v-icon :icon="item.icon" :size="item.size" />
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
