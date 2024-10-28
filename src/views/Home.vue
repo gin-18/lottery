@@ -98,10 +98,10 @@ onMounted(() => {
 
 <template>
   <Header />
-  <main class="px-2 pb-2 text-text bg-background">
+  <main class="px-3 pb-3 text-text bg-background">
     <h3 class="pb-2">最新开奖</h3>
     <div
-      class="d-flex flex-column ga-3 mb-4 pb-4 border-0 border-b-sm border-dashed"
+      class="d-flex flex-column ga-3 mb-4 pb-4 border-0 border-b-sm border-dashed border-border"
     >
       <div class="d-flex ga-6">
         <p class="text-text">第{{ data.code }}期</p>
@@ -119,7 +119,7 @@ onMounted(() => {
         <tr>
           <th scope="col">玩法</th>
           <th scope="col">中奖条件</th>
-          <th scope="col">奖金</th>
+          <th scope="col">奖金（元）</th>
         </tr>
       </thead>
       <tbody>

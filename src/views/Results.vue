@@ -27,8 +27,8 @@ function changeCode(num) {
 
 <template>
   <Header />
-  <main class="px-2 pb-2 text-text bg-background">
-    <div class="d-flex justify-space-between py-2">
+  <main class="px-3 pb-2 text-text bg-background">
+    <div class="d-flex justify-space-between py-4">
       <v-btn
         base-color="inactive"
         active-color="text-text"
@@ -42,9 +42,9 @@ function changeCode(num) {
       </v-btn>
     </div>
 
-    <ul class="d-flex flex-column ga-2">
+    <ul class="d-flex flex-column ga-4">
       <li
-        class="pa-2 rounded text-text bg-sub-background"
+        class="pb-4 border-0 border-b-sm border-dashed border-border text-text"
         v-for="data in dataList"
         :key="data.code"
       >
@@ -54,7 +54,7 @@ function changeCode(num) {
             <p class="text-subtext">{{ formatDay(data.day) }}</p>
           </div>
 
-          <!-- TODO: 跳转分析页面 -->
+          <!-- TODO: 跳转到详情页面(尚未找到具体的开奖结果的接口) -->
           <!-- <button>详情</button> -->
         </div>
         <div class="d-flex flex-column ga-4">
@@ -87,3 +87,9 @@ function changeCode(num) {
     </ul>
   </main>
 </template>
+
+<style scoped>
+li {
+  list-style: none;
+}
+</style>

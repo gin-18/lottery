@@ -389,7 +389,7 @@ async function setData() {
 
 <template>
   <Header />
-  <main class="px-2 pb-2 text-text bg-background">
+  <main class="px-3 pb-3 text-text bg-background">
     <v-tabs align-tabs="center" v-model="tab">
       <v-tab value="one">号码分析</v-tab>
       <v-tab value="two">区域分析</v-tab>

@@ -1,9 +1,13 @@
 <script setup>
-import { router } from '@/router/router.js'
+import { useRouter } from 'vue-router'
 import logo from '@/assets/images/logo.png'
 
+const router = useRouter()
+
 function goHome() {
-  router.push('/')
+  router.push({
+    name: 'Home',
+  })
 }
 </script>
 

@@ -6,7 +6,7 @@ import ToggleTheme from './ToggleTheme.vue'
 
 <template>
   <div
-    class="d-flex justify-space-between align-center px-2 text-text bg-background"
+    class="d-flex justify-space-between align-center px-3 text-text bg-background"
   >
     <Logo />
     <div class="d-flex justify-space-between align-center">
