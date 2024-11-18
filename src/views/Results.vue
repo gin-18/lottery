@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
+import { getBallNum } from '@/assets/js/count.js'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 
@@ -27,8 +28,8 @@ function changeCode(num) {
 
 <template>
   <Header />
-  <main class="px-3 pb-2 text-text bg-background">
-    <div class="d-flex justify-space-between py-4">
+  <main class="px-3 pt-6 pb-2 text-text bg-background">
+    <div class="d-flex justify-space-between pb-6">
       <v-btn
         base-color="inactive"
         active-color="text-text"
@@ -48,40 +49,12 @@ function changeCode(num) {
         v-for="data in dataList"
         :key="data.code"
       >
-        <div class="mb-3">
-          <div class="d-flex ga-6">
-            <p>第{{ data.code }}期</p>
-            <p class="text-subtext">{{ formatDay(data.day) }}</p>
-          </div>
-
-          <!-- TODO: 跳转到详情页面(尚未找到具体的开奖结果的接口) -->
-          <!-- <button>详情</button> -->
+        <div class="d-flex ga-6 pb-2">
+          <p>第{{ data.code }}期</p>
+          <p class="text-subtext">{{ formatDay(data.day) }}</p>
         </div>
-        <div class="d-flex flex-column ga-4">
-          <p class="d-flex justify-space-between">
-            <Ball :num="data.one" />
-            <Ball :num="data.two" />
-            <Ball :num="data.three" />
-            <Ball :num="data.four" />
-            <Ball :num="data.five" />
-            <Ball :num="data.six" />
-            <Ball :num="data.seven" />
-            <Ball :num="data.eight" />
-            <Ball :num="data.nine" />
-            <Ball :num="data.ten" />
-          </p>
-          <p class="d-flex justify-space-between">
-            <Ball :num="data.eleven" />
-            <Ball :num="data.twelve" />
-            <Ball :num="data.thirteen" />
-            <Ball :num="data.fourteen" />
-            <Ball :num="data.fifteen" />
-            <Ball :num="data.sixteen" />
-            <Ball :num="data.seventeen" />
-            <Ball :num="data.eighteen" />
-            <Ball :num="data.nineteen" />
-            <Ball :num="data.twenty" />
-          </p>
+        <div class="ball-container">
+          <Ball v-for="num in getBallNum(data)" :key="num" :num="num" />
         </div>
       </li>
     </ul>
@@ -91,5 +64,11 @@ function changeCode(num) {
 <style scoped>
 li {
   list-style: none;
+}
+
+.ball-container {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
 }
 </style>

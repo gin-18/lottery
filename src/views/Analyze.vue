@@ -358,7 +358,7 @@ async function setData() {
 <template>
   <Header />
   <main class="px-3 pb-3 text-text bg-background">
-    <v-tabs grow v-model="tab">
+    <v-tabs grow height="64px" v-model="tab">
       <v-tab value="one">号码分析</v-tab>
       <v-tab value="two">区域分析</v-tab>
       <v-tab value="three">重号分析</v-tab>
@@ -366,7 +366,7 @@ async function setData() {
 
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
-        <div class="d-flex justify-space-between align-center py-3">
+        <div class="d-flex justify-space-between align-center py-6">
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
           <div class="d-flex justify-space-between align-center">
             <v-icon
@@ -394,7 +394,7 @@ async function setData() {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
-        <div class="d-flex justify-space-between align-center py-3">
+        <div class="d-flex justify-space-between align-center py-6">
           <v-icon
             icon="fa fa-caret-left"
             size="16px"
@@ -437,7 +437,7 @@ async function setData() {
           </tbody>
         </v-table>
 
-        <div class="d-flex justify-space-around mt-2">
+        <div class="d-flex justify-space-around pt-3">
           <div
             class="d-flex align-center ga-2"
             v-for="category in intervalCategory"
@@ -453,7 +453,7 @@ async function setData() {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
-        <div class="d-flex justify-space-between align-center py-3">
+        <div class="d-flex justify-space-between align-center py-6">
           <p class="py-3">
             第{{ repeatStartData.code }}期 - 第{{ lastData.code }}期（共{{
               repeatCodes
@@ -488,7 +488,7 @@ async function setData() {
               </td>
             </tr>
           </tbody>
-          <caption>
+          <caption class="pt-3">
             只统计出现过{{
               repeatNum
             }}次及以上的号码

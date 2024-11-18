@@ -99,9 +99,9 @@ onMounted(() => {
 <template>
   <Header />
   <main class="px-3 pb-3 text-text bg-background">
-    <h3 class="pb-2">最新开奖</h3>
+    <h3 class="pt-6 pb-2">最新开奖</h3>
     <div
-      class="d-flex flex-column ga-3 mb-4 pb-4 border-0 border-b-sm border-dashed border-border"
+      class="d-flex flex-column ga-2 mb-4 pb-4 border-0 border-b-sm border-dashed border-border"
     >
       <div class="d-flex ga-6">
         <p class="text-text">第{{ data.code }}期</p>

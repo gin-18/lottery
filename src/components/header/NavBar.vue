@@ -4,19 +4,19 @@ const items = [
     name: 'HOME',
     path: '/',
     icon: 'fa fa-house',
-    size: '15px',
+    size: '16px',
   },
   {
     name: 'LIST',
     path: '/results',
     icon: 'fa fa-list-ul',
-    size: '16px',
+    size: '18px',
   },
   {
     name: 'ANALYZE',
     path: '/analyze',
     icon: 'fa fa-chart-line',
-    size: '16px',
+    size: '18px',
   },
 ]
 </script>
@@ -30,7 +30,7 @@ const items = [
       active-color="area-cold"
     >
       <template #item="{ item }">
-        <v-breadcrumbs-item :to="item.path">
+        <v-breadcrumbs-item class="pb-1" :to="item.path">
           <v-icon :icon="item.icon" :size="item.size" />
         </v-breadcrumbs-item>
       </template>
