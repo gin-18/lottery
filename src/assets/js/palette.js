@@ -11,17 +11,3 @@ export const paletteLight = {
   'area-warm': '#fe640b', // peach
   'area-cold': '#1e66f5', // blue
 }
-
-export const paletteDark = {
-  background: '#1e1e2e',
-  'sub-background': '#181825',
-  text: '#cdd6f4',
-  subtext: '#a6adc8',
-  border: '#bac2de',
-  inactive: '#6c7086',
-  'ball-hot': '#f38ba8',
-  'ball-cold': '#6c7086',
-  'area-hot': '#f38ba8',
-  'area-warm': '#fab387',
-  'area-cold': '#89b4fa',
-}

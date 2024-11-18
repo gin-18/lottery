@@ -1,10 +1,8 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/stores/app.js'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
-import { paletteLight, paletteDark } from '@/assets/js/palette.js'
+import { paletteLight } from '@/assets/js/palette.js'
 import {
   getBallNum,
   countSubarrays,
@@ -14,16 +12,11 @@ import Chart from 'chart.js/auto'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 
-const { isDark } = storeToRefs(useAppStore())
-
 const tab = ref(null) // 选项卡
 
 let chart = null // 图表实例
-const LIGHT_GRID_COLOR = paletteLight.border // 亮色模式网格颜色
-const LIGHT_DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
-
-const DARK_GRID_COLOR = paletteDark.border // 暗色模式网格颜色
-const DARK_DATA_COLOR = paletteDark['area-cold'] // 暗色模式数据颜色
+const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
+const DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 
 const allDataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
@@ -76,11 +69,6 @@ const intervalCategory = [
   },
 ]
 
-// 切换主题后重绘图表
-watch(isDark, () => {
-  updateLineChart()
-})
-
 watch(areaCurrentDataIndex, () => {
   areaCurrentData.value = allDataList.value[areaCurrentDataIndex.value]
   checkAreaArrowStatus()
@@ -119,7 +107,6 @@ onMounted(async () => {
   checkBallCountArrowStatus()
   checkRepeatCodesArrowStatus()
   showBallCount()
-  updateLineChart()
 })
 
 function setIntervalArea(size) {
@@ -210,9 +197,9 @@ function showBallCount() {
         {
           label: '号码出现次数',
           borderWidth: 2,
-          borderColor: LIGHT_DATA_COLOR,
-          backgroundColor: LIGHT_DATA_COLOR,
-          pointBackgroundColor: LIGHT_DATA_COLOR,
+          borderColor: DATA_COLOR,
+          backgroundColor: DATA_COLOR,
+          pointBackgroundColor: DATA_COLOR,
           data: ballResultData.value.map((row) => row.count),
         },
       ],
@@ -222,49 +209,30 @@ function showBallCount() {
       scales: {
         x: {
           ticks: {
-            color: LIGHT_GRID_COLOR,
+            color: GRID_COLOR,
           },
           grid: {
-            color: LIGHT_GRID_COLOR,
+            color: GRID_COLOR,
           },
         },
         y: {
           ticks: {
-            color: LIGHT_GRID_COLOR,
+            color: GRID_COLOR,
           },
           grid: {
-            color: LIGHT_GRID_COLOR,
+            color: GRID_COLOR,
           },
         },
       },
       plugins: {
         legend: {
           labels: {
-            color: LIGHT_GRID_COLOR,
+            color: GRID_COLOR,
           },
         },
       },
     },
   })
-}
-
-function updateLineChart() {
-  const dataColor = isDark.value ? DARK_DATA_COLOR : LIGHT_DATA_COLOR
-  const gridColor = isDark.value ? DARK_GRID_COLOR : LIGHT_GRID_COLOR
-
-  const datasets = chart.data.datasets[0]
-  datasets.borderColor = dataColor
-  datasets.backgroundColor = dataColor
-  datasets.pointBackgroundColor = dataColor
-
-  const options = chart.options
-  options.scales.x.grid.color = gridColor
-  options.scales.x.ticks.color = gridColor
-  options.scales.y.grid.color = gridColor
-  options.scales.y.ticks.color = gridColor
-  options.plugins.legend.labels.color = gridColor
-
-  chart.update()
 }
 
 function addBallCountCodes() {
@@ -390,7 +358,7 @@ async function setData() {
 <template>
   <Header />
   <main class="px-3 pb-3 text-text bg-background">
-    <v-tabs align-tabs="center" v-model="tab">
+    <v-tabs grow v-model="tab">
       <v-tab value="one">号码分析</v-tab>
       <v-tab value="two">区域分析</v-tab>
       <v-tab value="three">重号分析</v-tab>
@@ -402,13 +370,15 @@ async function setData() {
           <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
           <div class="d-flex justify-space-between align-center">
             <v-icon
-              icon="keyboard_arrow_left"
+              icon="fa fa-caret-left"
+              size="16px"
               :disabled="!ballCountLeftArrowEnable"
               @click="reduceBallCountCodes"
             />
             <p>（共 {{ ballCountCodes }} 期）</p>
             <v-icon
-              icon="keyboard_arrow_right"
+              icon="fa fa-caret-right"
+              size="16px"
               :disabled="!ballCountRightArrowEnable"
               @click="addBallCountCodes"
             />
@@ -426,7 +396,8 @@ async function setData() {
       <v-tabs-window-item value="two">
         <div class="d-flex justify-space-between align-center py-3">
           <v-icon
-            icon="keyboard_arrow_left"
+            icon="fa fa-caret-left"
+            size="16px"
             :disabled="!areaLeftArrowEnable"
             @click="getPreviousData"
           />
@@ -435,7 +406,8 @@ async function setData() {
             <p>{{ formatDay(areaCurrentData.day) }}</p>
           </div>
           <v-icon
-            icon="keyboard_arrow_right"
+            icon="fa fa-caret-right"
+            size="16px"
             :disabled="!areaRightArrowEnable"
             @click="getNextData"
           />
@@ -487,7 +459,7 @@ async function setData() {
               repeatCodes
             }}期）
           </p>
-          <v-icon icon="settings" size="16px" @click="toggleRepeatSetting" />
+          <v-icon icon="fa fa-gear" size="14px" @click="toggleRepeatSetting" />
         </div>
 
         <v-table class="border-border text-text bg-background">
@@ -534,15 +506,17 @@ async function setData() {
 
             <div class="d-flex justify-space-between align-center ga-6">
               <p>统计的期次：</p>
-              <div class="d-flex ga-8">
+              <div class="d-flex align-center ga-8">
                 <v-icon
-                  icon="keyboard_arrow_left"
+                  icon="fa fa-caret-left"
+                  size="16px"
                   :disabled="!repeatCodesLeftArrowEnable"
                   @click="reduceRepeatCodes"
                 />
                 <p>{{ repeatCodes }}</p>
                 <v-icon
-                  icon="keyboard_arrow_right"
+                  icon="fa fa-caret-right"
+                  size="16px"
                   :disabled="!repeatCodesRightArrowEnable"
                   @click="addRepeatCodes"
                 />
@@ -551,15 +525,17 @@ async function setData() {
 
             <div class="d-flex justify-space-between align-center ga-6">
               <p>重复的次数：</p>
-              <div class="d-flex ga-8">
+              <div class="d-flex align-center ga-8">
                 <v-icon
-                  icon="keyboard_arrow_left"
+                  icon="fa fa-caret-left"
+                  size="16px"
                   :disabled="!repeatNumLeftArrowEnable"
                   @click="reduceRepeatNum"
                 />
                 <p>{{ repeatNum }}</p>
                 <v-icon
-                  icon="keyboard_arrow_right"
+                  icon="fa fa-caret-right"
+                  size="16px"
                   :disabled="!repeatNumRightArrowEnable"
                   @click="addRepeatNum"
                 />

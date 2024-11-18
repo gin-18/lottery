@@ -1,7 +1,6 @@
 <script setup>
 import Logo from './Logo.vue'
 import NavBar from './NavBar.vue'
-import ToggleTheme from './ToggleTheme.vue'
 </script>
 
 <template>
@@ -11,7 +10,6 @@ import ToggleTheme from './ToggleTheme.vue'
     <Logo />
     <div class="d-flex justify-space-between align-center">
       <NavBar />
-      <ToggleTheme />
     </div>
   </div>
 </template>
