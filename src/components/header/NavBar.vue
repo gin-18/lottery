@@ -3,29 +3,34 @@ const items = [
   {
     name: 'HOME',
     path: '/',
-    icon: 'home',
-    size: '22px',
+    icon: 'fa fa-house',
+    size: '16px',
   },
   {
     name: 'LIST',
     path: '/results',
-    size: '22px',
-    icon: 'subject',
+    icon: 'fa fa-list-ul',
+    size: '18px',
   },
   {
     name: 'ANALYZE',
     path: '/analyze',
-    icon: 'equalizer',
-    size: '22px',
+    icon: 'fa fa-chart-line',
+    size: '18px',
   },
 ]
 </script>
 
 <template>
   <nav class="d-flex justify-center align-center">
-    <v-breadcrumbs :items="items" divider="" active-color="area-cold">
+    <v-breadcrumbs
+      class="pr-0"
+      :items="items"
+      divider=""
+      active-color="area-cold"
+    >
       <template #item="{ item }">
-        <v-breadcrumbs-item :to="item.path">
+        <v-breadcrumbs-item class="pb-1" :to="item.path">
           <v-icon :icon="item.icon" :size="item.size" />
         </v-breadcrumbs-item>
       </template>
