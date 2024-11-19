@@ -51,7 +51,7 @@ function changeCode(num) {
       >
         <div class="d-flex ga-6 pb-2">
           <p>第{{ data.code }}期</p>
-          <p class="text-subtext">{{ formatDay(data.day) }}</p>
+          <p>{{ formatDay(data.day) }}</p>
         </div>
         <div class="ball-container">
           <Ball v-for="num in getBallNum(data)" :key="num" :num="num" />
@@ -64,11 +64,5 @@ function changeCode(num) {
 <style scoped>
 li {
   list-style: none;
-}
-
-.ball-container {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 0.5rem;
 }
 </style>
