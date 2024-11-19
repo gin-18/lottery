@@ -2,32 +2,19 @@
 import { ref, watch, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
-import { paletteLight } from '@/assets/js/palette.js'
 import {
   getBallNum,
   countSubarrays,
   countDuplicates,
 } from '@/assets/js/count.js'
-import Chart from 'chart.js/auto'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
+import BallCount from '@/components/analyze/BallCount.vue'
 
 const tab = ref(null) // 选项卡
 
-let chart = null // 图表实例
-const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
-const DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
-
 const allDataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
-
-const ballCountCodes = ref(7) // 号码统计的期数
-const ballCountData = ref([]) // 号码统计的区间数据
-
-const ballCountStartCode = ref({}) // 号码统计的开始期次
-const ballResultData = ref([]) // 号码统计的数据
-const ballCountLeftArrowEnable = ref(true)
-const ballCountRightArrowEnable = ref(true)
 
 const intervalNum = ref(10) // 区间统计的分区范围
 const intervalArea = ref([]) // 区间统计的区间
@@ -74,18 +61,6 @@ watch(areaCurrentDataIndex, () => {
   checkAreaArrowStatus()
 })
 
-watch(ballCountCodes, () => {
-  checkBallCountArrowStatus()
-})
-
-watch(ballCountCodes, () => {
-  ballCountData.value = allDataList.value.slice(0, ballCountCodes.value)
-  ballCountStartCode.value = allDataList.value[ballCountCodes.value - 1]
-  countBall()
-  chart.destroy()
-  showBallCount()
-})
-
 watch([repeatCodes, repeatNum], () => {
   if (repeatNum.value > repeatCodes.value) {
     repeatNum.value = repeatCodes.value
@@ -102,11 +77,8 @@ onMounted(async () => {
   setIntervalAreaColor()
   setIntervalArea(intervalNum.value)
   countRepeatBall()
-  countBall()
   checkAreaArrowStatus()
-  checkBallCountArrowStatus()
   checkRepeatCodesArrowStatus()
-  showBallCount()
 })
 
 function setIntervalArea(size) {
@@ -169,95 +141,6 @@ function countRepeatBall() {
   const result = countDuplicates(repeatBallList, repeatNum.value)
 
   repeatResultData.value = result
-}
-
-// 统计所有的号码出现的次数
-function countBall() {
-  const data = new Array(80).fill(null).map((item, index) => ({
-    num: (index + 1).toString().padStart(2, '0'),
-    count: 0,
-  }))
-  const ballList = ballCountData.value
-    .map((item) => getBallNum(item))
-    .flatMap((item) => item)
-
-  data.forEach((obj) => {
-    obj.count = ballList.filter((item) => item === obj.num).length
-  })
-
-  ballResultData.value = data
-}
-
-function showBallCount() {
-  chart = new Chart(document.getElementById('my-canvas'), {
-    type: 'line',
-    data: {
-      labels: ballResultData.value.map((row) => row.num),
-      datasets: [
-        {
-          label: '号码出现次数',
-          borderWidth: 2,
-          borderColor: DATA_COLOR,
-          backgroundColor: DATA_COLOR,
-          pointBackgroundColor: DATA_COLOR,
-          data: ballResultData.value.map((row) => row.count),
-        },
-      ],
-    },
-    options: {
-      indexAxis: 'y',
-      scales: {
-        x: {
-          ticks: {
-            color: GRID_COLOR,
-          },
-          grid: {
-            color: GRID_COLOR,
-          },
-        },
-        y: {
-          ticks: {
-            color: GRID_COLOR,
-          },
-          grid: {
-            color: GRID_COLOR,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: GRID_COLOR,
-          },
-        },
-      },
-    },
-  })
-}
-
-function addBallCountCodes() {
-  ballCountCodes.value += 1
-}
-
-function reduceBallCountCodes() {
-  ballCountCodes.value -= 1
-}
-
-function checkBallCountArrowStatus() {
-  if (ballCountCodes.value === 1) {
-    ballCountLeftArrowEnable.value = false
-    ballCountRightArrowEnable.value = true
-    return
-  }
-
-  if (ballCountCodes.value === allDataList.value.length) {
-    ballCountLeftArrowEnable.value = true
-    ballCountRightArrowEnable.value = false
-    return
-  }
-
-  ballCountLeftArrowEnable.value = true
-  ballCountRightArrowEnable.value = true
 }
 
 function getNextData() {
@@ -347,9 +230,6 @@ async function setData() {
   lastData.value = res.data.list[0]
   areaCurrentData.value = res.data.list[areaCurrentDataIndex.value]
 
-  ballCountData.value = res.data.list.slice(0, ballCountCodes.value)
-  ballCountStartCode.value = res.data.list[ballCountCodes.value - 1]
-
   repeatData.value = res.data.list.slice(0, repeatCodes.value)
   repeatStartData.value = res.data.list[repeatCodes.value - 1]
 }
@@ -366,31 +246,7 @@ async function setData() {
 
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
-        <div class="d-flex justify-space-between align-center py-6">
-          <p>第{{ ballCountStartCode.code }}期 - 第{{ lastData.code }}期</p>
-          <div class="d-flex justify-space-between align-center">
-            <v-icon
-              icon="fa fa-caret-left"
-              size="16px"
-              :disabled="!ballCountLeftArrowEnable"
-              @click="reduceBallCountCodes"
-            />
-            <p>（共 {{ ballCountCodes }} 期）</p>
-            <v-icon
-              icon="fa fa-caret-right"
-              size="16px"
-              :disabled="!ballCountRightArrowEnable"
-              @click="addBallCountCodes"
-            />
-          </div>
-        </div>
-
-        <canvas
-          id="my-canvas"
-          class="bg-background"
-          width="100vw"
-          height="600vh"
-        ></canvas>
+        <BallCount :data="allDataList" />
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
