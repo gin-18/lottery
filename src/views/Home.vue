@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getTheLatestData } from '@/assets/js/request.js'
+import { getLatestData } from '@/assets/js/request.js'
 import { formatDay } from '@/assets/js/formatDay.js'
 import { getBallNum } from '@/assets/js/count.js'
 import Header from '@/components/header/Header.vue'
@@ -76,8 +76,9 @@ const tables = computed(() =>
     .flat(),
 )
 
-async function setTheLatestData() {
-  data.value = await getTheLatestData()
+async function setLatestData() {
+  data.value = await getLatestData()
+  console.log(data.value)
 }
 
 function getShowIndex() {
@@ -92,20 +93,22 @@ function getShowIndex() {
 
 onMounted(() => {
   getShowIndex()
-  setTheLatestData()
+  setLatestData()
 })
 </script>
 
 <template>
   <Header />
   <main class="px-3 pb-3 text-text bg-background">
-    <h3 class="pt-6 pb-2">最新开奖</h3>
+    <h2 class="text-h6 font-weight-bold pt-6 pb-2">最新开奖</h2>
+    <div v-if="!data.code"></div>
     <div
       class="d-flex flex-column ga-2 mb-4 pb-4 border-0 border-b-sm border-dashed border-border"
+      v-else
     >
-      <div class="d-flex ga-6">
-        <p class="text-text">第{{ data.code }}期</p>
-        <p class="text-subtext">{{ formatDay(data.day) }}</p>
+      <div class="d-flex ga-6 text-text">
+        <p>第{{ data.code }}期</p>
+        <p>{{ formatDay(data.day) }}</p>
       </div>
 
       <div class="ball-container">
@@ -113,7 +116,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <h3 class="pb-2">奖金对照表</h3>
+    <h2 class="text-h6 font-weight-bold pb-2">奖金对照表</h2>
     <v-table class="border-border text-text bg-background">
       <thead>
         <tr>
@@ -134,15 +137,3 @@ onMounted(() => {
     </v-table>
   </main>
 </template>
-
-<style>
-.ball-container {
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: repeat(10, 1fr);
-}
-
-th {
-  font-weight: bold !important;
-}
-</style>

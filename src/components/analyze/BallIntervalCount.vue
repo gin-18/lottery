@@ -4,8 +4,8 @@ import { formatDay } from '@/assets/js/formatDay.js'
 import { getBallNum, countSubarrays } from '@/assets/js/count.js'
 import Ball from '@/components/content/Ball.vue'
 
-const step = ref(10) // 区间统计的分区范围
-const areas = ref([]) // 区间统计的区间
+const partitionStep = ref(10) // 区间统计的步长
+const interval = ref([]) // 区间
 const currentData = ref({}) // 当前期次数据
 const currentDataIndex = ref(0) // 当前期次数据下标
 const rightArrowEnable = ref(true)
@@ -39,16 +39,16 @@ const props = defineProps({
   },
 })
 
-onMounted(() => {
-  setIntervalArea(step.value)
-  currentData.value = props.data[currentDataIndex.value]
-  checkAreaArrowStatus()
-})
-
 watch(currentDataIndex, (newValue) => {
   currentData.value = props.data[newValue]
-  setIntervalArea(step.value)
-  checkAreaArrowStatus()
+  setInterval(partitionStep.value)
+  checkIntervalArrowStatus()
+})
+
+onMounted(() => {
+  setInterval(partitionStep.value)
+  currentData.value = props.data[currentDataIndex.value]
+  checkIntervalArrowStatus()
 })
 
 function getNextData() {
@@ -75,7 +75,7 @@ function checkBallIsHot(num) {
   return isHot
 }
 
-function setIntervalArea(size) {
+function setInterval(size) {
   const chunkedArray = []
   const balls = Array.from({ length: 80 }, (_, index) => {
     const paddedIndex =
@@ -87,12 +87,12 @@ function setIntervalArea(size) {
     chunkedArray.push(balls.slice(i, i + size))
   }
 
-  areas.value = chunkedArray
+  interval.value = chunkedArray
 }
 
-function setIntervalAreaColor(index) {
+function setIntervalColor(index) {
   const ballNum = getBallNum(currentData.value)
-  const countObj = countSubarrays(areas.value, ballNum)
+  const countObj = countSubarrays(interval.value, ballNum)
 
   if (countObj[index] >= intervalCategory[0].weight) {
     return intervalCategory[0].textColor
@@ -103,7 +103,7 @@ function setIntervalAreaColor(index) {
   }
 }
 
-function checkAreaArrowStatus() {
+function checkIntervalArrowStatus() {
   if (currentDataIndex.value === 0) {
     rightArrowEnable.value = false
     leftArrowEnable.value = true
@@ -149,8 +149,8 @@ function checkAreaArrowStatus() {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(area, index) in areas" :key="area">
-        <td :class="setIntervalAreaColor(index)">
+      <tr v-for="(area, index) in interval" :key="area">
+        <td :class="setIntervalColor(index)">
           [{{ area[0] }},{{ area[area.length - 1] }}]
         </td>
         <td class="d-flex align-center ga-1">
@@ -181,9 +181,5 @@ function checkAreaArrowStatus() {
 .area-color-box {
   width: 18px;
   height: 18px;
-}
-
-th {
-  font-weight: bold !important;
 }
 </style>

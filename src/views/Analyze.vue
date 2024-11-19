@@ -3,10 +3,10 @@ import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request.js'
 import Header from '@/components/header/Header.vue'
 import BallCount from '@/components/analyze/BallCount.vue'
-import BallAreaCount from '@/components/analyze/BallAreaCount.vue'
+import BallIntervalCount from '@/components/analyze/BallIntervalCount.vue'
 import BallRepeatCount from '@/components/analyze/BallRepeatCount.vue'
 
-const tab = ref(null) // 选项卡
+const tab = ref(null)
 
 const allDataList = ref([]) // 所有数据
 
@@ -35,7 +35,7 @@ async function setData() {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
-        <BallAreaCount :data="allDataList" />
+        <BallIntervalCount :data="allDataList" />
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">

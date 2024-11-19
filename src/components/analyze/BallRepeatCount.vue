@@ -154,10 +154,8 @@ function toggleSetting() {
   </v-table>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
-    <div
-      class="d-flex flex-column justify-center align-center ga-6 pa-6 rounded text-text bg-background"
-    >
-      <h3>重号分析设置</h3>
+    <div class="d-flex flex-column ga-6 pa-6 rounded text-text bg-background">
+      <h2 class="text-h6 font-weight-bold">重号分析设置</h2>
 
       <div class="d-flex justify-space-between align-center ga-6">
         <p>统计的期次：</p>
@@ -201,10 +199,6 @@ function toggleSetting() {
 </template>
 
 <style scoped>
-th {
-  font-weight: bold !important;
-}
-
 caption {
   caption-side: bottom;
 }
