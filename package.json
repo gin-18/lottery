@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@vercel/analytics": "^1.4.0",
-    "@vercel/speed-insights": "^1.1.0",
     "chart.js": "^4.4.6",
     "pinia": "^2.2.6",
     "vite-plugin-vuetify": "^2.0.4",
