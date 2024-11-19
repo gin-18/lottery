@@ -10,18 +10,12 @@ import {
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 import BallCount from '@/components/analyze/BallCount.vue'
+import BallAreaCount from '@/components/analyze/BallAreaCount.vue'
 
 const tab = ref(null) // 选项卡
 
 const allDataList = ref([]) // 所有数据
 const lastData = ref({}) // 最新期次数据
-
-const intervalNum = ref(10) // 区间统计的分区范围
-const intervalArea = ref([]) // 区间统计的区间
-const areaCurrentData = ref({}) // 当前期次数据
-const areaCurrentDataIndex = ref(0) // 当前期次数据下标
-const areaRightArrowEnable = ref(true)
-const areaLeftArrowEnable = ref(true)
 
 const repeatCodes = ref(2) // 重号统计的期数
 const repeatNum = ref(2) // 重号统计的重号个数
@@ -33,33 +27,6 @@ const repeatCodesLeftArrowEnable = ref(true)
 const repeatCodesRightArrowEnable = ref(true)
 const repeatNumLeftArrowEnable = ref(true)
 const repeatNumRightArrowEnable = ref(true)
-
-// TODO: 设置区间权重
-const intervalCategory = [
-  {
-    title: '热',
-    weight: 3,
-    backgroundColor: 'bg-area-hot',
-    textColor: 'text-area-hot',
-  },
-  {
-    title: '温',
-    weight: 2,
-    backgroundColor: 'bg-area-warm',
-    textColor: 'text-area-warm',
-  },
-  {
-    title: '冷',
-    weight: 0,
-    backgroundColor: 'bg-area-cold',
-    textColor: 'text-area-cold',
-  },
-]
-
-watch(areaCurrentDataIndex, () => {
-  areaCurrentData.value = allDataList.value[areaCurrentDataIndex.value]
-  checkAreaArrowStatus()
-})
 
 watch([repeatCodes, repeatNum], () => {
   if (repeatNum.value > repeatCodes.value) {
@@ -74,56 +41,9 @@ watch([repeatCodes, repeatNum], () => {
 
 onMounted(async () => {
   await setData()
-  setIntervalAreaColor()
-  setIntervalArea(intervalNum.value)
   countRepeatBall()
-  checkAreaArrowStatus()
   checkRepeatCodesArrowStatus()
 })
-
-function setIntervalArea(size) {
-  const chunkedArray = []
-  const balls = Array.from({ length: 80 }, (_, index) => {
-    const paddedIndex =
-      index + 1 < 10 ? `0${index + 1}` : (index + 1).toString()
-    return paddedIndex
-  })
-
-  for (let i = 0; i < balls.length; i += size) {
-    chunkedArray.push(balls.slice(i, i + size))
-  }
-
-  intervalArea.value = chunkedArray
-}
-
-function setIntervalAreaColor(index) {
-  const ballNum = getBallNum(areaCurrentData.value)
-  const countObj = countSubarrays(intervalArea.value, ballNum)
-
-  if (countObj[index] >= intervalCategory[0].weight) {
-    return intervalCategory[0].textColor
-  } else if (countObj[index] >= intervalCategory[1].weight) {
-    return intervalCategory[1].textColor
-  } else {
-    return intervalCategory[2].textColor
-  }
-}
-
-function setHotBallBackgroundColor(num) {
-  return checkBallIsHot(num) ? 'bg-ball-hot' : 'bg-ball-cold'
-}
-
-function checkBallIsHot(num) {
-  let isHot = false
-
-  Object.values(areaCurrentData.value).forEach((item) => {
-    if (item === num) {
-      isHot = true
-    }
-  })
-
-  return isHot
-}
 
 // 统计重复的号码
 function countRepeatBall() {
@@ -141,31 +61,6 @@ function countRepeatBall() {
   const result = countDuplicates(repeatBallList, repeatNum.value)
 
   repeatResultData.value = result
-}
-
-function getNextData() {
-  areaCurrentDataIndex.value -= 1
-}
-
-function getPreviousData() {
-  areaCurrentDataIndex.value += 1
-}
-
-function checkAreaArrowStatus() {
-  if (areaCurrentDataIndex.value === 0) {
-    areaRightArrowEnable.value = false
-    areaLeftArrowEnable.value = true
-    return
-  }
-
-  if (areaCurrentDataIndex.value === allDataList.value.length - 1) {
-    areaLeftArrowEnable.value = false
-    areaRightArrowEnable.value = true
-    return
-  }
-
-  areaLeftArrowEnable.value = true
-  areaRightArrowEnable.value = true
 }
 
 function addRepeatCodes() {
@@ -228,7 +123,6 @@ async function setData() {
   allDataList.value = res.data.list
 
   lastData.value = res.data.list[0]
-  areaCurrentData.value = res.data.list[areaCurrentDataIndex.value]
 
   repeatData.value = res.data.list.slice(0, repeatCodes.value)
   repeatStartData.value = res.data.list[repeatCodes.value - 1]
@@ -250,62 +144,7 @@ async function setData() {
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
-        <div class="d-flex justify-space-between align-center py-6">
-          <v-icon
-            icon="fa fa-caret-left"
-            size="16px"
-            :disabled="!areaLeftArrowEnable"
-            @click="getPreviousData"
-          />
-          <div class="d-flex ga-6">
-            <p>第{{ areaCurrentData.code }}期</p>
-            <p>{{ formatDay(areaCurrentData.day) }}</p>
-          </div>
-          <v-icon
-            icon="fa fa-caret-right"
-            size="16px"
-            :disabled="!areaRightArrowEnable"
-            @click="getNextData"
-          />
-        </div>
-
-        <v-table class="border-border text-text bg-background">
-          <thead>
-            <tr>
-              <th scope="col">区域</th>
-              <th scope="col">号码</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(area, index) in intervalArea" :key="area">
-              <td :class="setIntervalAreaColor(index)">
-                [{{ area[0] }},{{ area[area.length - 1] }}]
-              </td>
-              <td class="d-flex align-center ga-1">
-                <Ball
-                  v-for="num in area"
-                  :key="num"
-                  :num="num"
-                  :color="setHotBallBackgroundColor(num)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-
-        <div class="d-flex justify-space-around pt-3">
-          <div
-            class="d-flex align-center ga-2"
-            v-for="category in intervalCategory"
-            :key="category.title"
-          >
-            <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
-            <p
-              class="rounded area-color-box"
-              :class="category.backgroundColor"
-            ></p>
-          </div>
-        </div>
+        <BallAreaCount :data="allDataList" />
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
@@ -405,11 +244,6 @@ async function setData() {
 </template>
 
 <style scoped>
-.area-color-box {
-  width: 18px;
-  height: 18px;
-}
-
 th {
   font-weight: bold !important;
 }
