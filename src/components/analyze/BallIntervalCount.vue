@@ -1,17 +1,18 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { formatDay } from '@/assets/js/formatDay'
 import { getBallNum, countSubarrays } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 
+const showSetting = ref(false)
 const partitionStep = ref(10) // 区间统计的步长
 const interval = ref([]) // 区间
 const currentData = ref({}) // 当前期次数据
-const currentDataIndex = ref(0) // 当前期次数据下标
-const rightArrowEnable = ref(true)
-const leftArrowEnable = ref(true)
+const currentCodeIndex = ref(0) // 当前期次数据下标
+const codeAddArrowStatus = ref(false)
+const codeReduceArrowStatus = ref(false)
 
-const intervalCategory = [
+const intervalCategory = ref([
   {
     title: '热',
     weight: 3,
@@ -30,7 +31,11 @@ const intervalCategory = [
     backgroundColor: 'bg-area-cold',
     textColor: 'text-area-cold',
   },
-]
+])
+
+const code = computed(
+  () => `第${currentData.value.code}期\n${formatDay(currentData.value.day)}`,
+)
 
 const props = defineProps({
   data: {
@@ -39,24 +44,32 @@ const props = defineProps({
   },
 })
 
-watch(currentDataIndex, (newValue) => {
+watch(currentCodeIndex, (newValue) => {
   currentData.value = props.data[newValue]
   setInterval(partitionStep.value)
-  checkIntervalArrowStatus()
+  checkCodeArrowStatus()
 })
 
 onMounted(() => {
   setInterval(partitionStep.value)
-  currentData.value = props.data[currentDataIndex.value]
-  checkIntervalArrowStatus()
+  currentData.value = props.data[currentCodeIndex.value]
+  checkCodeArrowStatus()
 })
 
-function getNextData() {
-  currentDataIndex.value -= 1
+function goNextCode() {
+  currentCodeIndex.value -= 1
 }
 
-function getPreviousData() {
-  currentDataIndex.value += 1
+function goPreviousCode() {
+  currentCodeIndex.value += 1
+}
+
+function addWeight(index) {
+  intervalCategory.value[index].weight += 1
+}
+
+function reduceWeight(index) {
+  intervalCategory.value[index].weight -= 1
 }
 
 function setHotBallBackgroundColor(num) {
@@ -94,51 +107,51 @@ function setIntervalColor(index) {
   const ballNum = getBallNum(currentData.value)
   const countObj = countSubarrays(interval.value, ballNum)
 
-  if (countObj[index] >= intervalCategory[0].weight) {
-    return intervalCategory[0].textColor
-  } else if (countObj[index] >= intervalCategory[1].weight) {
-    return intervalCategory[1].textColor
+  if (countObj[index] >= intervalCategory.value[0].weight) {
+    return intervalCategory.value[0].textColor
+  } else if (countObj[index] >= intervalCategory.value[1].weight) {
+    return intervalCategory.value[1].textColor
   } else {
-    return intervalCategory[2].textColor
+    return intervalCategory.value[2].textColor
   }
 }
 
-function checkIntervalArrowStatus() {
-  if (currentDataIndex.value === 0) {
-    rightArrowEnable.value = false
-    leftArrowEnable.value = true
-    return
-  }
+function checkCodeArrowStatus() {
+  codeAddArrowStatus.value = false
+  codeReduceArrowStatus.value = false
 
-  if (currentDataIndex.value === props.data.length - 1) {
-    leftArrowEnable.value = false
-    rightArrowEnable.value = true
-    return
+  if (currentCodeIndex.value <= 0) {
+    codeAddArrowStatus.value = true
+  } else if (currentCodeIndex.value >= props.data.length - 1) {
+    codeReduceArrowStatus.value = true
   }
+}
 
-  leftArrowEnable.value = true
-  rightArrowEnable.value = true
+function checkAddWeightArrowStatus(index) {
+  if (index === 2) return
+
+  const weights = intervalCategory.value.map((item) => item.weight)
+  return index === 0
+    ? weights[index] >= partitionStep.value
+    : weights[index] >= weights[index - 1] - 1
+}
+
+function checkReduceWeightArrowStatus(index) {
+  if (index === 2) return
+
+  const weights = intervalCategory.value.map((item) => item.weight)
+  return weights[index] <= weights[index + 1] + 1
+}
+
+function toggleSetting() {
+  showSetting.value = !showSetting.value
 }
 </script>
 
 <template>
   <div class="d-flex justify-space-between align-center py-6">
-    <v-icon
-      icon="fa fa-caret-left"
-      size="16px"
-      :disabled="!leftArrowEnable"
-      @click="getPreviousData"
-    />
-    <div class="d-flex ga-6">
-      <p>第{{ currentData.code }}期</p>
-      <p>{{ formatDay(currentData.day) }}</p>
-    </div>
-    <v-icon
-      icon="fa fa-caret-right"
-      size="16px"
-      :disabled="!rightArrowEnable"
-      @click="getNextData"
-    />
+    <p class="wrap">{{ code }}</p>
+    <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
 
   <v-table class="border-border text-text bg-background">
@@ -168,13 +181,67 @@ function checkIntervalArrowStatus() {
   <div class="d-flex justify-space-around pt-3">
     <div
       class="d-flex align-center ga-2"
-      v-for="category in intervalCategory"
-      :key="category.title"
+      v-for="(category, index) in intervalCategory"
+      :key="index"
     >
-      <p>{{ category.title }}(&ge; {{ category.weight }}):</p>
+      <p>
+        {{ category.title }}(&ge;
+        {{ category.weight.toString().padStart(2, '0') }}):
+      </p>
       <p class="rounded area-color-box" :class="category.backgroundColor"></p>
     </div>
   </div>
+
+  <v-overlay v-model="showSetting" class="justify-center align-center">
+    <div class="d-flex flex-column pa-6 rounded text-text bg-background">
+      <h2 class="text-h6 font-weight-bold pb-8">区域分析设置</h2>
+
+      <div class="pb-8">
+        <h3 class="pb-3 text-body-1">期次：</h3>
+        <div class="d-flex justify-space-between align-center ga-12">
+          <v-icon
+            icon="fa fa-caret-left"
+            size="16px"
+            :disabled="codeReduceArrowStatus"
+            @click="goPreviousCode"
+          />
+          <p class="wrap">{{ code }}</p>
+          <v-icon
+            icon="fa fa-caret-right"
+            size="16px"
+            :disabled="codeAddArrowStatus"
+            @click="goNextCode"
+          />
+        </div>
+      </div>
+
+      <div
+        class="d-flex justify-space-between align-center"
+        v-for="(category, index) in intervalCategory"
+        :key="index"
+        :class="index === 0 ? 'pb-8' : ''"
+      >
+        <p v-if="index !== 2">{{ category.title }}区权重：</p>
+        <div v-if="index !== 2" class="d-flex align-center ga-8">
+          <v-icon
+            icon="fa fa-caret-left"
+            size="16px"
+            :disabled="checkReduceWeightArrowStatus(index)"
+            @click="reduceWeight(index)"
+          />
+          <p>
+            {{ intervalCategory[index].weight.toString().padStart(2, '0') }}
+          </p>
+          <v-icon
+            icon="fa fa-caret-right"
+            size="16px"
+            :disabled="checkAddWeightArrowStatus(index)"
+            @click="addWeight(index)"
+          />
+        </div>
+      </div>
+    </div>
+  </v-overlay>
 </template>
 
 <style scoped>

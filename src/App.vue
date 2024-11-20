@@ -19,4 +19,8 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
 th {
   font-weight: bold !important;
 }
+
+.wrap {
+  white-space: pre;
+}
 </style>

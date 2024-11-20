@@ -23,7 +23,7 @@ async function setData() {
 <template>
   <Header />
   <main class="px-3 pb-3 text-text bg-background">
-    <v-tabs grow height="64px" v-model="tab">
+    <v-tabs grow v-model="tab">
       <v-tab value="one">号码分析</v-tab>
       <v-tab value="two">区域分析</v-tab>
       <v-tab value="three">重号分析</v-tab>

@@ -166,12 +166,12 @@ function toggleSetting() {
 <template>
   <div v-if="!data.length"></div>
   <div v-else>
-    <div class="d-flex justify-space-between align-center w-100 pt-4">
+    <div class="d-flex justify-space-between align-center w-100 pt-6">
       <p class="font-weight-bold">共 {{ codeStep }} 期</p>
       <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
     </div>
 
-    <div class="d-flex align-center py-4">
+    <div class="d-flex align-center pt-4 pb-6">
       <div class="d-flex justify-space-between align-center ga-6 w-100">
         <p class="wrap">{{ startCode }}</p>
         <p>-</p>
@@ -179,6 +179,7 @@ function toggleSetting() {
       </div>
     </div>
   </div>
+
   <canvas
     id="chart"
     class="bg-background"
@@ -197,14 +198,14 @@ function toggleSetting() {
         <div class="d-flex justify-space-between align-center ga-12">
           <v-icon
             icon="fa fa-caret-left"
-            size="18px"
+            size="16px"
             :disabled="startAddArrowStatus"
             @click="addStartCode"
           />
           <p class="wrap">{{ startCode }}</p>
           <v-icon
             icon="fa fa-caret-right"
-            size="18px"
+            size="16px"
             :disabled="startReduceArrowStatus"
             @click="reduceStartCode"
           />
@@ -216,14 +217,14 @@ function toggleSetting() {
         <div class="d-flex justify-space-between align-center ga-12">
           <v-icon
             icon="fa fa-caret-left"
-            size="18px"
+            size="16px"
             :disabled="endAddArrowStatus"
             @click="addEndCode"
           />
           <p class="wrap">{{ endCode }}</p>
           <v-icon
             icon="fa fa-caret-right"
-            size="18px"
+            size="16px"
             :disabled="endReduceArrowStatus"
             @click="reduceEndCode"
           />
@@ -232,9 +233,3 @@ function toggleSetting() {
     </div>
   </v-overlay>
 </template>
-
-<style scoped>
-.wrap {
-  white-space: pre;
-}
-</style>
