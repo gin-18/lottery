@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request.js'
+import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import BallCount from '@/components/analyze/BallCount.vue'
 import BallIntervalCount from '@/components/analyze/BallIntervalCount.vue'

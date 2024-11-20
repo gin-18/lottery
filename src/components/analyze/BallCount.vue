@@ -1,20 +1,34 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { getBallNum } from '@/assets/js/count.js'
-import { paletteLight } from '@/assets/js/palette.js'
+import { ref, computed, watch } from 'vue'
+import { getBallNum } from '@/assets/js/count'
+import { formatDay } from '@/assets/js/formatDay'
+import { paletteLight } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 
 let chart = null // 图表实例
 const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
 const DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 
-const startData = ref({}) // 号码统计的开始期次
-const lastData = ref({}) // 最新期次数据
-const codeStep = ref(7) // 号码统计的期数
-const countData = ref([]) // 号码统计的区间数据
-const resultData = ref([]) // 号码统计的数据
-const leftArrowEnable = ref(true)
-const rightArrowEnable = ref(true)
+const showSetting = ref(false)
+const startData = ref({}) // 开始期次
+const endData = ref({}) // 结束期次
+const startIndex = ref(6) // 开始期次下标
+const endIndex = ref(0) // 结束期次下标
+const countData = ref([]) // 统计的数据
+const resultData = ref([]) // 统计后的数据
+
+const startAddArrowStatus = ref(false)
+const startReduceArrowStatus = ref(false)
+const endAddArrowStatus = ref(false)
+const endReduceArrowStatus = ref(false)
+
+const codeStep = computed(() => startIndex.value - endIndex.value + 1)
+const startCode = computed(
+  () => `第${startData.value.code}期\n${formatDay(startData.value.day)}`,
+)
+const endCode = computed(
+  () => `第${endData.value.code}期\n${formatDay(endData.value.day)}`,
+)
 
 const props = defineProps({
   data: {
@@ -26,30 +40,43 @@ const props = defineProps({
 watch(
   () => props.data,
   () => {
-    startData.value = props.data[codeStep.value - 1]
-    lastData.value = props.data[0]
-    countData.value = props.data.slice(0, codeStep.value)
+    startData.value = props.data[startIndex.value]
+    endData.value = props.data[endIndex.value]
+    countData.value = props.data.slice(endIndex.value, startIndex.value + 1)
     countBall()
     drawResultData()
     checkBallCountArrowStatus()
   },
 )
 
-watch(codeStep, (newValue) => {
-  countData.value = props.data.slice(0, newValue)
-  startData.value = props.data[newValue - 1]
+watch([startIndex, endIndex], (newValue) => {
+  startData.value = props.data[newValue[0]]
+  endData.value = props.data[newValue[1]]
+  countData.value = props.data.slice(newValue[1], newValue[0] + 1)
   countBall()
   chart.destroy()
   drawResultData()
   checkBallCountArrowStatus()
 })
 
-function addCodeStep() {
-  codeStep.value += 1
+function addStartCode() {
+  if (startIndex.value >= props.data.length - 1) return
+  startIndex.value += 1
 }
 
-function reduceCodeStep() {
-  codeStep.value -= 1
+function reduceStartCode() {
+  if (startIndex.value <= endIndex.value) return
+  startIndex.value -= 1
+}
+
+function addEndCode() {
+  if (startIndex.value <= endIndex.value) return
+  endIndex.value += 1
+}
+
+function reduceEndCode() {
+  if (endIndex.value <= 0) return
+  endIndex.value -= 1
 }
 
 function countBall() {
@@ -69,20 +96,19 @@ function countBall() {
 }
 
 function checkBallCountArrowStatus() {
-  if (codeStep.value === 1) {
-    leftArrowEnable.value = false
-    rightArrowEnable.value = true
-    return
-  }
+  startAddArrowStatus.value = false
+  startReduceArrowStatus.value = false
+  endAddArrowStatus.value = false
+  endReduceArrowStatus.value = false
 
-  if (codeStep.value === props.data.length) {
-    leftArrowEnable.value = true
-    rightArrowEnable.value = false
-    return
+  if (startIndex.value >= props.data.length - 1) {
+    startAddArrowStatus.value = true
+  } else if (startIndex.value <= endIndex.value) {
+    startReduceArrowStatus.value = true
+    endAddArrowStatus.value = true
+  } else if (endIndex.value <= 0) {
+    endReduceArrowStatus.value = true
   }
-
-  leftArrowEnable.value = true
-  rightArrowEnable.value = true
 }
 
 function drawResultData() {
@@ -131,33 +157,84 @@ function drawResultData() {
     },
   })
 }
+
+function toggleSetting() {
+  showSetting.value = !showSetting.value
+}
 </script>
 
 <template>
   <div v-if="!data.length"></div>
-  <div v-else class="d-flex justify-space-between align-center py-6">
-    <p>第{{ startData.code }}期 - 第{{ lastData.code }}期</p>
-    <div class="d-flex justify-space-between align-center">
-      <v-icon
-        icon="fa fa-caret-left"
-        size="16px"
-        :disabled="!leftArrowEnable"
-        @click="reduceCodeStep"
-      />
-      <p>（共 {{ codeStep }} 期）</p>
-      <v-icon
-        icon="fa fa-caret-right"
-        size="16px"
-        :disabled="!rightArrowEnable"
-        @click="addCodeStep"
-      />
+  <div v-else>
+    <div class="d-flex justify-space-between align-center w-100 pt-4">
+      <p class="font-weight-bold">共 {{ codeStep }} 期</p>
+      <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
+    </div>
+
+    <div class="d-flex align-center py-4">
+      <div class="d-flex justify-space-between align-center ga-6 w-100">
+        <p class="wrap">{{ startCode }}</p>
+        <p>-</p>
+        <p class="wrap">{{ endCode }}</p>
+      </div>
     </div>
   </div>
-
   <canvas
     id="chart"
     class="bg-background"
     width="100vw"
     height="600vh"
   ></canvas>
+
+  <v-overlay v-model="showSetting" class="justify-center align-center">
+    <div class="d-flex flex-column ga-8 pa-6 rounded text-text bg-background">
+      <h2 class="text-h6 font-weight-bold">号码统计设置</h2>
+
+      <p>共 {{ codeStep }} 期</p>
+
+      <div>
+        <h3 class="pb-3 text-body-1">起始期次：</h3>
+        <div class="d-flex justify-space-between align-center ga-12">
+          <v-icon
+            icon="fa fa-caret-left"
+            size="18px"
+            :disabled="startAddArrowStatus"
+            @click="addStartCode"
+          />
+          <p class="wrap">{{ startCode }}</p>
+          <v-icon
+            icon="fa fa-caret-right"
+            size="18px"
+            :disabled="startReduceArrowStatus"
+            @click="reduceStartCode"
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 class="pb-3 text-body-1">结束期次：</h3>
+        <div class="d-flex justify-space-between align-center ga-12">
+          <v-icon
+            icon="fa fa-caret-left"
+            size="18px"
+            :disabled="endAddArrowStatus"
+            @click="addEndCode"
+          />
+          <p class="wrap">{{ endCode }}</p>
+          <v-icon
+            icon="fa fa-caret-right"
+            size="18px"
+            :disabled="endReduceArrowStatus"
+            @click="reduceEndCode"
+          />
+        </div>
+      </div>
+    </div>
+  </v-overlay>
 </template>
+
+<style scoped>
+.wrap {
+  white-space: pre;
+}
+</style>

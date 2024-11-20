@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { getBallNum, countDuplicates } from '@/assets/js/count.js'
+import { getBallNum, countDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 
 const showSetting = ref(false)

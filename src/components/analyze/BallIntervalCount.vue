@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { formatDay } from '@/assets/js/formatDay.js'
-import { getBallNum, countSubarrays } from '@/assets/js/count.js'
+import { formatDay } from '@/assets/js/formatDay'
+import { getBallNum, countSubarrays } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 
 const partitionStep = ref(10) // 区间统计的步长
