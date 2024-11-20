@@ -1,8 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request.js'
-import { formatDay } from '@/assets/js/formatDay.js'
-import { getBallNum } from '@/assets/js/count.js'
+import { getDataByNum } from '@/assets/js/request'
+import { formatDay } from '@/assets/js/formatDay'
+import { getBallNum } from '@/assets/js/count'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
 

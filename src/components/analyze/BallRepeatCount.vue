@@ -1,20 +1,20 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { getBallNum, countDuplicates } from '@/assets/js/count.js'
+import { getBallNum, countDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 
 const showSetting = ref(false)
 
-const startData = ref({}) // 重号统计的开始期次
+const startData = ref({}) // 开始期次
 const lastData = ref({}) // 最新期次数据
-const codeStep = ref(2) // 重号统计的期数
-const repeatNum = ref(2) // 重号统计的重号个数
-const repeatData = ref([]) // 重号统计的区间数据
-const resultData = ref({}) // 重号统计的数据
-const codeStepLeftArrowEnable = ref(true)
-const codeStepRightArrowEnable = ref(true)
-const repeatNumLeftArrowEnable = ref(true)
-const repeatNumRightArrowEnable = ref(true)
+const codeStep = ref(2) // 期数
+const repeatTimes = ref(2) // 重复个数
+const repeatData = ref([]) // 需要统计的数据
+const resultData = ref({}) // 统计后的数据
+const codeStepReduceArrowStatus = ref(false)
+const codeStepAddArrowStatus = ref(false)
+const repeatNumReduceArrowStatus = ref(false)
+const repeatNumAddArrowStatus = ref(false)
 
 const props = defineProps({
   data: {
@@ -23,23 +23,24 @@ const props = defineProps({
   },
 })
 
-watch([codeStep, repeatNum], () => {
-  if (repeatNum.value > codeStep.value) {
-    repeatNum.value = codeStep.value
+watch([codeStep, repeatTimes], (newValue) => {
+  if (newValue[1] > newValue[0]) {
+    repeatTimes.value = newValue[0]
   }
-  repeatData.value = props.data.slice(0, codeStep.value)
-  startData.value = props.data[codeStep.value - 1]
+  startData.value = props.data[newValue[0] - 1]
+  repeatData.value = props.data.slice(0, newValue[0])
+  countRepeatBall()
   checkCodeStepArrowStatus()
   checkRepeatNumArrowStatus()
-  countRepeatBall()
 })
 
 onMounted(() => {
-  startData.value = props.data[codeStep.value - 1]
   lastData.value = props.data[0]
+  startData.value = props.data[codeStep.value - 1]
   repeatData.value = props.data.slice(0, codeStep.value)
   countRepeatBall()
   checkCodeStepArrowStatus()
+  checkRepeatNumArrowStatus()
 })
 
 function countRepeatBall() {
@@ -54,7 +55,7 @@ function countRepeatBall() {
     })
   }
 
-  const result = countDuplicates(repeatBallList, repeatNum.value)
+  const result = countDuplicates(repeatBallList, repeatTimes.value)
 
   resultData.value = result
 }
@@ -68,45 +69,34 @@ function reduceCodeStep() {
 }
 
 function addRepeatNum() {
-  repeatNum.value += 1
+  repeatTimes.value += 1
 }
 
 function reduceRepeatNum() {
-  repeatNum.value -= 1
+  repeatTimes.value -= 1
 }
 
 function checkCodeStepArrowStatus() {
-  if (codeStep.value === 1) {
-    codeStepLeftArrowEnable.value = false
-    codeStepRightArrowEnable.value = true
-    return
-  }
+  codeStepReduceArrowStatus.value = false
+  codeStepAddArrowStatus.value = false
 
-  if (codeStep.value === props.data.length) {
-    codeStepLeftArrowEnable.value = true
-    codeStepRightArrowEnable.value = false
-    return
+  if (codeStep.value <= 2) {
+    codeStepReduceArrowStatus.value = true
+  } else if (codeStep.value >= props.data.length) {
+    codeStepAddArrowStatus.value = true
   }
-
-  codeStepLeftArrowEnable.value = true
-  codeStepRightArrowEnable.value = true
 }
 
 function checkRepeatNumArrowStatus() {
-  if (repeatNum.value === 1) {
-    repeatNumLeftArrowEnable.value = false
-    repeatNumRightArrowEnable.value = true
-    return
-  }
+  repeatNumReduceArrowStatus.value = false
+  repeatNumAddArrowStatus.value = false
 
-  if (repeatNum.value === codeStep.value) {
-    repeatNumLeftArrowEnable.value = true
-    repeatNumRightArrowEnable.value = false
-    return
+  if (repeatTimes.value === codeStep.value) {
+    repeatNumReduceArrowStatus.value = true
+    repeatNumAddArrowStatus.value = true
+  } else if (repeatTimes.value <= 2) {
+    repeatNumReduceArrowStatus.value = true
   }
-
-  repeatNumLeftArrowEnable.value = true
-  repeatNumRightArrowEnable.value = true
 }
 
 function toggleSetting() {
@@ -119,7 +109,7 @@ function toggleSetting() {
     <p class="py-3">
       第{{ startData.code }}期 - 第{{ lastData.code }}期（共{{ codeStep }}期）
     </p>
-    <v-icon icon="fa fa-gear" size="14px" @click="toggleSetting" />
+    <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
 
   <v-table class="border-border text-text bg-background">
@@ -148,29 +138,29 @@ function toggleSetting() {
     </tbody>
     <caption class="pt-3">
       只统计出现过{{
-        repeatNum
+        repeatTimes
       }}次及以上的号码
     </caption>
   </v-table>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
-    <div class="d-flex flex-column ga-6 pa-6 rounded text-text bg-background">
+    <div class="d-flex flex-column ga-8 pa-6 rounded text-text bg-background">
       <h2 class="text-h6 font-weight-bold">重号分析设置</h2>
 
-      <div class="d-flex justify-space-between align-center ga-6">
-        <p>统计的期次：</p>
+      <div class="d-flex justify-space-between align-center ga-8">
+        <p>期数：</p>
         <div class="d-flex align-center ga-8">
           <v-icon
             icon="fa fa-caret-left"
             size="16px"
-            :disabled="!codeStepLeftArrowEnable"
+            :disabled="codeStepReduceArrowStatus"
             @click="reduceCodeStep"
           />
           <p>{{ codeStep }}</p>
           <v-icon
             icon="fa fa-caret-right"
             size="16px"
-            :disabled="!codeStepRightArrowEnable"
+            :disabled="codeStepAddArrowStatus"
             @click="addCodeStep"
           />
         </div>
@@ -182,14 +172,14 @@ function toggleSetting() {
           <v-icon
             icon="fa fa-caret-left"
             size="16px"
-            :disabled="!repeatNumLeftArrowEnable"
+            :disabled="repeatNumReduceArrowStatus"
             @click="reduceRepeatNum"
           />
-          <p>{{ repeatNum }}</p>
+          <p>{{ repeatTimes }}</p>
           <v-icon
             icon="fa fa-caret-right"
             size="16px"
-            :disabled="!repeatNumRightArrowEnable"
+            :disabled="repeatNumAddArrowStatus"
             @click="addRepeatNum"
           />
         </div>

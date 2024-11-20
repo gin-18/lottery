@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
   <p
-    class="d-flex justify-center align-center pa-3 rounded-circle text-body-2"
+    class="d-flex justify-center align-center pa-3 rounded-circle text-body-2 font-weight-bold"
     :class="color"
   >
     {{ num }}
@@ -19,7 +19,7 @@ const props = defineProps({
 
 <style scoped>
 p {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 </style>

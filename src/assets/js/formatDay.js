@@ -5,5 +5,5 @@ export function formatDay(d) {
   const day = date.getDate()
   const week = date.getDay()
   const weekArr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-  return `${year}-${month}-${day}(${weekArr[week]})`
+  return `${year}/${month}/${day}(${weekArr[week]})`
 }
