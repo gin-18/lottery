@@ -149,7 +149,7 @@ function toggleSetting() {
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center py-6">
+  <div class="d-flex justify-space-between align-center pb-4">
     <p class="wrap">{{ code }}</p>
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>

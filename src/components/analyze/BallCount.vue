@@ -166,12 +166,12 @@ function toggleSetting() {
 <template>
   <div v-if="!data.length"></div>
   <div v-else>
-    <div class="d-flex justify-space-between align-center w-100 pt-6">
+    <div class="d-flex justify-space-between align-center w-100">
       <p class="font-weight-bold">共 {{ codeStep }} 期</p>
       <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
     </div>
 
-    <div class="d-flex align-center pt-4 pb-6">
+    <div class="d-flex align-center pt-4 pb-4">
       <div class="d-flex justify-space-between align-center ga-6 w-100">
         <p class="wrap">{{ startCode }}</p>
         <p>-</p>

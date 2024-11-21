@@ -105,7 +105,7 @@ function toggleSetting() {
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center py-6">
+  <div class="d-flex justify-space-between align-center pb-4">
     <p class="py-3">
       第{{ startData.code }}期 - 第{{ lastData.code }}期（共{{ codeStep }}期）
     </p>

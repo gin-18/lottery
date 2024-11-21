@@ -98,8 +98,9 @@ onMounted(() => {
 
 <template>
   <Header />
-  <main class="px-3 pb-3 text-text bg-background">
-    <h2 class="text-h6 font-weight-bold pt-6 pb-2">最新开奖</h2>
+
+  <v-container class="text-text">
+    <h2 class="text-h6 font-weight-bold pb-2">最新开奖</h2>
     <div v-if="!data.code"></div>
     <div
       class="d-flex flex-column ga-2 mb-4 pb-4 border-0 border-b-sm border-dashed border-border"
@@ -134,5 +135,5 @@ onMounted(() => {
         </tr>
       </tbody>
     </v-table>
-  </main>
+  </v-container>
 </template>

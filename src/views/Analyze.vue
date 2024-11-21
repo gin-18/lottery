@@ -22,13 +22,14 @@ async function setData() {
 
 <template>
   <Header />
-  <main class="px-3 pb-3 text-text bg-background">
-    <v-tabs grow v-model="tab">
-      <v-tab value="one">号码分析</v-tab>
-      <v-tab value="two">区域分析</v-tab>
-      <v-tab value="three">重号分析</v-tab>
-    </v-tabs>
 
+  <v-tabs grow class="text-text" v-model="tab">
+    <v-tab value="one">号码分析</v-tab>
+    <v-tab value="two">区域分析</v-tab>
+    <v-tab value="three">重号分析</v-tab>
+  </v-tabs>
+
+  <v-container class="text-text">
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
         <BallCount :data="allDataList" />
@@ -42,5 +43,5 @@ async function setData() {
         <BallRepeatCount :data="allDataList" />
       </v-tabs-window-item>
     </v-tabs-window>
-  </main>
+  </v-container>
 </template>
