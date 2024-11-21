@@ -1,5 +1,6 @@
 export const paletteLight = {
   background: '#eff1f5', // base
+  surface: '#e6e9ef', // mantle
   'sub-background': '#e6e9ef', // mantle
   text: '#4c4f69', // text
   subtext: '#6c6f85', // subtext0

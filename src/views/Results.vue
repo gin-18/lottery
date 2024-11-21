@@ -28,8 +28,9 @@ function changeCode(num) {
 
 <template>
   <Header />
-  <main class="px-3 pt-6 pb-2 text-text bg-background">
-    <div class="d-flex justify-space-between pb-6">
+
+  <v-container class="text-text">
+    <div class="d-flex justify-space-between pb-4">
       <v-btn
         base-color="inactive"
         active-color="text-text"
@@ -58,7 +59,7 @@ function changeCode(num) {
         </div>
       </li>
     </ul>
-  </main>
+  </v-container>
 </template>
 
 <style scoped>
