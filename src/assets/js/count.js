@@ -104,3 +104,18 @@ export function countDuplicates(array, weight) {
 
   return duplicates
 }
+
+/*
+ * 传入一个[{num: '01', count: 1}, {num: '02', count: 2}, {num: '03', count: 1}]这样的数组
+ * 返回一个{1: {nums: ['01', '03'], total: 2}, 2: {nums: ['02'], total: 1}}这样的对象
+ */
+export function groupByCount(arr) {
+  return arr.reduce((acc, curr) => {
+    if (!acc[curr.count]) {
+      acc[curr.count] = { nums: [], total: 0 }
+    }
+    acc[curr.count].nums.push(curr.num)
+    acc[curr.count].total++
+    return acc
+  }, {})
+}
