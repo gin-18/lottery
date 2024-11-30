@@ -1,9 +1,10 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { getBallNum } from '@/assets/js/count'
+import { getBallNum, groupByCount } from '@/assets/js/count'
 import { formatDay } from '@/assets/js/formatDay'
 import { paletteLight } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
+import Ball from '@/components/content/Ball.vue'
 
 let chart = null // 图表实例
 const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
@@ -16,6 +17,7 @@ const startIndex = ref(6) // 开始期次下标
 const endIndex = ref(0) // 结束期次下标
 const countData = ref([]) // 统计的数据
 const resultData = ref([]) // 统计后的数据
+const groupResultData = ref(null)
 
 const startAddArrowStatus = ref(false)
 const startReduceArrowStatus = ref(false)
@@ -44,6 +46,7 @@ watch(
     endData.value = props.data[endIndex.value]
     countData.value = props.data.slice(endIndex.value, startIndex.value + 1)
     countBall()
+    setGroupResultData()
     drawResultData()
     checkBallCountArrowStatus()
   },
@@ -54,6 +57,7 @@ watch([startIndex, endIndex], (newValue) => {
   endData.value = props.data[newValue[1]]
   countData.value = props.data.slice(newValue[1], newValue[0] + 1)
   countBall()
+  setGroupResultData()
   chart.destroy()
   drawResultData()
   checkBallCountArrowStatus()
@@ -93,6 +97,10 @@ function countBall() {
   })
 
   resultData.value = data
+}
+
+function setGroupResultData() {
+  groupResultData.value = groupByCount(resultData.value)
 }
 
 function checkBallCountArrowStatus() {
@@ -180,6 +188,28 @@ function toggleSetting() {
     </div>
   </div>
 
+  <h2 class="text-h6 font-weight-bold pb-2">统计表</h2>
+  <v-table class="border-border text-text bg-background">
+    <thead>
+      <tr>
+        <th>次数</th>
+        <th>号码</th>
+        <th>个数</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="(value, key) in groupResultData" :key="key">
+        <th>{{ key }}</th>
+        <td class="ball-container h-100">
+          <Ball v-for="num in value.nums" :key="num" :num="num" />
+        </td>
+        <td>{{ value.total }}</td>
+      </tr>
+    </tbody>
+  </v-table>
+
+  <h2 class="text-h6 font-weight-bold py-2">折线图</h2>
   <canvas
     id="chart"
     class="bg-background"
@@ -233,3 +263,12 @@ function toggleSetting() {
     </div>
   </v-overlay>
 </template>
+
+<style scoped>
+.ball-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  padding: 1rem !important;
+}
+</style>
