@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { getBallNum, countByGroup } from '@/assets/js/count'
 import { formatDay } from '@/assets/js/formatDay'
 import Ball from '@/components/content/Ball.vue'
@@ -33,17 +33,14 @@ const props = defineProps({
   },
 })
 
-watch(
-  () => props.data,
-  () => {
-    startData.value = props.data[startIndex.value]
-    endData.value = props.data[endIndex.value]
-    countData.value = props.data.slice(endIndex.value, startIndex.value + 1)
-    countBall()
-    setGroupResultData()
-    checkBallCountArrowStatus()
-  },
-)
+onMounted(() => {
+  startData.value = props.data[startIndex.value]
+  endData.value = props.data[endIndex.value]
+  countData.value = props.data.slice(endIndex.value, startIndex.value + 1)
+  countBall()
+  setGroupResultData()
+  checkBallCountArrowStatus()
+})
 
 watch([startIndex, endIndex], (newValue) => {
   startData.value = props.data[newValue[0]]

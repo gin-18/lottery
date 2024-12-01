@@ -126,5 +126,5 @@ export function countByFrequency(arr) {
       acc[count] = (acc[count] || 0) + 1
       return acc
     }, {}),
-  ).map(([count, sum]) => ({ [count]: sum }))
+  )
 }
