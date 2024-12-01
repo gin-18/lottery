@@ -1,14 +1,8 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { getBallNum, groupByCount } from '@/assets/js/count'
+import { getBallNum, countByGroup } from '@/assets/js/count'
 import { formatDay } from '@/assets/js/formatDay'
-import { paletteLight } from '@/assets/js/palette'
-import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
-
-let chart = null // 图表实例
-const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
-const DATA_COLOR = paletteLight['area-cold'] // 亮色模式数据颜色
 
 const showSetting = ref(false)
 const startData = ref({}) // 开始期次
@@ -47,7 +41,6 @@ watch(
     countData.value = props.data.slice(endIndex.value, startIndex.value + 1)
     countBall()
     setGroupResultData()
-    drawResultData()
     checkBallCountArrowStatus()
   },
 )
@@ -58,8 +51,6 @@ watch([startIndex, endIndex], (newValue) => {
   countData.value = props.data.slice(newValue[1], newValue[0] + 1)
   countBall()
   setGroupResultData()
-  chart.destroy()
-  drawResultData()
   checkBallCountArrowStatus()
 })
 
@@ -100,7 +91,7 @@ function countBall() {
 }
 
 function setGroupResultData() {
-  groupResultData.value = groupByCount(resultData.value)
+  groupResultData.value = countByGroup(resultData.value)
 }
 
 function checkBallCountArrowStatus() {
@@ -117,53 +108,6 @@ function checkBallCountArrowStatus() {
   } else if (endIndex.value <= 0) {
     endReduceArrowStatus.value = true
   }
-}
-
-function drawResultData() {
-  chart = new Chart(document.getElementById('chart'), {
-    type: 'line',
-    data: {
-      labels: resultData.value.map((row) => row.num),
-      datasets: [
-        {
-          label: '号码出现次数',
-          borderWidth: 2,
-          borderColor: DATA_COLOR,
-          backgroundColor: DATA_COLOR,
-          pointBackgroundColor: DATA_COLOR,
-          data: resultData.value.map((row) => row.count),
-        },
-      ],
-    },
-    options: {
-      indexAxis: 'y',
-      scales: {
-        x: {
-          ticks: {
-            color: GRID_COLOR,
-          },
-          grid: {
-            color: GRID_COLOR,
-          },
-        },
-        y: {
-          ticks: {
-            color: GRID_COLOR,
-          },
-          grid: {
-            color: GRID_COLOR,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: GRID_COLOR,
-          },
-        },
-      },
-    },
-  })
 }
 
 function toggleSetting() {
@@ -208,14 +152,6 @@ function toggleSetting() {
       </tr>
     </tbody>
   </v-table>
-
-  <h2 class="text-h6 font-weight-bold py-2">折线图</h2>
-  <canvas
-    id="chart"
-    class="bg-background"
-    width="100vw"
-    height="600vh"
-  ></canvas>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
     <div class="d-flex flex-column ga-8 pa-6 rounded text-text bg-background">

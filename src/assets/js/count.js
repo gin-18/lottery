@@ -109,7 +109,7 @@ export function countDuplicates(array, weight) {
  * 传入一个[{num: '01', count: 1}, {num: '02', count: 2}, {num: '03', count: 1}]这样的数组
  * 返回一个{1: {nums: ['01', '03'], total: 2}, 2: {nums: ['02'], total: 1}}这样的对象
  */
-export function groupByCount(arr) {
+export function countByGroup(arr) {
   return arr.reduce((acc, curr) => {
     if (!acc[curr.count]) {
       acc[curr.count] = { nums: [], total: 0 }
@@ -118,4 +118,13 @@ export function groupByCount(arr) {
     acc[curr.count].total++
     return acc
   }, {})
+}
+
+export function countByFrequency(arr) {
+  return Object.entries(
+    arr.reduce((acc, { num, count }) => {
+      acc[count] = (acc[count] || 0) + 1
+      return acc
+    }, {}),
+  ).map(([count, sum]) => ({ [count]: sum }))
 }

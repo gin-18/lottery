@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
+import FrequencyCount from '@/components/analyze/FrequencyCount.vue'
 import BallCount from '@/components/analyze/BallCount.vue'
 import BallIntervalCount from '@/components/analyze/BallIntervalCount.vue'
 import BallRepeatCount from '@/components/analyze/BallRepeatCount.vue'
@@ -24,22 +25,27 @@ async function setData() {
   <Header />
 
   <v-tabs grow class="text-text" v-model="tab">
-    <v-tab value="one">号码分析</v-tab>
-    <v-tab value="two">区域分析</v-tab>
-    <v-tab value="three">重号分析</v-tab>
+    <v-tab value="one">频率分析</v-tab>
+    <v-tab value="two">号码分析</v-tab>
+    <v-tab value="three">区域分析</v-tab>
+    <v-tab value="four">重号分析</v-tab>
   </v-tabs>
 
   <v-container class="text-text">
     <v-tabs-window v-model="tab">
       <v-tabs-window-item value="one">
-        <BallCount :data="allDataList" />
+        <FrequencyCount :data="allDataList" />
       </v-tabs-window-item>
 
       <v-tabs-window-item value="two">
-        <BallIntervalCount :data="allDataList" />
+        <BallCount :data="allDataList" />
       </v-tabs-window-item>
 
       <v-tabs-window-item value="three">
+        <BallIntervalCount :data="allDataList" />
+      </v-tabs-window-item>
+
+      <v-tabs-window-item value="four">
         <BallRepeatCount :data="allDataList" />
       </v-tabs-window-item>
     </v-tabs-window>

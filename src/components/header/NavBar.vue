@@ -1,12 +1,6 @@
 <script setup>
 const items = [
   {
-    name: 'HOME',
-    path: '/',
-    icon: 'fa fa-house',
-    size: '16px',
-  },
-  {
     name: 'LIST',
     path: '/results',
     icon: 'fa fa-list-ul',
