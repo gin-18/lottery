@@ -5,6 +5,7 @@ import { formatDay } from '@/assets/js/formatDay'
 import { getBallNum } from '@/assets/js/count'
 import Header from '@/components/header/Header.vue'
 import Ball from '@/components/content/Ball.vue'
+import ResultContainer from '@/components/content/ResultContainer.vue'
 
 let datas = []
 const nums = [15, 30, 50, 100]
@@ -44,19 +45,13 @@ function changeCode(num) {
       </v-btn>
     </div>
 
-    <ul class="d-flex flex-column ga-4">
+    <ul class="d-flex flex-column ga-6">
       <li
-        class="pb-4 border-0 border-b-sm border-dashed border-border text-text"
+        class="pb-6 border-0 border-b-sm"
         v-for="data in dataList"
         :key="data.code"
       >
-        <div class="d-flex ga-6 pb-6">
-          <p>第{{ data.code }}期</p>
-          <p>{{ formatDay(data.day) }}</p>
-        </div>
-        <div class="d-flex align-center ga-4">
-          <Ball v-for="num in getBallNum(data)" :key="num" :num="num" />
-        </div>
+        <ResultContainer :data="data" />
       </li>
     </ul>
   </v-container>
