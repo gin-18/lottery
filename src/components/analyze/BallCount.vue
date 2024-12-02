@@ -142,7 +142,7 @@ function toggleSetting() {
     <tbody>
       <tr v-for="(value, key) in groupResultData" :key="key">
         <th>{{ key }}</th>
-        <td class="ball-container h-100">
+        <td class="d-flex flex-wrap align-center ga-4 pa-4 h-100">
           <Ball v-for="num in value.nums" :key="num" :num="num" />
         </td>
         <td>{{ value.total }}</td>

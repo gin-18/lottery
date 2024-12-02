@@ -154,6 +154,20 @@ function toggleSetting() {
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
 
+  <div class="d-flex ga-8 pt-3">
+    <div
+      class="d-flex align-center ga-2"
+      v-for="(category, index) in intervalCategory"
+      :key="index"
+    >
+      <p>
+        {{ category.title }}(&ge;
+        {{ category.weight.toString().padStart(2, '0') }}):
+      </p>
+      <p class="rounded area-color-box" :class="category.backgroundColor"></p>
+    </div>
+  </div>
+
   <v-table class="border-border text-text bg-background">
     <thead>
       <tr>
@@ -177,20 +191,6 @@ function toggleSetting() {
       </tr>
     </tbody>
   </v-table>
-
-  <div class="d-flex justify-space-around pt-3">
-    <div
-      class="d-flex align-center ga-2"
-      v-for="(category, index) in intervalCategory"
-      :key="index"
-    >
-      <p>
-        {{ category.title }}(&ge;
-        {{ category.weight.toString().padStart(2, '0') }}):
-      </p>
-      <p class="rounded area-color-box" :class="category.backgroundColor"></p>
-    </div>
-  </div>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
     <div class="d-flex flex-column pa-6 rounded text-text bg-background">

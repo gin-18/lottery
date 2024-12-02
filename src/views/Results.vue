@@ -30,7 +30,7 @@ function changeCode(num) {
   <Header />
 
   <v-container class="text-text">
-    <div class="d-flex justify-space-between pb-4">
+    <div class="d-flex align-center ga-6 pb-4">
       <v-btn
         base-color="inactive"
         active-color="text-text"
@@ -50,11 +50,11 @@ function changeCode(num) {
         v-for="data in dataList"
         :key="data.code"
       >
-        <div class="d-flex ga-6 pb-2">
+        <div class="d-flex ga-6 pb-6">
           <p>第{{ data.code }}期</p>
           <p>{{ formatDay(data.day) }}</p>
         </div>
-        <div class="ball-container">
+        <div class="d-flex align-center ga-4">
           <Ball v-for="num in getBallNum(data)" :key="num" :num="num" />
         </div>
       </li>

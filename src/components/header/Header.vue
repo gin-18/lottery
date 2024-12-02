@@ -5,7 +5,7 @@ import NavBar from './NavBar.vue'
 
 <template>
   <header
-    class="position-sticky top-0 left-0 d-flex justify-space-between align-center px-3 text-text bg-background"
+    class="position-sticky top-0 left-0 d-flex justify-space-between align-center px-6 text-text bg-background w-100"
   >
     <Logo />
     <NavBar />

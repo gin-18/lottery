@@ -93,7 +93,7 @@ function sliceArray(arr, step) {
     result.push({
       code: `第${arr[i + step - 1].code}期 - 第${arr[i].code}期`,
       list: countByFrequency(
-        countBall(arr.slice(i, i + step).map((item) => getBallNum(item))),
+        countBall(arr.slice(i, i + step).map((item) => getBallNum(item)), codeStep.value),
       ),
     })
   }
