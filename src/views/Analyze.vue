@@ -26,7 +26,7 @@ async function setData() {
 
   <v-container class="pt-0 text-text">
     <v-tabs grow class="text-text" v-model="tab">
-      <v-tab value="one">频率分析</v-tab>
+      <v-tab value="one">频次分析</v-tab>
       <v-tab value="two">号码分析</v-tab>
       <v-tab value="three">区域分析</v-tab>
       <v-tab value="four">重号分析</v-tab>

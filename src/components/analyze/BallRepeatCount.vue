@@ -105,8 +105,8 @@ function toggleSetting() {
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center pb-4">
-    <p class="py-3">
+  <div class="d-flex justify-space-between align-center py-6">
+    <p>
       第{{ startData.code }}期 - 第{{ lastData.code }}期（共{{ codeStep }}期）
     </p>
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
@@ -144,7 +144,7 @@ function toggleSetting() {
   </v-table>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
-    <div class="d-flex flex-column ga-8 pa-6 rounded text-text bg-background">
+    <div class="d-flex flex-column ga-8 pa-8 rounded text-text bg-background">
       <h2 class="text-h6 font-weight-bold">重号分析设置</h2>
 
       <div class="d-flex justify-space-between align-center ga-8">

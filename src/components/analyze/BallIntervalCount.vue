@@ -1,8 +1,15 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
-import { formatDay } from '@/assets/js/formatDay'
+import { ref, watch, onMounted } from 'vue'
 import { getBallNum, countSubarrays } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
+
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+})
 
 const showSetting = ref(false)
 const partitionStep = ref(10) // 区间统计的步长
@@ -32,17 +39,6 @@ const intervalCategory = ref([
     textColor: 'text-area-cold',
   },
 ])
-
-const code = computed(
-  () => `第${currentData.value.code}期\n${formatDay(currentData.value.day)}`,
-)
-
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
 
 watch(currentCodeIndex, (newValue) => {
   currentData.value = props.data[newValue]
@@ -149,23 +145,9 @@ function toggleSetting() {
 </script>
 
 <template>
-  <div class="d-flex justify-space-between align-center pb-4">
-    <p class="wrap">{{ code }}</p>
+  <div class="d-flex justify-space-between align-center py-6">
+    <CodeDate :data="currentData" />
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
-  </div>
-
-  <div class="d-flex ga-8 pt-3">
-    <div
-      class="d-flex align-center ga-2"
-      v-for="(category, index) in intervalCategory"
-      :key="index"
-    >
-      <p>
-        {{ category.title }}(&ge;
-        {{ category.weight.toString().padStart(2, '0') }}):
-      </p>
-      <p class="rounded area-color-box" :class="category.backgroundColor"></p>
-    </div>
   </div>
 
   <v-table class="border-border text-text bg-background">
@@ -192,8 +174,22 @@ function toggleSetting() {
     </tbody>
   </v-table>
 
+  <div class="d-flex ga-8 pt-6">
+    <div
+      class="d-flex align-center ga-2"
+      v-for="(category, index) in intervalCategory"
+      :key="index"
+    >
+      <p>
+        {{ category.title }}(&ge;
+        {{ category.weight.toString().padStart(2, '0') }}):
+      </p>
+      <p class="rounded area-color-box" :class="category.backgroundColor"></p>
+    </div>
+  </div>
+
   <v-overlay v-model="showSetting" class="justify-center align-center">
-    <div class="d-flex flex-column pa-6 rounded text-text bg-background">
+    <div class="d-flex flex-column pa-8 rounded text-text bg-background">
       <h2 class="text-h6 font-weight-bold pb-8">区域分析设置</h2>
 
       <div class="pb-8">
@@ -205,7 +201,7 @@ function toggleSetting() {
             :disabled="codeReduceArrowStatus"
             @click="goPreviousCode"
           />
-          <p class="wrap">{{ code }}</p>
+          <CodeDate :data="currentData" />
           <v-icon
             icon="fa fa-caret-right"
             size="16px"

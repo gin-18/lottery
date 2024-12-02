@@ -1,9 +1,15 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { getBallNum, countByGroup } from '@/assets/js/count'
-import { formatDay } from '@/assets/js/formatDay'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
+
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+})
 
 const showSetting = ref(false)
 const startData = ref({}) // 开始期次
@@ -20,19 +26,6 @@ const endAddArrowStatus = ref(false)
 const endReduceArrowStatus = ref(false)
 
 const codeStep = computed(() => startIndex.value - endIndex.value + 1)
-const startCode = computed(
-  () => `第${startData.value.code}期\n${formatDay(startData.value.day)}`,
-)
-const endCode = computed(
-  () => `第${endData.value.code}期\n${formatDay(endData.value.day)}`,
-)
-
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
 
 onMounted(() => {
   startData.value = props.data[startIndex.value]
