@@ -17,8 +17,8 @@
 import { ref, computed, watch } from 'vue'
 import { paletteLight, chartLine } from '@/assets/js/palette'
 import { getBallNum, countByFrequency } from '@/assets/js/count'
-import { formatDay } from '@/assets/js/formatDay'
 import Chart from 'chart.js/auto'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   data: {
@@ -37,12 +37,6 @@ const resultData = ref([])
 const codeStep = ref(7) // 统计步长
 
 const codes = computed(() => 13 + codeStep.value)
-const startCode = computed(
-  () => `第${startData.value.code}期\n${formatDay(startData.value.day)}`,
-)
-const lastCode = computed(
-  () => `第${lastData.value.code}期\n${formatDay(lastData.value.day)}`,
-)
 
 watch(
   () => props.data,
@@ -93,7 +87,10 @@ function sliceArray(arr, step) {
     result.push({
       code: `第${arr[i + step - 1].code}期 - 第${arr[i].code}期`,
       list: countByFrequency(
-        countBall(arr.slice(i, i + step).map((item) => getBallNum(item)), codeStep.value),
+        countBall(
+          arr.slice(i, i + step).map((item) => getBallNum(item)),
+          codeStep.value,
+        ),
       ),
     })
   }
@@ -156,24 +153,16 @@ function reduceStep() {
 
 <template>
   <div v-if="!data.length"></div>
-  <div v-else>
-    <div
-      class="d-flex justify-space-between align-center w-100 font-weight-bold"
-    >
+  <div v-else class="d-flex justify-space-between align-center w-100 py-6">
+    <div class="d-flex align-center ga-8">
+      <CodeDate :start-data="startData" :last-data="lastData" />
       <p>共 {{ codes }} 期</p>
-      <div class="d-flex align-center ga-8">
-        <v-icon icon="fa fa-caret-left" size="16px" @click="reduceStep" />
-        <p>步长: &nbsp; {{ codeStep }}</p>
-        <v-icon icon="fa fa-caret-right" size="16px" @click="addStep" />
-      </div>
     </div>
 
-    <div class="d-flex align-center pt-4 pb-4">
-      <div class="d-flex justify-space-between align-center ga-6 w-100">
-        <p class="wrap">{{ startCode }}</p>
-        <p>-</p>
-        <p class="wrap">{{ lastCode }}</p>
-      </div>
+    <div class="d-flex align-center ga-8 font-weight-bold">
+      <v-icon icon="fa fa-caret-left" size="16px" @click="reduceStep" />
+      <p>步长: &nbsp; {{ codeStep }}</p>
+      <v-icon icon="fa fa-caret-right" size="16px" @click="addStep" />
     </div>
   </div>
 
