@@ -19,12 +19,24 @@ onMounted(() => {
 <template>
   <Header />
 
-  <v-container class="text-text">
-    <h2 class="text-h6 font-weight-bold pb-2">最新开奖</h2>
-    <div v-if="!data.code"></div>
-    <ResultContainer v-else :data="data" />
+  <v-container class="d-flex flex-column ga-16 text-text">
+    <div class="section">
+      <h2 class="text-h6 font-weight-bold">最新开奖</h2>
+      <div v-if="!data.code"></div>
+      <ResultContainer v-else :data="data" />
+    </div>
 
-    <h2 class="text-h6 font-weight-bold pb-6">奖金对照表</h2>
-    <RewardTable />
+    <div class="section">
+      <h2 class="text-h6 font-weight-bold pb-4">奖金对照表</h2>
+      <RewardTable />
+    </div>
   </v-container>
 </template>
+
+<style scoped>
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>
