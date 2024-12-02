@@ -19,6 +19,9 @@ const currentCodeIndex = ref(0) // 当前期次数据下标
 const codeAddArrowStatus = ref(false)
 const codeReduceArrowStatus = ref(false)
 
+const description =
+  '这一部分以10为步长，划分80个开奖号码，得到8个区间。统计每个区间内，开奖号码出现的情况，并根据每个区间开奖号码的个数划分为热，温，冷。'
+
 const intervalCategory = ref([
   {
     title: '热',
@@ -149,6 +152,8 @@ function toggleSetting() {
     <CodeDate :data="currentData" />
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
+
+  <p class="pb-6">{{ description }}</p>
 
   <v-table class="border-border text-text bg-background">
     <thead>

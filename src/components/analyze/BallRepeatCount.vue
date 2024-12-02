@@ -3,6 +3,13 @@ import { ref, watch, onMounted } from 'vue'
 import { getBallNum, countDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 
+const props = defineProps({
+  data: {
+    type: Array,
+    required: true,
+  },
+})
+
 const showSetting = ref(false)
 
 const startData = ref({}) // 开始期次
@@ -16,12 +23,8 @@ const codeStepAddArrowStatus = ref(false)
 const repeatNumReduceArrowStatus = ref(false)
 const repeatNumAddArrowStatus = ref(false)
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
+const description =
+  '这一部分用于统计给定期次内，重复出现的号码，重复出现的次数，以及实现的期次。例如：近2期内重复出现的号码，重复出现的次数，以及实现的期次。'
 
 watch([codeStep, repeatTimes], (newValue) => {
   if (newValue[1] > newValue[0]) {
@@ -111,6 +114,8 @@ function toggleSetting() {
     </p>
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
+
+  <p class="pb-6">{{ description }}</p>
 
   <v-table class="border-border text-text bg-background">
     <thead>

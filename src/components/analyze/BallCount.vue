@@ -25,6 +25,9 @@ const startReduceArrowStatus = ref(false)
 const endAddArrowStatus = ref(false)
 const endReduceArrowStatus = ref(false)
 
+const description =
+  '这一部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
+
 const codeStep = computed(() => startIndex.value - endIndex.value + 1)
 
 onMounted(() => {
@@ -120,6 +123,8 @@ function toggleSetting() {
 
     <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
+
+  <p class="pb-6">{{ description }}</p>
 
   <v-table class="border-border text-text bg-background">
     <thead>

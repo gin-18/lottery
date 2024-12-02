@@ -38,6 +38,9 @@ const codeStep = ref(7) // 统计步长
 
 const codes = computed(() => 13 + codeStep.value)
 
+const description =
+  '这一部分用于统计指定步长的期次的所有号码出现的次数的总个数, 例如：步长为7的情况下, 则以每7期作为一组数据，统计这一组数据中，出现0次的号码有多少个，出现1次的号码有多少个，以此类推，总共统计14组数据。'
+
 watch(
   () => props.data,
   () => {
@@ -169,6 +172,8 @@ function reduceStep() {
       <v-icon icon="fa fa-caret-right" size="16px" @click="addStep" />
     </div>
   </div>
+
+  <p class="pb-6">{{ description }}</p>
 
   <canvas id="chart" class="bg-background"></canvas>
 </template>
