@@ -155,7 +155,11 @@ function reduceStep() {
   <div v-if="!data.length"></div>
   <div v-else class="d-flex justify-space-between align-center w-100 py-6">
     <div class="d-flex align-center ga-8">
-      <CodeDate :start-data="startData" :last-data="lastData" />
+      <div class="d-flex align-center ga-4">
+        <CodeDate :data="startData" />
+        <p>-</p>
+        <CodeDate :data="lastData" />
+      </div>
       <p>共 {{ codes }} 期</p>
     </div>
 

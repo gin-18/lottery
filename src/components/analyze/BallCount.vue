@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { getBallNum, countByGroup } from '@/assets/js/count'
 import { formatDay } from '@/assets/js/formatDay'
 import Ball from '@/components/content/Ball.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const showSetting = ref(false)
 const startData = ref({}) // 开始期次
@@ -114,22 +115,19 @@ function toggleSetting() {
 
 <template>
   <div v-if="!data.length"></div>
-  <div v-else>
-    <div class="d-flex justify-space-between align-center w-100">
-      <p class="font-weight-bold">共 {{ codeStep }} 期</p>
-      <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
+  <div v-else class="d-flex justify-space-between align-center py-6">
+    <div class="d-flex align-center ga-8">
+      <div class="d-flex align-center ga-4">
+        <CodeDate :data="startData" />
+        <p>-</p>
+        <CodeDate :data="endData" />
+      </div>
+      <p>共 {{ codeStep }} 期</p>
     </div>
 
-    <div class="d-flex align-center pt-4 pb-4">
-      <div class="d-flex justify-space-between align-center ga-6 w-100">
-        <p class="wrap">{{ startCode }}</p>
-        <p>-</p>
-        <p class="wrap">{{ endCode }}</p>
-      </div>
-    </div>
+    <v-icon icon="fa fa-gear" size="16px" @click="toggleSetting" />
   </div>
 
-  <h2 class="text-h6 font-weight-bold pb-2">统计表</h2>
   <v-table class="border-border text-text bg-background">
     <thead>
       <tr>
@@ -138,11 +136,10 @@ function toggleSetting() {
         <th>个数</th>
       </tr>
     </thead>
-
     <tbody>
       <tr v-for="(value, key) in groupResultData" :key="key">
         <th>{{ key }}</th>
-        <td class="d-flex flex-wrap align-center ga-4 pa-4 h-100">
+        <td class="ball-container ga-4 h-100">
           <Ball v-for="num in value.nums" :key="num" :num="num" />
         </td>
         <td>{{ value.total }}</td>
@@ -151,7 +148,7 @@ function toggleSetting() {
   </v-table>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">
-    <div class="d-flex flex-column ga-8 pa-6 rounded text-text bg-background">
+    <div class="d-flex flex-column ga-8 pa-8 rounded text-text bg-background">
       <h2 class="text-h6 font-weight-bold">号码统计设置</h2>
 
       <p>共 {{ codeStep }} 期</p>
@@ -165,7 +162,7 @@ function toggleSetting() {
             :disabled="startAddArrowStatus"
             @click="addStartCode"
           />
-          <p class="wrap">{{ startCode }}</p>
+          <CodeDate :data="startData" />
           <v-icon
             icon="fa fa-caret-right"
             size="16px"
@@ -184,7 +181,7 @@ function toggleSetting() {
             :disabled="endAddArrowStatus"
             @click="addEndCode"
           />
-          <p class="wrap">{{ endCode }}</p>
+          <CodeDate :data="endData" />
           <v-icon
             icon="fa fa-caret-right"
             size="16px"
@@ -200,8 +197,7 @@ function toggleSetting() {
 <style scoped>
 .ball-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(20, 1fr);
   padding: 1rem !important;
 }
 </style>
