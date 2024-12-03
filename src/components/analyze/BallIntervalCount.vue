@@ -88,18 +88,13 @@ function checkBallIsHot(num) {
 }
 
 function setInterval(size) {
-  const chunkedArray = []
-  const balls = Array.from({ length: 80 }, (_, index) => {
-    const paddedIndex =
-      index + 1 < 10 ? `0${index + 1}` : (index + 1).toString()
-    return paddedIndex
-  })
+  const balls = new Array(80)
+    .fill(null)
+    .map((item, index) => (index + 1).toString().padStart(2, '0'))
 
   for (let i = 0; i < balls.length; i += size) {
-    chunkedArray.push(balls.slice(i, i + size))
+    interval.value.push(balls.slice(i, i + size))
   }
-
-  interval.value = chunkedArray
 }
 
 function setIntervalColor(index) {

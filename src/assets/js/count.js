@@ -34,6 +34,13 @@ export function getBallNum(obj) {
 }
 
 /*
+ * 返回两个数组的交集
+ */
+export function findDuplicates(arr1, arr2) {
+  return arr1.filter((item) => arr2.includes(item))
+}
+
+/*
  * 统计一个数组中的元素落在一个二维数组中的次数
  * 返回一个以元素为key，次数为value的对象
  *
@@ -54,17 +61,10 @@ export function countSubarrays(array2D, targetArray) {
   return countObj
 }
 
-/*
- * 返回两个数组的交集
- */
-export function findDuplicates(arr1, arr2) {
-  return arr1.filter((item) => arr2.includes(item))
-}
-
-/*
+/**
  * 传入一个[{num: '01', count: 1}, {num: '02', count: 2}, {num: '03', count: 1}]这样的数组
  * 返回一个{1: {nums: ['01', '03'], total: 2}, 2: {nums: ['02'], total: 1}}这样的对象
- */
+ * */
 export function countByGroup(arr) {
   return arr.reduce((acc, curr) => {
     if (!acc[curr.count]) {
@@ -76,6 +76,9 @@ export function countByGroup(arr) {
   }, {})
 }
 
+/**
+ * 统计一个step内，每个元素出现的次数
+ * */
 export function countByFrequency(arr, step) {
   const obj = {}
 

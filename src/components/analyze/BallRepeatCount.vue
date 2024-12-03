@@ -1,4 +1,7 @@
 <script setup>
+/**
+ * 这个组件用于统计最近2期重复出现的号码
+ */
 import { ref, onMounted } from 'vue'
 import { getBallNum, findDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
@@ -14,11 +17,9 @@ const props = defineProps({
 const startData = ref({}) // 开始期次
 const lastData = ref({}) // 最新期次数据
 const codeStep = ref(2) // 期数
-const repeatTimes = ref(2) // 重复个数
 const resultData = ref({}) // 统计后的数据
 
-const description =
-  '这一部分只统计最近2期内，重复出现的号码，重复出现的次数，以及实现的期次。'
+const description = '这一部分只统计最近2期内，重复出现的号码，重复出现的个数。'
 
 onMounted(() => {
   lastData.value = props.data[0]
