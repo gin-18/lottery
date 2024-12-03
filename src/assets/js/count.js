@@ -120,11 +120,16 @@ export function countByGroup(arr) {
   }, {})
 }
 
-export function countByFrequency(arr) {
-  return Object.entries(
-    arr.reduce((acc, { num, count }) => {
-      acc[count] = (acc[count] || 0) + 1
-      return acc
-    }, {}),
-  )
+export function countByFrequency(arr, step) {
+  const obj = {}
+
+  for (let i = 0; i <= step; i++) {
+    obj[i] = 0
+  }
+
+  arr.forEach((item) => {
+    obj[item.count] = (obj[item.count] || 0) + 1
+  })
+
+  return obj
 }

@@ -90,10 +90,8 @@ function sliceArray(arr, step) {
     result.push({
       code: `第${arr[i + step - 1].code}期 - 第${arr[i].code}期`,
       list: countByFrequency(
-        countBall(
-          arr.slice(i, i + step).map((item) => getBallNum(item)),
-          codeStep.value,
-        ),
+        countBall(arr.slice(i, i + step).map((item) => getBallNum(item))),
+        codeStep.value,
       ),
     })
   }
@@ -104,12 +102,13 @@ function renderResultData() {
   chart = new Chart(document.getElementById('chart'), {
     type: 'line',
     data: {
+      labels: resultData.value.map((item) => Object.keys(item.list))[0],
       datasets: resultData.value.map((item, index) => ({
         label: `${item.code}`,
         borderWidth: 1,
         borderColor: chartLine[index],
         backgroundColor: chartLine[index],
-        data: item.list.map((item) => Object.values(item)),
+        data: Object.values(item.list),
       })),
     },
     options: {
