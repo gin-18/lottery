@@ -1,6 +1,26 @@
 <script setup>
+/**
+ * 绘制的数据：
+ * {
+ *   '[01, 10]': {
+ *     'code1': times,
+ *     'code2': times,
+ *   },
+ *   '[11, 20]': {
+ *     'code1': times,
+ *     'code2': times,
+ *   },
+ *   ...
+ * }
+ **/
 import { ref, watch, onMounted } from 'vue'
-import { getBallNum, countSubarrays } from '@/assets/js/count'
+import {
+  generateBallInterval,
+  countAllBallRange,
+  countOneCodeByRange,
+} from '@/assets/js/count'
+import { chartLine } from '@/assets/js/palette'
+import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -11,11 +31,14 @@ const props = defineProps({
   },
 })
 
+let chart = null
 const showSetting = ref(false)
 const partitionStep = ref(10) // 区间统计的步长
-const interval = ref([]) // 区间
+const ballInterval = ref([]) // 号码区间
 const currentData = ref({}) // 当前期次数据
-const currentCodeIndex = ref(0) // 当前期次数据下标
+const rangeData = ref({}) // 多期次数据
+const rangeStep = ref(7) // 多期次数据步长
+const currentDataIndex = ref(0) // 当前期次数据下标
 const codeAddArrowStatus = ref(false)
 const codeReduceArrowStatus = ref(false)
 
@@ -43,24 +66,28 @@ const intervalCategory = ref([
   },
 ])
 
-watch(currentCodeIndex, (newValue) => {
-  currentData.value = props.data[newValue]
-  setInterval(partitionStep.value)
+watch(currentDataIndex, (newValue) => {
+  setCurrentData(newValue)
+  setRangeData()
+  chart.destroy()
+  renderChart()
   checkCodeArrowStatus()
 })
 
 onMounted(() => {
-  setInterval(partitionStep.value)
-  currentData.value = props.data[currentCodeIndex.value]
+  ballInterval.value = generateBallInterval(partitionStep.value)
+  setCurrentData(currentDataIndex.value)
+  setRangeData()
+  renderChart()
   checkCodeArrowStatus()
 })
 
 function goNextCode() {
-  currentCodeIndex.value -= 1
+  currentDataIndex.value -= 1
 }
 
 function goPreviousCode() {
-  currentCodeIndex.value += 1
+  currentDataIndex.value += 1
 }
 
 function addWeight(index) {
@@ -87,36 +114,51 @@ function checkBallIsHot(num) {
   return isHot
 }
 
-function setInterval(size) {
-  const balls = new Array(80)
-    .fill(null)
-    .map((item, index) => (index + 1).toString().padStart(2, '0'))
-
-  for (let i = 0; i < balls.length; i += size) {
-    interval.value.push(balls.slice(i, i + size))
-  }
-}
-
 function setIntervalColor(index) {
-  const ballNum = getBallNum(currentData.value)
-  const countObj = countSubarrays(interval.value, ballNum)
+  const countObj = countOneCodeByRange(currentData.value)
+  const intervalValue = Object.values(countObj)[index]
 
-  if (countObj[index] >= intervalCategory.value[0].weight) {
+  if (intervalValue >= intervalCategory.value[0].weight) {
     return intervalCategory.value[0].textColor
-  } else if (countObj[index] >= intervalCategory.value[1].weight) {
+  } else if (intervalValue >= intervalCategory.value[1].weight) {
     return intervalCategory.value[1].textColor
   } else {
     return intervalCategory.value[2].textColor
   }
 }
 
+function renderChart() {
+  const result = countAllBallRange(rangeData.value)
+
+  chart = new Chart(document.getElementById('interval-chart'), {
+    type: 'line',
+    data: {
+      datasets: Object.keys(result).map((item, index) => ({
+        label: `${item} 区间`,
+        borderWidth: 1,
+        borderColor: chartLine[index],
+        backgroundColor: chartLine[index],
+        data: result[item],
+      })),
+    },
+  })
+}
+
+function setCurrentData(index) {
+  currentData.value = props.data[index]
+}
+
+function setRangeData() {
+  rangeData.value = props.data.slice(0, rangeStep.value)
+}
+
 function checkCodeArrowStatus() {
   codeAddArrowStatus.value = false
   codeReduceArrowStatus.value = false
 
-  if (currentCodeIndex.value <= 0) {
+  if (currentDataIndex.value <= 0) {
     codeAddArrowStatus.value = true
-  } else if (currentCodeIndex.value >= props.data.length - 1) {
+  } else if (currentDataIndex.value >= props.data.length - 1) {
     codeReduceArrowStatus.value = true
   }
 }
@@ -150,29 +192,32 @@ function toggleSetting() {
 
   <p class="pb-6">{{ description }}</p>
 
-  <v-table class="border-border text-text bg-background">
-    <thead>
-      <tr>
-        <th scope="col">区域</th>
-        <th scope="col">号码</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(area, index) in interval" :key="area">
-        <td :class="setIntervalColor(index)">
-          [{{ area[0] }},{{ area[area.length - 1] }}]
-        </td>
-        <td class="d-flex align-center ga-1">
-          <Ball
-            v-for="num in area"
-            :key="num"
-            :num="num"
-            :color="setHotBallBackgroundColor(num)"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </v-table>
+  <div>
+    <h2 class="text-h6 font-weight-bold">各区域开奖情况</h2>
+    <v-table class="border-border text-text bg-background">
+      <thead>
+        <tr>
+          <th scope="col">区域</th>
+          <th scope="col">号码</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(interval, index) in ballInterval" :key="interval">
+          <td :class="setIntervalColor(index)">
+            [{{ interval[0] }},{{ interval[interval.length - 1] }}]
+          </td>
+          <td class="d-flex align-center ga-1">
+            <Ball
+              v-for="num in interval"
+              :key="num"
+              :num="num"
+              :color="setHotBallBackgroundColor(num)"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
 
   <div class="d-flex ga-8 pt-6">
     <div
@@ -186,6 +231,11 @@ function toggleSetting() {
       </p>
       <p class="rounded area-color-box" :class="category.backgroundColor"></p>
     </div>
+  </div>
+
+  <div>
+    <h2 class="text-h6 font-weight-bold py-6">区域频率统计</h2>
+    <canvas id="interval-chart" class="bg-background"></canvas>
   </div>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">

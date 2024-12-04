@@ -3,7 +3,7 @@
  * 这个组件用于统计最近2期重复出现的号码
  */
 import { ref, onMounted } from 'vue'
-import { getBallNum, findDuplicates } from '@/assets/js/count'
+import { formatData, findDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -28,8 +28,8 @@ onMounted(() => {
 })
 
 function countRepeatBall() {
-  const startBall = getBallNum(startData.value)
-  const lastBall = getBallNum(lastData.value)
+  const startBall = formatData(startData.value).balls
+  const lastBall = formatData(lastData.value).balls
 
   resultData.value = findDuplicates(startBall, lastBall)
 }

@@ -16,7 +16,7 @@
  */
 import { ref, computed, watch } from 'vue'
 import { paletteLight, chartLine } from '@/assets/js/palette'
-import { getBallNum, countByFrequency } from '@/assets/js/count'
+import { formatData, countByFrequency } from '@/assets/js/count'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -90,7 +90,7 @@ function sliceArray(arr, step) {
     result.push({
       code: `第${arr[i + step - 1].code}期 - 第${arr[i].code}期`,
       list: countByFrequency(
-        countBall(arr.slice(i, i + step).map((item) => getBallNum(item))),
+        countBall(arr.slice(i, i + step).map((item) => formatData(item).balls)),
         codeStep.value,
       ),
     })

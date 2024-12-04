@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { getBallNum, countByGroup } from '@/assets/js/count'
+import { formatData, countByGroup } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -74,7 +74,7 @@ function countBall() {
     count: 0,
   }))
   const ballList = countData.value
-    .map((item) => getBallNum(item))
+    .map((item) => formatData(item).balls)
     .flatMap((item) => item)
 
   data.forEach((obj) => {
