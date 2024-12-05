@@ -1,23 +1,10 @@
 <script setup>
-/**
- * 绘制的数据：
- * {
- *   '[01, 10]': {
- *     'code1': times,
- *     'code2': times,
- *   },
- *   '[11, 20]': {
- *     'code1': times,
- *     'code2': times,
- *   },
- *   ...
- * }
- **/
 import { ref, watch, onMounted } from 'vue'
 import {
   generateBallInterval,
-  countAllBallRange,
-  countOneCodeByRange,
+  generateBallTailInterval,
+  countAllByRange,
+  countOneByRange,
 } from '@/assets/js/count'
 import { chartLine } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
@@ -31,10 +18,12 @@ const props = defineProps({
   },
 })
 
-let chart = null
+let intervalChart = null
+let tailChart = null
 const showSetting = ref(false)
 const partitionStep = ref(10) // 区间统计的步长
 const ballInterval = ref([]) // 号码区间
+const ballTailInterval = ref([]) // 号码尾数区间
 const currentData = ref({}) // 当前期次数据
 const rangeData = ref({}) // 多期次数据
 const rangeStep = ref(7) // 多期次数据步长
@@ -69,16 +58,17 @@ const intervalCategory = ref([
 watch(currentDataIndex, (newValue) => {
   setCurrentData(newValue)
   setRangeData()
-  chart.destroy()
-  renderChart()
+  intervalChart.destroy()
   checkCodeArrowStatus()
 })
 
 onMounted(() => {
   ballInterval.value = generateBallInterval(partitionStep.value)
+  ballTailInterval.value = generateBallTailInterval()
   setCurrentData(currentDataIndex.value)
   setRangeData()
-  renderChart()
+  renderChart('interval')
+  renderChart('tail')
   checkCodeArrowStatus()
 })
 
@@ -114,9 +104,9 @@ function checkBallIsHot(num) {
   return isHot
 }
 
-function setIntervalColor(index) {
-  const countObj = countOneCodeByRange(currentData.value)
-  const intervalValue = Object.values(countObj)[index]
+function setIntervalColor(index, type) {
+  const countObj = countOneByRange(currentData.value, type)
+  const intervalValue = Object.values(countObj.data)[index]
 
   if (intervalValue >= intervalCategory.value[0].weight) {
     return intervalCategory.value[0].textColor
@@ -127,14 +117,25 @@ function setIntervalColor(index) {
   }
 }
 
-function renderChart() {
-  const result = countAllBallRange(rangeData.value)
+/**
+ * 绘制的数据：
+ * {
+ *   'range': {
+ *     'code1': times,
+ *     'code2': times,
+ *   },
+ *   ...
+ * }
+ **/
+function renderChart(type) {
+  const result = countAllByRange(rangeData.value, type)
+  const suffix = type === 'tail' ? '尾数' : '区间'
 
-  chart = new Chart(document.getElementById('interval-chart'), {
+  intervalChart = new Chart(document.getElementById(type), {
     type: 'line',
     data: {
       datasets: Object.keys(result).map((item, index) => ({
-        label: `${item} 区间`,
+        label: `${item} ${suffix}`,
         borderWidth: 1,
         borderColor: chartLine[index],
         backgroundColor: chartLine[index],
@@ -192,34 +193,7 @@ function toggleSetting() {
 
   <p class="pb-6">{{ description }}</p>
 
-  <div>
-    <h2 class="text-h6 font-weight-bold">各区域开奖情况</h2>
-    <v-table class="border-border text-text bg-background">
-      <thead>
-        <tr>
-          <th scope="col">区域</th>
-          <th scope="col">号码</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(interval, index) in ballInterval" :key="interval">
-          <td :class="setIntervalColor(index)">
-            [{{ interval[0] }},{{ interval[interval.length - 1] }}]
-          </td>
-          <td class="d-flex align-center ga-1">
-            <Ball
-              v-for="num in interval"
-              :key="num"
-              :num="num"
-              :color="setHotBallBackgroundColor(num)"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-  </div>
-
-  <div class="d-flex ga-8 pt-6">
+  <div class="d-flex ga-8 pb-6">
     <div
       class="d-flex align-center ga-2"
       v-for="(category, index) in intervalCategory"
@@ -234,8 +208,81 @@ function toggleSetting() {
   </div>
 
   <div>
+    <h2 class="text-h6 font-weight-bold">各区域开奖情况</h2>
+    <v-table class="border-border text-text bg-background">
+      <thead>
+        <tr>
+          <th scope="col">区域</th>
+          <th scope="col">号码</th>
+          <th scope="col">次数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(interval, index) in ballInterval" :key="interval">
+          <td :class="setIntervalColor(index, 'interval')">
+            [{{ interval[0] }},{{ interval[interval.length - 1] }}]
+          </td>
+          <td class="d-flex align-center ga-1">
+            <Ball
+              v-for="num in interval"
+              :key="num"
+              :num="num"
+              :color="setHotBallBackgroundColor(num)"
+            />
+          </td>
+          <td>
+            {{
+              Object.values(countOneByRange(currentData, 'interval').data)[
+                index
+              ]
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
+
+  <div>
+    <h2 class="text-h6 font-weight-bold">各尾部开奖情况</h2>
+    <v-table class="border-border text-text bg-background">
+      <thead>
+        <tr>
+          <th scope="col">尾号</th>
+          <th scope="col">号码</th>
+          <th scope="col">次数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(interval, index) in ballTailInterval" :key="interval">
+          <td :class="setIntervalColor(index, 'tail')">
+            {{ interval[0].slice(-1) }}
+          </td>
+          <td class="d-flex align-center ga-1">
+            <Ball
+              v-for="num in interval"
+              :key="num"
+              :num="num"
+              :color="setHotBallBackgroundColor(num)"
+            />
+          </td>
+          <td>
+            {{
+              Object.values(countOneByRange(currentData, 'tail').data)[index]
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </v-table>
+  </div>
+
+  <div>
     <h2 class="text-h6 font-weight-bold py-6">区域频率统计</h2>
-    <canvas id="interval-chart" class="bg-background"></canvas>
+    <canvas id="interval" class="bg-background"></canvas>
+  </div>
+
+  <div>
+    <h2 class="text-h6 font-weight-bold py-6">尾部频率统计</h2>
+    <canvas id="tail" class="bg-background"></canvas>
   </div>
 
   <v-overlay v-model="showSetting" class="justify-center align-center">

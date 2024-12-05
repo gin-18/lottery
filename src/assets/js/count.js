@@ -99,58 +99,61 @@ export function generateBallInterval(step = 10) {
   return result
 }
 
-export function countOneCodeByRange(data) {
-  const dataFormat = formatData(data)
-  const ballInterval = generateBallInterval()
-  const result = {}
+export function generateBallTailInterval() {
+  const balls = new Array(80)
+    .fill(null)
+    .map((item, index) => (index + 1).toString().padStart(2, '0'))
 
-  dataFormat.balls.forEach((item) => {
-    ballInterval.forEach((subBall, index) => {
-      if (subBall.includes(item)) {
-        result[index] = (result[index] || 0) + 1
-      }
-    })
-  })
+  return balls.reduce((acc, curr) => {
+    const lastDigit = curr.slice(-1)
 
-  return result
+    if (!acc[lastDigit]) {
+      acc[lastDigit] = []
+    }
+
+    acc[lastDigit].push(curr)
+
+    return acc
+  }, [])
 }
 
 /**
  * 返回的数据格式：
  * {
- *    code: "2024324",
+ *    code: 'code1',
  *    data: {
- *      '[01, 10]': 1,
- *      '[11, 20]': 0,
- *      '[21, 30]': 3,
- *      '[31, 40]': 4,
- *      '[41, 50]': 2,
- *      '[51, 60]': 0,
- *      '[61, 70]': 8,
- *      '[71, 80]': 0
+ *      'interval': times,
+ *      ...
  *    }
  * }
  **/
-export function countOneForAllRange(data) {
-  const ranges = [
-    '[01, 10]',
-    '[11, 20]',
-    '[21, 30]',
-    '[31, 40]',
-    '[41, 50]',
-    '[51, 60]',
-    '[61, 70]',
-    '[71, 80]',
-  ]
+export function countOneByRange(data, type) {
+  let ballRange, ranges
+
+  if (type === 'tail') {
+    ballRange = generateBallTailInterval()
+    ranges = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  } else {
+    ballRange = generateBallInterval()
+    ranges = [
+      '[01, 10]',
+      '[11, 20]',
+      '[21, 30]',
+      '[31, 40]',
+      '[41, 50]',
+      '[51, 60]',
+      '[61, 70]',
+      '[71, 80]',
+    ]
+  }
   const dataFormat = formatData(data)
-  const ballInterval = generateBallInterval()
   const result = {
     code: `第${dataFormat.code}期`,
     data: Object.fromEntries(ranges.map((item) => [item, 0])),
   }
 
   dataFormat.balls.forEach((num) => {
-    const index = ballInterval.findIndex((subBall) => subBall.includes(num))
+    const index = ballRange.findIndex((subBall) => subBall.includes(num))
     if (index !== -1) {
       result.data[ranges[index]]++
     }
@@ -172,10 +175,10 @@ export function countOneForAllRange(data) {
  *   ...
  * }
  **/
-export function countAllBallRange(dataArray) {
-  const dataList = dataArray.map((item) => countOneForAllRange(item))
+export function countAllByRange(dataArray, type) {
+  const dataList = dataArray.map((item) => countOneByRange(item, type))
 
-  return dataList.reduce((acc, curr, index) => {
+  return dataList.reduce((acc, curr) => {
     if (!acc) {
       acc = {}
     }
