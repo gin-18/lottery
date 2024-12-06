@@ -4,17 +4,8 @@ import NavBar from './NavBar.vue'
 </script>
 
 <template>
-  <header
-    class="position-sticky top-0 left-0 d-flex justify-space-between align-center px-6 text-text bg-background w-100"
-  >
-    <Logo />
-    <NavBar />
+  <header class="navbar">
+    <Logo class="flex-1" />
+    <NavBar class="flex-none" />
   </header>
 </template>
-
-<style scoped>
-header {
-  z-index: 10;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-</style>

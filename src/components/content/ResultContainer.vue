@@ -19,13 +19,13 @@ const ballList = computed(() => formatData(props.data).balls)
 </script>
 
 <template>
-  <div class="d-flex flex-column ga-4">
-    <div class="d-flex align-center ga-4 text-text">
+  <div class="flex flex-col gap-4">
+    <div class="flex items-center gap-6">
       <p>第{{ data.code }}期</p>
       <p>{{ formatDay(data.day) }}</p>
     </div>
 
-    <div class="d-flex align-center ga-4">
+    <div class="flex items-center gap-4">
       <Ball v-for="num in ballList" :key="num" :num="num" />
     </div>
   </div>

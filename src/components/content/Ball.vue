@@ -3,23 +3,16 @@ const props = defineProps({
   num: String,
   color: {
     type: String,
-    default: 'bg-ball-hot',
+    default: 'bg-error',
   },
 })
 </script>
 
 <template>
   <p
-    class="d-flex justify-center align-center pa-3 rounded-circle text-body-2 font-weight-bold"
+    class="flex justify-center items-center w-7 h-7 rounded-full text-base-100 text-sm font-semibold"
     :class="color"
   >
     {{ num }}
   </p>
 </template>
-
-<style scoped>
-p {
-  width: 20px;
-  height: 20px;
-}
-</style>

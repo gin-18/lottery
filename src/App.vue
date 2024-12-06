@@ -8,9 +8,3 @@ import { SpeedInsights } from '@vercel/speed-insights/vue'
   <SpeedInsights />
   <RouterView />
 </template>
-
-<style>
-th {
-  font-weight: bold !important;
-}
-</style>

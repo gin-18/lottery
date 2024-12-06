@@ -7,8 +7,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <p class="d-flex align-center ga-2">
-    <span>第{{ data.code }} 期</span>
+  <p>
+    <span class="pr-3">第{{ data.code }}期</span>
     <span>{{ formatDay(data.day) }}</span>
   </p>
 </template>

@@ -27,35 +27,24 @@ function changeCode(num) {
 <template>
   <Header />
 
-  <v-container class="text-text">
-    <div class="d-flex align-center ga-6 pb-4">
-      <v-btn
-        base-color="inactive"
-        active-color="text-text"
+  <main class="container mx-auto">
+    <div class="flex items-center gap-6 pb-6">
+      <button
+        class="btn"
         v-for="code in nums"
         :key="code"
-        variant="outlined"
         :active="activeCodeButton === code"
+        :class="{ 'btn-active btn-primary': activeCodeButton === code }"
         @click="changeCode(code)"
       >
         近{{ code }}期
-      </v-btn>
+      </button>
     </div>
 
-    <ul class="d-flex flex-column ga-6">
-      <li
-        class="pb-6 border-0 border-b-sm"
-        v-for="data in dataList"
-        :key="data.code"
-      >
+    <ul class="flex flex-col gap-8">
+      <li v-for="data in dataList" :key="data.code">
         <ResultContainer :data="data" />
       </li>
     </ul>
-  </v-container>
+  </main>
 </template>
-
-<style scoped>
-li {
-  list-style: none;
-}
-</style>

@@ -2,7 +2,7 @@
 /**
  * 这个组件用于统计最近2期重复出现的号码
  */
-import { ref, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { formatData, findDuplicates } from '@/assets/js/count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -21,11 +21,14 @@ const resultData = ref({}) // 统计后的数据
 
 const description = '这一部分只统计最近2期内，重复出现的号码，重复出现的个数。'
 
-onMounted(() => {
-  lastData.value = props.data[0]
-  startData.value = props.data[codeStep.value - 1]
-  countRepeatBall()
-})
+watch(
+  () => props.data,
+  () => {
+    lastData.value = props.data[0]
+    startData.value = props.data[codeStep.value - 1]
+    countRepeatBall()
+  },
+)
 
 function countRepeatBall() {
   const startBall = formatData(startData.value).balls
@@ -36,16 +39,19 @@ function countRepeatBall() {
 </script>
 
 <template>
-  <p class="py-6">{{ description }}</p>
+  <div v-if="!data.length"></div>
+  <div v-else>
+    <div class="flex items-center gap-4">
+      <CodeDate :data="startData" />
+      <p>-</p>
+      <CodeDate :data="lastData" />
+    </div>
 
-  <div class="d-flex align-center ga-4 pb-4">
-    <CodeDate :data="startData" />
-    <p>-</p>
-    <CodeDate :data="lastData" />
-  </div>
+    <p class="py-6">{{ description }}</p>
 
-  <div class="d-flex ga-4">
-    <p>共 {{ resultData.length }} 个:</p>
-    <Ball v-for="num in resultData" :key="num" :num="num" />
+    <div class="flex items-center gap-4">
+      <p>共 {{ resultData.length }} 个:</p>
+      <Ball v-for="num in resultData" :key="num" :num="num" />
+    </div>
   </div>
 </template>

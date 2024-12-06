@@ -15,7 +15,7 @@
  * ]
  */
 import { ref, computed, watch } from 'vue'
-import { paletteLight, chartLine } from '@/assets/js/palette'
+import { chartLine } from '@/assets/js/palette'
 import { formatData, countByFrequency } from '@/assets/js/count'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 let chart = null // 图表实例
-const GRID_COLOR = paletteLight.border // 亮色模式网格颜色
+const GRID_COLOR = '#000' // 亮色模式网格颜色
 
 const countData = ref([]) // 统计的数据
 const startData = ref({}) // 开始期次
@@ -155,24 +155,29 @@ function reduceStep() {
 
 <template>
   <div v-if="!data.length"></div>
-  <div v-else class="d-flex justify-space-between align-center w-100 py-6">
-    <div class="d-flex align-center ga-8">
-      <div class="d-flex align-center ga-4">
-        <CodeDate :data="startData" />
-        <p>-</p>
-        <CodeDate :data="lastData" />
+  <div v-else>
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-6">
+          <CodeDate :data="startData" />
+          <p>-</p>
+          <CodeDate :data="lastData" />
+        </div>
+        <p>共 {{ codes }} 期</p>
       </div>
-      <p>共 {{ codes }} 期</p>
-    </div>
 
-    <div class="d-flex align-center ga-8 font-weight-bold">
-      <v-icon icon="fa fa-caret-left" size="16px" @click="reduceStep" />
-      <p>步长: &nbsp; {{ codeStep }}</p>
-      <v-icon icon="fa fa-caret-right" size="16px" @click="addStep" />
+      <div class="flex items-center gap-4">
+        <span
+          class="icon-[octicon--triangle-left-24]"
+          @click="reduceStep"
+        ></span>
+        <p>步长: &nbsp; {{ codeStep }}</p>
+        <span class="icon-[octicon--triangle-right-24]" @click="addStep"></span>
+      </div>
     </div>
   </div>
 
-  <p class="pb-6">{{ description }}</p>
+  <p class="py-6">{{ description }}</p>
 
-  <canvas id="chart" class="bg-background"></canvas>
+  <canvas id="chart"></canvas>
 </template>

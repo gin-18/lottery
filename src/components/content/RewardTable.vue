@@ -84,7 +84,7 @@ function getShowIndex() {
 </script>
 
 <template>
-  <v-table class="border-border text-text bg-background">
+  <table class="table">
     <thead>
       <tr>
         <th scope="col">玩法</th>
@@ -101,5 +101,5 @@ function getShowIndex() {
         <td>{{ item.price }}</td>
       </tr>
     </tbody>
-  </v-table>
+  </table>
 </template>
