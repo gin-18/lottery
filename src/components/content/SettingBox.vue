@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      class="icon-[octicon--gear-24]"
+      class="icon-[octicon--gear-24] text-xl"
       onclick="my_modal_2.showModal()"
     ></button>
 
