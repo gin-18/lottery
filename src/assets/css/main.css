@@ -9,3 +9,7 @@ h2 {
 h3 {
   @apply pb-4 text-lg font-bold;
 }
+
+h4 {
+  @apply pb-4 text-base font-bold;
+}

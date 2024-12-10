@@ -4,7 +4,7 @@ import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 
-const data = ref(null)
+const data = ref([])
 
 onMounted(async () => {
   const res = await getDataByNum(100)

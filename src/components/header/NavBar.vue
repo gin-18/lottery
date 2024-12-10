@@ -21,7 +21,7 @@ const items = [
 
 <template>
   <nav class="flex-none">
-    <ul class="menu menu-horizontal px-1">
+    <ul class="menu menu-horizontal">
       <li v-for="(item, index) in items" :key="index">
         <RouterLink :to="item.path" active-class="text-primary">{{
           item.name
