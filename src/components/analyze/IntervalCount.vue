@@ -6,7 +6,7 @@ import {
   countAllByRange,
   countOneByRange,
 } from '@/assets/js/count'
-import { chartLine } from '@/assets/js/palette'
+import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -131,6 +131,7 @@ function setIntervalColor(index, type) {
 function renderChart(type) {
   const result = countAllByRange(rangeData.value, type)
   const suffix = type === 'tail' ? '尾数' : '区间'
+  const chartLine = chartPalette.chartLine
 
   chart = new Chart(document.getElementById(type), {
     type: 'line',

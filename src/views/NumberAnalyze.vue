@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberAnalyzeStore } from '@/stores/number_analyze'
+import { useFrequencyAnalyzeStore } from '@/stores/frequency_analyze'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -12,8 +13,9 @@ import SettingBox from '@/components/content/SettingBox.vue'
 const data = ref([])
 
 const numberAnalyzeStore = useNumberAnalyzeStore()
+const frequencyAnalyzeStore = useFrequencyAnalyzeStore()
 const {
-  codeStep,
+  codeStep: numberCodeStep,
   startData,
   endData,
   startAddArrowStatus,
@@ -21,6 +23,7 @@ const {
   endAddArrowStatus,
   endReduceArrowStatus,
 } = storeToRefs(numberAnalyzeStore)
+const { codeStep: frequencyCodeStep } = storeToRefs(frequencyAnalyzeStore)
 
 onMounted(async () => {
   const res = await getDataByNum(100)
@@ -42,6 +45,14 @@ function addEndCode() {
 function reduceEndCode() {
   numberAnalyzeStore.reduceEndCode()
 }
+
+function addFrequencyStep() {
+  frequencyAnalyzeStore.addCodeStep()
+}
+
+function reduceFrequencyStep() {
+  frequencyAnalyzeStore.reduceCodeStep()
+}
 </script>
 
 <template>
@@ -54,7 +65,7 @@ function reduceEndCode() {
 
         <h3>号码统计</h3>
         <div class="pb-12">
-          <p class="pb-6">共 {{ codeStep }} 期</p>
+          <p class="pb-6">共 {{ numberCodeStep }} 期</p>
 
           <div class="pb-6">
             <h4>起始期次：</h4>
@@ -102,6 +113,15 @@ function reduceEndCode() {
         <h3>号码频率</h3>
         <div>
           <h4>统计步长：</h4>
+          <div class="flex justify-between items-center">
+            <button class="btn" @click="reduceFrequencyStep">
+              <span class="icon-[octicon--triangle-left-24]"></span>
+            </button>
+            <p>{{ frequencyCodeStep }}</p>
+            <button class="btn" @click="addFrequencyStep">
+              <span class="icon-[octicon--triangle-right-24]"></span>
+            </button>
+          </div>
         </div>
       </div>
     </SettingBox>
