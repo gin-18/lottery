@@ -1,6 +1,8 @@
 <script setup>
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
+import { formatData } from '@/assets/js/count'
+import { useCurrentResultStore } from '@/stores/current_result'
 import { useNumberAnalyzeStore } from '@/stores/number_analyze'
 import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
 import Ball from '@/components/content/Ball.vue'
@@ -13,17 +15,25 @@ const props = defineProps({
   },
 })
 
+const currentResultStore = useCurrentResultStore()
 const numberAnalyzeStore = useNumberAnalyzeStore()
 const repeatAnalyzeStore = useRepeatAnalyzeStore()
 
-const { startIndex, endIndex, codeStep, startData, endData, groupResultData } =
-  storeToRefs(numberAnalyzeStore)
+const {
+  startDataIndex,
+  endDataIndex,
+  codeStep,
+  startData,
+  endData,
+  groupResultData,
+} = storeToRefs(numberAnalyzeStore)
 const { resultData: repeatResultData } = storeToRefs(repeatAnalyzeStore)
+const { resultData: currentResultData } = storeToRefs(currentResultStore)
 
 const description =
   '这一部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
 
-watch([startIndex, endIndex, () => props.data], () => {
+watch([startDataIndex, endDataIndex, () => props.data], () => {
   numberAnalyzeStore.setStartData(props.data)
   numberAnalyzeStore.setEndData(props.data)
   numberAnalyzeStore.setGroupResultData(props.data)
@@ -36,8 +46,12 @@ function checkNumberCountArrowStatus() {
 }
 
 function setNumberColor(num) {
+  const currentData = formatData(currentResultData.value).balls
+
   if (repeatResultData.value.includes(num)) {
     return 'bg-info'
+  } else if (currentData.includes(num)) {
+    return 'bg-primary'
   }
 }
 </script>

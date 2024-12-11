@@ -22,7 +22,7 @@ const { startData, currentData, resultData, currentDataIndex } =
 const description =
   '这一部分只统计当前期次到它前一期，重复出现的号码，重复出现的个数。'
 
-watch([currentDataIndex, () => props.data], () => {
+watch([() => props.data, currentDataIndex], () => {
   repeatAnalyzeStore.setStartData(props.data)
   repeatAnalyzeStore.setCurrentData(props.data)
   repeatAnalyzeStore.setResultData()
@@ -42,12 +42,7 @@ watch([currentDataIndex, () => props.data], () => {
 
     <div class="flex items-center gap-4">
       <p>共 {{ resultData.length }} 个:</p>
-      <Ball
-        v-for="num in resultData"
-        :key="num"
-        :num="num"
-        :color="'bg-info'"
-      />
+      <Ball v-for="num in resultData" :key="num" :num="num" />
     </div>
   </div>
 </template>

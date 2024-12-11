@@ -3,45 +3,45 @@ import { formatData, countByGroup } from '@/assets/js/count'
 
 export const useNumberAnalyzeStore = defineStore('number_analyze', {
   state: () => ({
-    startIndex: 6,
-    endIndex: 0,
+    startDataIndex: 6,
+    endDataIndex: 0,
     startData: {},
     endData: {},
-    groupResultData: null,
+    groupResultData: {},
     startAddArrowStatus: false,
     startReduceArrowStatus: false,
     endAddArrowStatus: false,
     endReduceArrowStatus: false,
   }),
   getters: {
-    codeStep: (state) => state.startIndex - state.endIndex + 1,
+    codeStep: (state) => state.startDataIndex - state.endDataIndex + 1,
   },
   actions: {
     setStartData(data) {
-      this.startData = data[this.startIndex]
+      this.startData = data[this.startDataIndex]
     },
     setEndData(data) {
-      this.endData = data[this.endIndex]
+      this.endData = data[this.endDataIndex]
     },
     setGroupResultData(data) {
       const resultData = this.setResultData(data)
       this.groupResultData = countByGroup(resultData)
     },
-    addStartCode(data) {
-      if (this.startIndex >= data.length - 1) return
-      this.startIndex += 1
+    addStartCode() {
+      if (this.startDataIndex <= this.endDataIndex) return
+      this.startDataIndex -= 1
     },
-    reduceStartCode() {
-      if (this.startIndex <= this.endIndex) return
-      this.startIndex -= 1
+    reduceStartCode(data) {
+      if (this.startDataIndex >= data.length - 1) return
+      this.startDataIndex += 1
     },
     addEndCode() {
-      if (this.startIndex <= this.endIndex) return
-      this.endIndex += 1
+      if (this.endDataIndex <= 0) return
+      this.endDataIndex -= 1
     },
     reduceEndCode() {
-      if (this.endIndex <= 0) return
-      this.endIndex -= 1
+      if (this.endDataIndex >= this.startDataIndex) return
+      this.endDataIndex += 1
     },
     checkNumberCountArrowStatus(data) {
       this.startAddArrowStatus = false
@@ -49,17 +49,17 @@ export const useNumberAnalyzeStore = defineStore('number_analyze', {
       this.endAddArrowStatus = false
       this.endReduceArrowStatus = false
 
-      if (this.startIndex >= data.length - 1) {
+      if (this.startDataIndex >= data.length - 1) {
         this.startAddArrowStatus = true
-      } else if (this.startIndex <= this.endIndex) {
+      } else if (this.startDataIndex <= this.endDataIndex) {
         this.startReduceArrowStatus = true
         this.endAddArrowStatus = true
-      } else if (this.endIndex <= 0) {
+      } else if (this.endDataIndex <= 0) {
         this.endReduceArrowStatus = true
       }
     },
     setResultData(data) {
-      const countData = data.slice(this.endIndex, this.startIndex + 1)
+      const countData = data.slice(this.endDataIndex, this.startDataIndex + 1)
       const resultData = new Array(80).fill(null).map((item, index) => ({
         num: (index + 1).toString().padStart(2, '0'),
         count: 0,

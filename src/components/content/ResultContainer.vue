@@ -15,7 +15,7 @@ const props = defineProps({
   },
 })
 
-const ballList = computed(() => formatData(props.data).balls)
+const numberList = computed(() => formatData(props.data).balls)
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const ballList = computed(() => formatData(props.data).balls)
     </div>
 
     <div class="flex items-center gap-4">
-      <Ball v-for="num in ballList" :key="num" :num="num" />
+      <Ball v-for="num in numberList" :key="num" :num="num" />
     </div>
   </div>
 </template>
