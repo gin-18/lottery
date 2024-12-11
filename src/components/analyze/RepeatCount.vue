@@ -38,7 +38,7 @@ watch([() => props.data, currentDataIndex], () => {
       <CodeDate :data="currentData" />
     </div>
 
-    <p class="py-6">{{ description }}</p>
+    <p>{{ description }}</p>
 
     <div class="flex items-center gap-4">
       <p>共 {{ resultData.length }} 个:</p>

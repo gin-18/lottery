@@ -194,7 +194,7 @@ function checkReduceWeightArrowStatus(index) {
       ></button>
     </div>
 
-    <p class="py-6">{{ description }}</p>
+    <p>{{ description }}</p>
 
     <div>
       <h2 class="">各区域开奖情况</h2>

@@ -59,18 +59,15 @@ function setNumberColor(num) {
 <template>
   <div v-if="!data.length"></div>
   <div v-else>
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-6">
-          <CodeDate :data="startData" />
-          <p>-</p>
-          <CodeDate :data="endData" />
-        </div>
-        <p>共 {{ codeStep }} 期</p>
-      </div>
+    <div class="flex items-center gap-6">
+      <CodeDate :data="startData" />
+      <p>-</p>
+      <CodeDate :data="endData" />
     </div>
 
-    <p class="py-6">{{ description }}</p>
+    <p>共 {{ codeStep }} 期</p>
+
+    <p>{{ description }}</p>
 
     <table class="table">
       <thead>

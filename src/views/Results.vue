@@ -27,8 +27,8 @@ function changeCode(num) {
 <template>
   <Header />
 
-  <main class="container mx-auto">
-    <div class="flex items-center gap-6 pb-6">
+  <main>
+    <div class="flex items-center gap-6">
       <button
         class="btn"
         v-for="code in nums"
@@ -41,7 +41,7 @@ function changeCode(num) {
       </button>
     </div>
 
-    <ul class="flex flex-col gap-8">
+    <ul>
       <li v-for="data in dataList" :key="data.code">
         <ResultContainer :data="data" />
       </li>

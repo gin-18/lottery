@@ -19,7 +19,7 @@ onMounted(() => {
 <template>
   <Header />
 
-  <main class="container mx-auto flex flex-col gap-16">
+  <main>
     <div>
       <h2>最新开奖</h2>
       <div v-if="!data.code"></div>

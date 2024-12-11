@@ -108,23 +108,19 @@ function renderResultData() {
 <template>
   <div v-if="!data.length"></div>
   <div v-else>
-    <div class="flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <div class="flex items-center gap-6">
-          <CodeDate :data="startData" />
-          <p>-</p>
-          <CodeDate :data="lastData" />
-        </div>
-      </div>
-
-      <div class="flex items-center gap-6">
-        <p>共 {{ codes }} 期</p>
-        <p>步长: {{ codeStep }}</p>
-      </div>
+    <div class="flex items-center gap-6">
+      <CodeDate :data="startData" />
+      <p>-</p>
+      <CodeDate :data="lastData" />
     </div>
-  </div>
 
-  <p class="py-6">{{ description }}</p>
+    <div class="self-end flex items-center gap-6">
+      <p>共 {{ codes }} 期</p>
+      <p>步长: {{ codeStep }}</p>
+    </div>
+
+    <p>{{ description }}</p>
+  </div>
 
   <canvas id="chart"></canvas>
 </template>

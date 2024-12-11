@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-h2 {
-  @apply pb-8 text-xl font-bold;
-}
-
-h3 {
-  @apply pb-4 text-lg font-bold;
-}
-
-h4 {
-  @apply pb-4 text-base font-bold;
+main {
+  @apply container mx-auto prose prose-lg;
 }

@@ -16,7 +16,7 @@ onMounted(async () => {
 <template>
   <Header />
 
-  <main class="container mx-auto">
+  <main>
     <IntervalCount :data="data" />
   </main>
 </template>

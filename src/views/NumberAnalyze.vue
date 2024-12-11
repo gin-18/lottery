@@ -19,10 +19,10 @@ onMounted(async () => {
 <template>
   <Header />
 
-  <main class="container mx-auto flex flex-col gap-8">
+  <main>
     <div>
-      <div class="flex items-center justify-between pb-8">
-        <h2 class="p-0">当前开奖</h2>
+      <div class="flex items-center justify-between">
+        <h2>当前开奖</h2>
         <Setup :data="data" />
       </div>
       <CurrentResult :data="data" />
