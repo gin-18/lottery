@@ -16,19 +16,17 @@ const props = defineProps({
 })
 
 const repeatAnalyzeStore = useRepeatAnalyzeStore()
-const { startData, currentData, resultData } = storeToRefs(repeatAnalyzeStore)
+const { startData, currentData, resultData, currentDataIndex } =
+  storeToRefs(repeatAnalyzeStore)
 
 const description =
   '这一部分只统计当前期次到它前一期，重复出现的号码，重复出现的个数。'
 
-watch(
-  () => props.data,
-  () => {
-    repeatAnalyzeStore.setStartData(props.data)
-    repeatAnalyzeStore.setCurrentData(props.data)
-    repeatAnalyzeStore.setResultData(props.data)
-  },
-)
+watch([currentDataIndex, () => props.data], () => {
+  repeatAnalyzeStore.setStartData(props.data)
+  repeatAnalyzeStore.setCurrentData(props.data)
+  repeatAnalyzeStore.setResultData()
+})
 </script>
 
 <template>
@@ -44,7 +42,12 @@ watch(
 
     <div class="flex items-center gap-4">
       <p>共 {{ resultData.length }} 个:</p>
-      <Ball v-for="num in resultData" :key="num" :num="num" />
+      <Ball
+        v-for="num in resultData"
+        :key="num"
+        :num="num"
+        :color="'bg-info'"
+      />
     </div>
   </div>
 </template>

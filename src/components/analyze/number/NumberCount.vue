@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberAnalyzeStore } from '@/stores/number_analyze'
+import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -13,24 +14,16 @@ const props = defineProps({
 })
 
 const numberAnalyzeStore = useNumberAnalyzeStore()
+const repeatAnalyzeStore = useRepeatAnalyzeStore()
+
 const { startIndex, endIndex, codeStep, startData, endData, groupResultData } =
   storeToRefs(numberAnalyzeStore)
+const { resultData: repeatResultData } = storeToRefs(repeatAnalyzeStore)
 
 const description =
   '这一部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
 
-watch(
-  () => props.data,
-  () => {
-    numberAnalyzeStore.setStartData(props.data)
-    numberAnalyzeStore.setEndData(props.data)
-    numberAnalyzeStore.setGroupResultData(props.data)
-
-    checkNumberCountArrowStatus()
-  },
-)
-
-watch([startIndex, endIndex], () => {
+watch([startIndex, endIndex, () => props.data], () => {
   numberAnalyzeStore.setStartData(props.data)
   numberAnalyzeStore.setEndData(props.data)
   numberAnalyzeStore.setGroupResultData(props.data)
@@ -40,6 +33,12 @@ watch([startIndex, endIndex], () => {
 
 function checkNumberCountArrowStatus() {
   numberAnalyzeStore.checkNumberCountArrowStatus(props.data)
+}
+
+function setNumberColor(num) {
+  if (repeatResultData.value.includes(num)) {
+    return 'bg-info'
+  }
 }
 </script>
 
@@ -71,7 +70,12 @@ function checkNumberCountArrowStatus() {
         <tr v-for="(value, key) in groupResultData" :key="key">
           <th>{{ key }}</th>
           <td class="flex flex-wrap gap-2">
-            <Ball v-for="num in value.nums" :key="num" :num="num" />
+            <Ball
+              v-for="num in value.nums"
+              :key="num"
+              :num="num"
+              :color="setNumberColor(num)"
+            />
           </td>
           <td>{{ value.total }}</td>
         </tr>

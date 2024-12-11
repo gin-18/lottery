@@ -6,12 +6,11 @@ export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
     startData: {},
     currentData: {},
     currentDataIndex: 0,
-    codeStep: 2,
     resultData: {},
   }),
   actions: {
     setStartData(data) {
-      this.startData = data[this.codeStep - 1]
+      this.startData = data[this.currentDataIndex + 1]
     },
     setCurrentData(data) {
       this.currentData = data[this.currentDataIndex]
@@ -22,10 +21,11 @@ export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
       const resultData = findDuplicates(startDataNumbers, currentDataNumbers)
       this.resultData = resultData
     },
-    addCurrentDataIndex() {
+    reduceCurrentCode() {
       this.currentDataIndex += 1
     },
-    reduceCurrentDataIndex() {
+    addCurrentCode() {
+      if (this.currentDataIndex <= 0) return
       this.currentDataIndex -= 1
     },
   },
