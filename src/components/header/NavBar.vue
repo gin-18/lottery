@@ -12,10 +12,6 @@ const items = [
     name: '区间分析',
     path: '/interval',
   },
-  {
-    name: '重号分析',
-    path: '/repeat',
-  },
 ]
 </script>
 

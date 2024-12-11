@@ -347,10 +347,3 @@ function checkReduceWeightArrowStatus(index) {
     <canvas id="tail" class="bg-background"></canvas>
   </div>
 </template>
-
-<style scoped>
-.area-color-box {
-  width: 18px;
-  height: 18px;
-}
-</style>

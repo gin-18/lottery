@@ -2,8 +2,9 @@
 /**
  * 这个组件用于统计最近2期重复出现的号码
  */
-import { ref, watch } from 'vue'
-import { formatData, findDuplicates } from '@/assets/js/count'
+import { watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -14,28 +15,20 @@ const props = defineProps({
   },
 })
 
-const startData = ref({}) // 开始期次
-const lastData = ref({}) // 最新期次数据
-const codeStep = ref(2) // 期数
-const resultData = ref({}) // 统计后的数据
+const repeatAnalyzeStore = useRepeatAnalyzeStore()
+const { startData, currentData, resultData } = storeToRefs(repeatAnalyzeStore)
 
-const description = '这一部分只统计最近2期内，重复出现的号码，重复出现的个数。'
+const description =
+  '这一部分只统计当前期次到它前一期，重复出现的号码，重复出现的个数。'
 
 watch(
   () => props.data,
   () => {
-    lastData.value = props.data[0]
-    startData.value = props.data[codeStep.value - 1]
-    countRepeatBall()
+    repeatAnalyzeStore.setStartData(props.data)
+    repeatAnalyzeStore.setCurrentData(props.data)
+    repeatAnalyzeStore.setResultData(props.data)
   },
 )
-
-function countRepeatBall() {
-  const startBall = formatData(startData.value).balls
-  const lastBall = formatData(lastData.value).balls
-
-  resultData.value = findDuplicates(startBall, lastBall)
-}
 </script>
 
 <template>
@@ -44,7 +37,7 @@ function countRepeatBall() {
     <div class="flex items-center gap-4">
       <CodeDate :data="startData" />
       <p>-</p>
-      <CodeDate :data="lastData" />
+      <CodeDate :data="currentData" />
     </div>
 
     <p class="py-6">{{ description }}</p>

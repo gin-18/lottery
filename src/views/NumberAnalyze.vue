@@ -8,6 +8,7 @@ import Header from '@/components/header/Header.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 import NumberCount from '@/components/analyze/number/NumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
+import RepeatCount from '@/components/analyze/number/RepeatCount.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
 
 const data = ref([])
@@ -61,7 +62,7 @@ function reduceFrequencyStep() {
   <main class="container mx-auto flex flex-col gap-8">
     <div>
       <div class="flex items-center justify-between pb-8">
-        <h2 class="p-0">号码统计</h2>
+        <h2 class="p-0">重复号码</h2>
         <SettingBox class="self-end">
           <div>
             <h2>号码分析设置</h2>
@@ -129,6 +130,11 @@ function reduceFrequencyStep() {
           </div>
         </SettingBox>
       </div>
+      <RepeatCount :data="data" />
+    </div>
+
+    <div>
+      <h2>号码统计</h2>
       <NumberCount :data="data" />
     </div>
 
