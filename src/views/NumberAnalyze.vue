@@ -21,10 +21,7 @@ onMounted(async () => {
 
   <main>
     <div>
-      <div class="flex items-center justify-between">
-        <h2>当前开奖</h2>
-        <Setup :data="data" />
-      </div>
+      <h2>当前开奖</h2>
       <CurrentResult :data="data" />
     </div>
 
@@ -42,5 +39,7 @@ onMounted(async () => {
       <h2>号码频率</h2>
       <FrequencyCount :data="data" />
     </div>
+
+    <Setup :data="data" />
   </main>
 </template>

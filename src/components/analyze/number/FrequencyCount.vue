@@ -106,7 +106,9 @@ function renderResultData() {
 </script>
 
 <template>
-  <div v-if="!data.length"></div>
+  <div v-if="!data.length">
+    <span class="loading loading-dots loading-sm"></span>
+  </div>
   <div v-else>
     <div class="flex items-center gap-6">
       <CodeDate :data="startData" />

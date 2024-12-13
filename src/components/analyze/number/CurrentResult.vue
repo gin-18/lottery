@@ -20,7 +20,9 @@ watch([() => props.data, currentDataIndex], () => {
 </script>
 
 <template>
-  <div v-if="!data.length"></div>
+  <div v-if="!data.length">
+    <span class="loading loading-dots loading-sm"></span>
+  </div>
   <div v-else>
     <ResultContainer :data="resultData" />
   </div>
