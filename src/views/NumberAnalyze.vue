@@ -6,7 +6,7 @@ import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import NumberCount from '@/components/analyze/number/NumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
-import Setup from '@/components/analyze/number/setting/Setup.vue'
+import Setting from '@/components/analyze/number/setting/Setting.vue'
 
 const data = ref([])
 
@@ -40,6 +40,6 @@ onMounted(async () => {
       <FrequencyCount :data="data" />
     </div>
 
-    <Setup :data="data" />
+    <Setting :data="data" />
   </main>
 </template>

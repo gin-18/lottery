@@ -19,12 +19,12 @@ onMounted(async () => {
 
   <main>
     <div>
-      <h2>区间统计</h2>
-      <IntervalCount :data="data" type="interval" />
+      <h2>尾部统计</h2>
+      <IntervalCount :data="data" type="tail" />
     </div>
     <div>
-      <h2>区间走势</h2>
-      <IntervalTendencyCount :data="data" type="interval" />
+      <h2>尾部走势</h2>
+      <IntervalTendencyCount :data="data" type="tail" />
     </div>
   </main>
 </template>

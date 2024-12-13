@@ -12,6 +12,10 @@ const items = [
     name: '区间分析',
     path: '/interval',
   },
+  {
+    name: '尾部分析',
+    path: '/tail',
+  },
 ]
 </script>
 
