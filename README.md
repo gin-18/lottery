@@ -1,29 +1,25 @@
 # :chart_with_upwards_trend: Lottery-8
 
- 根据本人的习惯，对福彩的快乐8开奖数据进行了一些统计，包括：开奖列表、开奖号码统计、开奖号码分布图、冷热区域统计和重开号码统计。
+ 根据本人的习惯，对福彩的快乐8开奖数据进行了一些统计，包括：开奖列表、开奖号码分析、开奖号码的区间分析、开奖号码的尾部分析和重开号码分析。
 
-## 首页
+## 号码分析
 
-最新一期的开奖号码和奖金对照表。
+这部分包括：当前期次的开奖号码，当前期次与上一期次的重复号码的统计，根据开奖次数归类所有的号码，以及次数的频率图。
 
-<img style="width: 50%" src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/home.JPG?raw=true" alt="home" />
+<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/number_analyze.png?raw=true" alt="number_analyze" />
 
-## 开奖列表
+## 区间分析
 
-可选近15、30、50和100期的开奖列表。
+这部分包括：当前期次与上一期次的重复号码的统计，当前期次的开奖号码和重复号码落在各个区间的情况，以及每个区间开出号码的频率图。
 
-<img style="width: 50%" src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/list.JPG?raw=true" alt="list" />
+<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/interval_analyze.png?raw=true" alt="interval_analyze" />
 
-## 开奖统计
+## 尾数分析
 
-使用chart.js统计各个号码出现的次数。
+这部分包括：当前期次与上一期次的重复号码的统计，当前期次的开奖号码和重复号码落在各个尾部的情况，以及每个尾部开出号码的频率图。
 
-<img style="width: 50%" src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/analyze-number-count.JPG?raw=true" alt="analyze-number-count" />
+<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/tail_analyze.png?raw=true" alt="tail_analyze" />
 
-对所有号码以10为步长分区，统计开奖号码在各个分区的情况，对各分区开奖情况进行冷热区域的统计。
+## License
 
-<img style="width: 50%" src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/analyze-area.JPG?raw=true" alt="analyze-area" />
-
-统计所选期数重复出现的开奖号码的次数。
-
-<img style="width: 50%" src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/analyze-number-repeat.JPG?raw=true" alt="analyze-number-repeat" />
+次项目遵循 [MIT](https://opensource.org/licenses/MIT) 协议。
