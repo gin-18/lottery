@@ -13,14 +13,14 @@ const props = defineProps({
 
 <template>
   <SettingBox class="not-prose">
-    <h2>{{ type }}</h2>
+    <h2>{{ type }}统计设置</h2>
     <div class="flex flex-col gap-8">
       <div>
         <RepeatAnalyzeSetting />
       </div>
 
       <div>
-        <IntervalAnalyzeSetting type="尾部" />
+        <IntervalAnalyzeSetting :type="type" />
       </div>
     </div>
   </SettingBox>

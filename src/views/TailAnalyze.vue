@@ -35,6 +35,6 @@ onMounted(async () => {
       <IntervalTendencyCount :data="data" type="tail" />
     </div>
 
-    <Setting type="尾部统计设置" />
+    <Setting type="尾部" />
   </main>
 </template>
