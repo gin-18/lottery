@@ -12,7 +12,7 @@ export const useIntervalAnalyzeStore = defineStore('interval_analyze', {
     currentData: {},
     rangeData: {},
     currentDataIndex: 0,
-    rangeStep: 14,
+    rangeStep: 7,
     intervalCategory: [
       {
         title: '热',
@@ -46,6 +46,19 @@ export const useIntervalAnalyzeStore = defineStore('interval_analyze', {
     },
     setRangeData(data) {
       this.rangeData = data.slice(0, this.rangeStep)
+    },
+    addCurrentCode() {
+      if (this.currentDataIndex <= 0) return
+      this.currentDataIndex -= 1
+    },
+    reduceCurrentCode() {
+      this.currentDataIndex += 1
+    },
+    addRangeStep() {
+      this.rangeStep += 1
+    },
+    reduceRangeStep() {
+      this.rangeStep -= 1
     },
     setIntervalColor(index, type) {
       const countObj = countOneByRange(this.currentData, type)

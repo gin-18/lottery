@@ -1,5 +1,7 @@
 export const chartPalette = {
-  baseColor: '#333c4d',
+  gridColor: '#b1b1b1',
+  tickColor: '#333c4d',
+  labelColor: '#333c4d',
   chartLine: [
     '#dc8a78',
     '#dd7878',

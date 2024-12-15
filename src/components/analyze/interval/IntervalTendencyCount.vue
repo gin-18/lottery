@@ -28,22 +28,20 @@ const props = defineProps({
 })
 
 const intervalAnalyzeStore = useIntervalAnalyzeStore()
-const { rangeData } = storeToRefs(intervalAnalyzeStore)
+const { rangeData, rangeStep } = storeToRefs(intervalAnalyzeStore)
 
 let chart = null
 
-watch(
-  () => props.data,
-  () => {
-    intervalAnalyzeStore.setRangeData(props.data)
-    renderChart()
-  },
-)
+watch([() => props.data, rangeStep], () => {
+  intervalAnalyzeStore.setRangeData(props.data)
+  chart?.destroy()
+  renderChart()
+})
 
 function renderChart() {
   const result = countAllByRange(rangeData.value, props.type)
   const suffix = props.type === 'interval' ? '区间' : '尾数'
-  const chartLine = chartPalette.chartLine
+  const { gridColor, tickColor, labelColor, chartLine } = chartPalette
 
   chart = new Chart(document.getElementById(props.type), {
     type: 'line',
@@ -55,6 +53,34 @@ function renderChart() {
         backgroundColor: chartLine[index],
         data: result[item],
       })),
+    },
+    options: {
+      indexAxis: 'x',
+      scales: {
+        x: {
+          ticks: {
+            color: tickColor,
+          },
+          grid: {
+            color: gridColor,
+          },
+        },
+        y: {
+          ticks: {
+            color: tickColor,
+          },
+          grid: {
+            color: gridColor,
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: labelColor,
+          },
+        },
+      },
     },
   })
 }

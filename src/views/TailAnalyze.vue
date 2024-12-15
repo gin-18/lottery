@@ -3,8 +3,10 @@ import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 
 import Header from '@/components/header/Header.vue'
+import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import IntervalCount from '@/components/analyze/interval/IntervalCount.vue'
 import IntervalTendencyCount from '@/components/analyze/interval/IntervalTendencyCount.vue'
+import Setting from '@/components/analyze/interval/Setting.vue'
 
 const data = ref([])
 
@@ -19,12 +21,20 @@ onMounted(async () => {
 
   <main>
     <div>
+      <h2>重号统计</h2>
+      <RepeatCount :data="data" />
+    </div>
+
+    <div>
       <h2>尾部统计</h2>
       <IntervalCount :data="data" type="tail" />
     </div>
+
     <div>
       <h2>尾部走势</h2>
       <IntervalTendencyCount :data="data" type="tail" />
     </div>
+
+    <Setting type="尾部统计设置" />
   </main>
 </template>

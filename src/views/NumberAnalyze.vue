@@ -6,7 +6,7 @@ import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import NumberCount from '@/components/analyze/number/NumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
-import Setting from '@/components/analyze/number/setting/Setting.vue'
+import Setting from '@/components/analyze/number/Setting.vue'
 
 const data = ref([])
 

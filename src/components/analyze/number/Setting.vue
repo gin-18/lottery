@@ -6,6 +6,7 @@ import { useFrequencyAnalyzeStore } from '@/stores/frequency_analyze'
 import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
 import CodeDate from '@/components/content/CodeDate.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
+import RepeatAnalyzeSetting from '@/components/setting/RepeatAnalyzeSetting.vue'
 
 const props = defineProps({
   data: {
@@ -17,7 +18,6 @@ const props = defineProps({
 const currentResultStore = useCurrentResultStore()
 const numberAnalyzeStore = useNumberAnalyzeStore()
 const frequencyAnalyzeStore = useFrequencyAnalyzeStore()
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
 
 const {
   codeStep: numberCodeStep,
@@ -29,7 +29,6 @@ const {
   endReduceArrowStatus,
 } = storeToRefs(numberAnalyzeStore)
 const { codeStep: frequencyCodeStep } = storeToRefs(frequencyAnalyzeStore)
-const { currentData: repeatCurrentData } = storeToRefs(repeatAnalyzeStore)
 const { resultData: currentCodeData } = storeToRefs(currentResultStore)
 
 function addNumberStartCode() {
@@ -51,13 +50,6 @@ function addFrequencyStep() {
 }
 function reduceFrequencyStep() {
   frequencyAnalyzeStore.reduceCodeStep()
-}
-
-function addRepeatCurrentCode() {
-  repeatAnalyzeStore.addCurrentCode()
-}
-function reduceRepeatCurrentCode() {
-  repeatAnalyzeStore.reduceCurrentCode()
 }
 
 function addCurrentCode() {
@@ -92,15 +84,7 @@ function reduceCurrentCode() {
         <h3>重号统计</h3>
         <div>
           <h4>重号当前期次：</h4>
-          <div class="flex justify-between items-center">
-            <button class="btn" @click="reduceRepeatCurrentCode">
-              <span class="icon-[octicon--triangle-left-24]"></span>
-            </button>
-            <CodeDate :data="repeatCurrentData" />
-            <button class="btn" @click="addRepeatCurrentCode">
-              <span class="icon-[octicon--triangle-right-24]"></span>
-            </button>
-          </div>
+          <RepeatAnalyzeSetting />
         </div>
       </div>
 
