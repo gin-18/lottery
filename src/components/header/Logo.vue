@@ -12,19 +12,7 @@ function goHome() {
 </script>
 
 <template>
-  <h1 class="d-flex justify-center align-center ga-2" @click="goHome">
-    <img :src="logo" alt="logo" />
-    <p class="text-h5 font-weight-bold">快乐8</p>
+  <h1 class="cursor-pointer" @click="goHome">
+    <img class="w-8 h-8" :src="logo" alt="logo" />
   </h1>
 </template>
-
-<style scoped>
-h1 {
-  cursor: pointer;
-}
-
-img {
-  width: 28px;
-  height: 28px;
-}
-</style>

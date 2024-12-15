@@ -1,39 +1,32 @@
 <script setup>
 const items = [
   {
-    name: 'HOME',
-    path: '/',
-    icon: 'fa fa-house',
-    size: '16px',
-  },
-  {
-    name: 'LIST',
+    name: '开奖结果',
     path: '/results',
-    icon: 'fa fa-list-ul',
-    size: '18px',
   },
   {
-    name: 'ANALYZE',
-    path: '/analyze',
-    icon: 'fa fa-chart-line',
-    size: '18px',
+    name: '号码分析',
+    path: '/number',
+  },
+  {
+    name: '区间分析',
+    path: '/interval',
+  },
+  {
+    name: '尾部分析',
+    path: '/tail',
   },
 ]
 </script>
 
 <template>
-  <nav class="d-flex justify-center align-center">
-    <v-breadcrumbs
-      class="pr-0"
-      :items="items"
-      divider=""
-      active-color="area-cold"
-    >
-      <template #item="{ item }">
-        <v-breadcrumbs-item class="pb-1" :to="item.path">
-          <v-icon :icon="item.icon" :size="item.size" />
-        </v-breadcrumbs-item>
-      </template>
-    </v-breadcrumbs>
+  <nav class="flex-none">
+    <ul class="menu menu-horizontal">
+      <li v-for="(item, index) in items" :key="index">
+        <RouterLink :to="item.path" active-class="text-primary">{{
+          item.name
+        }}</RouterLink>
+      </li>
+    </ul>
   </nav>
 </template>

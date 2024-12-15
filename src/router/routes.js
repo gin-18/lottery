@@ -10,9 +10,19 @@ export const routes = [
     component: () => import('@/views/Results.vue'),
   },
   {
-    path: '/analyze',
-    name: 'Analyze',
-    component: () => import('@/views/Analyze.vue'),
+    path: '/number',
+    name: 'Number',
+    component: () => import('@/views/NumberAnalyze.vue'),
+  },
+  {
+    path: '/interval',
+    name: 'Interval',
+    component: () => import('@/views/IntervalAnalyze.vue'),
+  },
+  {
+    path: '/tail',
+    name: 'tail',
+    component: () => import('@/views/TailAnalyze.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
