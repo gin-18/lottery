@@ -12,22 +12,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <SettingBox class="not-prose">
-    <h2>{{ type }}统计设置</h2>
-    <div class="flex flex-col gap-8">
-      <div>
-        <RepeatAnalyzeSetting />
-      </div>
-
-      <div>
-        <IntervalAnalyzeSetting :type="type" />
-      </div>
-    </div>
+  <SettingBox :title="`${type}统计设置`">
+    <RepeatAnalyzeSetting />
+    <IntervalAnalyzeSetting :type="type" />
   </SettingBox>
 </template>
-
-<style scoped>
-h2 {
-  @apply mb-8 text-3xl font-semibold;
-}
-</style>
