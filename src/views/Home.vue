@@ -22,7 +22,9 @@ onMounted(() => {
   <main>
     <div>
       <h2>最新开奖</h2>
-      <div v-if="!data.code"></div>
+      <div v-if="!data.code">
+        <span class="loading loading-dots loading-sm"></span>
+      </div>
       <ResultContainer v-else :data="data" />
     </div>
 

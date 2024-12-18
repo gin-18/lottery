@@ -29,12 +29,3 @@ function reduceRepeatCurrentCode() {
     </div>
   </div>
 </template>
-
-<style scoped>
-h3 {
-  @apply mb-3 text-2xl font-semibold;
-}
-h4 {
-  @apply mb-3 text-xl font-semibold;
-}
-</style>
