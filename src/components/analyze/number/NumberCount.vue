@@ -94,5 +94,17 @@ function setNumberColor(num) {
         </tr>
       </tbody>
     </table>
+
+    <div class="flex justify-center gap-12">
+      <div class="flex items-center">
+        <p class="m-0">重复号码:</p>
+        <div class="w-4 h-4 rounded bg-info"></div>
+      </div>
+
+      <div class="flex items-center">
+        <p class="m-0">当前期次号码:</p>
+        <div class="w-4 h-4 rounded bg-primary"></div>
+      </div>
+    </div>
   </div>
 </template>
