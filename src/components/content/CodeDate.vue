@@ -1,5 +1,5 @@
 <script setup>
-import { formatDay } from '@/assets/js/formatDay'
+import { formatDay } from '@/assets/js/utils'
 
 const props = defineProps({
   data: Object,

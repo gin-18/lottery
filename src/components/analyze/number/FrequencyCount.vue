@@ -35,7 +35,7 @@ const { startData, lastData, resultData, codeStep, codes } = storeToRefs(
   frequencyAnalyzeStore,
 )
 const description =
-  '这一部分用于统计指定步长的期次的所有号码出现的次数的总个数, 例如：步长为7的情况下, 则以每7期作为一组数据，统计这一组数据中，出现0次的号码有多少个，出现1次的号码有多少个，以此类推，总共统计14组数据。'
+  '这部分用于统计指定步长的期次的所有号码出现的次数的总个数, 例如：步长为7的情况下, 则以每7期作为一组数据，统计这一组数据中，出现0次的号码有多少个，出现1次的号码有多少个，以此类推，总共统计14组数据。'
 
 watch(
   () => props.data,
@@ -110,6 +110,8 @@ function renderResultData() {
     <span class="loading loading-dots loading-sm"></span>
   </div>
   <div v-else>
+    <p>{{ description }}</p>
+
     <div class="flex items-center gap-6">
       <CodeDate :data="startData" />
       <p>-</p>
@@ -120,8 +122,6 @@ function renderResultData() {
       <p>共 {{ codes }} 期</p>
       <p>步长: {{ codeStep }}</p>
     </div>
-
-    <p>{{ description }}</p>
   </div>
 
   <canvas id="chart"></canvas>
