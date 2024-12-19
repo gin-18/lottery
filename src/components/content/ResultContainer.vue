@@ -5,7 +5,7 @@
  */
 import { computed } from 'vue'
 import { formatData } from '@/assets/js/count'
-import { formatDay } from '@/assets/js/formatDay'
+import { formatDay } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 
 const props = defineProps({
