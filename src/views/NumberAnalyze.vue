@@ -21,7 +21,7 @@ onMounted(async () => {
 
   <main>
     <div>
-      <h2>当前开奖</h2>
+      <h2>当前期次开奖</h2>
       <CurrentResult :data="data" />
     </div>
 

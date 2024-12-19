@@ -31,7 +31,7 @@ const { resultData: repeatResultData } = storeToRefs(repeatAnalyzeStore)
 const { resultData: currentResultData } = storeToRefs(currentResultStore)
 
 const description =
-  '这一部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
+  '这部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
 
 watch([startDataIndex, endDataIndex, () => props.data], () => {
   numberAnalyzeStore.setStartData(props.data)
@@ -61,6 +61,8 @@ function setNumberColor(num) {
     <span class="loading loading-dots loading-sm"></span>
   </div>
   <div v-else>
+    <p>{{ description }}</p>
+
     <div class="flex items-center gap-6">
       <CodeDate :data="startData" />
       <p>-</p>
@@ -68,8 +70,6 @@ function setNumberColor(num) {
     </div>
 
     <p>共 {{ codeStep }} 期</p>
-
-    <p>{{ description }}</p>
 
     <table class="table">
       <thead>

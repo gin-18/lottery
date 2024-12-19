@@ -20,7 +20,7 @@ const { startData, currentData, resultData, currentDataIndex } =
   storeToRefs(repeatAnalyzeStore)
 
 const description =
-  '这一部分只统计当前期次到它前一期，重复出现的号码，重复出现的个数。'
+  '这部分只统计当前期次到它前一期，重复出现的个数，以及重复出现的号码。'
 
 watch([() => props.data, currentDataIndex], () => {
   repeatAnalyzeStore.setStartData(props.data)
@@ -34,13 +34,13 @@ watch([() => props.data, currentDataIndex], () => {
     <span class="loading loading-dots loading-sm"></span>
   </div>
   <div v-else>
+    <p>{{ description }}</p>
+
     <div class="flex items-center gap-4">
       <CodeDate :data="startData" />
       <p>-</p>
       <CodeDate :data="currentData" />
     </div>
-
-    <p>{{ description }}</p>
 
     <div class="flex items-center gap-4">
       <p>共 {{ resultData.length }} 个:</p>

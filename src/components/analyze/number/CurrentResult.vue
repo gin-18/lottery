@@ -14,6 +14,8 @@ const props = defineProps({
 const currentResultStore = useCurrentResultStore()
 const { resultData, currentDataIndex } = storeToRefs(currentResultStore)
 
+const description = '这部分用于显示当前期次的开奖结果。'
+
 watch([() => props.data, currentDataIndex], () => {
   currentResultStore.setCurrentData(props.data)
 })
@@ -24,6 +26,7 @@ watch([() => props.data, currentDataIndex], () => {
     <span class="loading loading-dots loading-sm"></span>
   </div>
   <div v-else>
+    <p>{{ description }}</p>
     <ResultContainer :data="resultData" />
   </div>
 </template>
