@@ -25,6 +25,7 @@ function toggleShowSetting() {
     <div
       v-show="show"
       class="fixed top-0 right-0 w-full h-full bg-neutral opacity-60"
+      @click="toggleShowSetting"
     ></div>
   </Transition>
 
