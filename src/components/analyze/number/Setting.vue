@@ -4,6 +4,7 @@ import CurrentResultSetting from '@/components/setting/CurrentResultSetting.vue'
 import RepeatAnalyzeSetting from '@/components/setting/RepeatAnalyzeSetting.vue'
 import TimesNumberCountAnalyzeSetting from '@/components/setting/TimesNumberCountAnalyzeSetting.vue'
 import FrequencyCountAnalyzeSetting from '@/components/setting/FrequencyCountAnalyzeSetting.vue'
+import CodeNumberCountSetting from '@/components/setting/CodeNumberCountSetting.vue'
 
 const props = defineProps({
   data: {
@@ -19,5 +20,6 @@ const props = defineProps({
     <RepeatAnalyzeSetting />
     <TimesNumberCountAnalyzeSetting :data="data" />
     <FrequencyCountAnalyzeSetting />
+    <CodeNumberCountSetting />
   </SettingBox>
 </template>

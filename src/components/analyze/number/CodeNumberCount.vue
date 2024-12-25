@@ -45,6 +45,13 @@ watch(
   },
 )
 
+watch(codeStep, () => {
+  codeNumberAnalyzeStore.setData(props.data)
+  codeNumberAnalyzeStore.countNumberByCode()
+  chart.destroy()
+  renderChart()
+})
+
 function renderChart() {
   const { tickColor, gridColor, labelColor, barColor } = chartPalette
 
