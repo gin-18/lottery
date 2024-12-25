@@ -38,7 +38,7 @@ function reduceNumberEndCode() {
 
 <template>
   <div>
-    <h3>号码统计</h3>
+    <h3>号码统计设置</h3>
     <p>共 {{ numberCodeStep }} 期</p>
     <div>
       <div>

@@ -2,6 +2,7 @@ export const chartPalette = {
   gridColor: '#b1b1b1',
   tickColor: '#333c4d',
   labelColor: '#333c4d',
+  barColor: '#7287fd',
   chartLine: [
     '#dc8a78',
     '#dd7878',

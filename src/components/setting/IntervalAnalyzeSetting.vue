@@ -48,11 +48,11 @@ function reduceIntervalRangeStep() {
     <h4>{{ type }}频率期次:</h4>
     <div class="flex justify-between items-center">
       <button class="btn" @click="reduceIntervalRangeStep">
-        <span class="icon-[octicon--triangle-left-24]"></span>
+        <span class="icon-[octicon--dash-16]"></span>
       </button>
       <p>{{ rangeStep }}</p>
       <button class="btn" @click="addIntervalRangeStep">
-        <span class="icon-[octicon--triangle-right-24]"></span>
+        <span class="icon-[octicon--plus-16]"></span>
       </button>
     </div>
   </div>

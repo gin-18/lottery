@@ -58,8 +58,7 @@ watch(codeStep, () => {
 })
 
 function renderResultData() {
-  const baseColor = chartPalette.baseColor
-  const chartLine = chartPalette.chartLine
+  const { tickColor, gridColor, labelColor, chartLine } = chartPalette
 
   chart = new Chart(document.getElementById('frequency-chart'), {
     type: 'line',
@@ -67,10 +66,10 @@ function renderResultData() {
       labels: resultData.value.map((item) => Object.keys(item.list))[0],
       datasets: resultData.value.map((item, index) => ({
         label: `${item.code}`,
+        data: Object.values(item.list),
         borderWidth: 1,
         borderColor: chartLine[index],
         backgroundColor: chartLine[index],
-        data: Object.values(item.list),
       })),
     },
     options: {
@@ -78,25 +77,25 @@ function renderResultData() {
       scales: {
         x: {
           ticks: {
-            color: baseColor,
+            color: tickColor,
           },
           grid: {
-            color: baseColor,
+            color: gridColor,
           },
         },
         y: {
           ticks: {
-            color: baseColor,
+            color: tickColor,
           },
           grid: {
-            color: baseColor,
+            color: gridColor,
           },
         },
       },
       plugins: {
         legend: {
           labels: {
-            color: baseColor,
+            color: labelColor,
           },
         },
       },
