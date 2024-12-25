@@ -4,8 +4,9 @@ import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
-import NumberCount from '@/components/analyze/number/NumberCount.vue'
+import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
+import CodeNumberCount from '@/components/analyze/number/CodeNumberCount.vue'
 import Setting from '@/components/analyze/number/Setting.vue'
 
 const data = ref([])
@@ -32,12 +33,17 @@ onMounted(async () => {
 
     <div>
       <h2>号码统计</h2>
-      <NumberCount :data="data" />
+      <TimesNumberCount :data="data" />
     </div>
 
     <div>
       <h2>号码频率</h2>
       <FrequencyCount :data="data" />
+    </div>
+
+    <div>
+      <h2>号码次数</h2>
+      <CodeNumberCount :data="data" />
     </div>
 
     <Setting :data="data" />

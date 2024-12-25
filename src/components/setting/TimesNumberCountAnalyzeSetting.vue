@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useNumberAnalyzeStore } from '@/stores/number_analyze'
+import { useTimesNumberAnalyzeStore } from '@/stores/times_number_analyze'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const numberAnalyzeStore = useNumberAnalyzeStore()
+const timesNumberAnalyzeStore = useTimesNumberAnalyzeStore()
 const {
   codeStep: numberCodeStep,
   startData: numberStartData,
@@ -19,26 +19,26 @@ const {
   startReduceArrowStatus,
   endAddArrowStatus,
   endReduceArrowStatus,
-} = storeToRefs(numberAnalyzeStore)
+} = storeToRefs(timesNumberAnalyzeStore)
 
 function addNumberStartCode() {
-  numberAnalyzeStore.addStartCode()
+  timesNumberAnalyzeStore.addStartCode()
 }
 function reduceNumberStartCode() {
-  numberAnalyzeStore.reduceStartCode(props.data)
+  timesNumberAnalyzeStore.reduceStartCode(props.data)
 }
 
 function addNumberEndCode() {
-  numberAnalyzeStore.addEndCode()
+  timesNumberAnalyzeStore.addEndCode()
 }
 function reduceNumberEndCode() {
-  numberAnalyzeStore.reduceEndCode()
+  timesNumberAnalyzeStore.reduceEndCode()
 }
 </script>
 
 <template>
   <div>
-    <h3>号码统计</h3>
+    <h3>号码统计设置</h3>
     <p>共 {{ numberCodeStep }} 期</p>
     <div>
       <div>

@@ -52,10 +52,10 @@ function renderChart() {
     data: {
       datasets: Object.keys(result).map((item, index) => ({
         label: `${item} ${suffix}`,
+        data: result[item],
         borderWidth: 1,
         borderColor: chartLine[index],
         backgroundColor: chartLine[index],
-        data: result[item],
       })),
     },
     options: {
