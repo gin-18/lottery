@@ -4,7 +4,7 @@
 
 ## 号码分析
 
-这部分包括：当前期次的开奖号码，当前期次与上一期次的重复号码的统计，根据开奖次数归类所有的号码，以及次数的频率图。
+这部分包括：当前期次的开奖号码，当前期次与上一期次的重复号码的统计，根据开奖次数归类所有的号码，次数的频率图，以及所有号码出现次数的柱状图。
 
 <img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/number_analyze.png?raw=true" alt="number_analyze" />
 
