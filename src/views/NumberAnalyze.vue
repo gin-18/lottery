@@ -4,7 +4,7 @@ import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
-import NumberCount from '@/components/analyze/number/NumberCount.vue'
+import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
 import Setting from '@/components/analyze/number/Setting.vue'
 
@@ -32,7 +32,7 @@ onMounted(async () => {
 
     <div>
       <h2>号码统计</h2>
-      <NumberCount :data="data" />
+      <TimesNumberCount :data="data" />
     </div>
 
     <div>

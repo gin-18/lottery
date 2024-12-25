@@ -61,7 +61,7 @@ function renderResultData() {
   const baseColor = chartPalette.baseColor
   const chartLine = chartPalette.chartLine
 
-  chart = new Chart(document.getElementById('chart'), {
+  chart = new Chart(document.getElementById('frequency-chart'), {
     type: 'line',
     data: {
       labels: resultData.value.map((item) => Object.keys(item.list))[0],
@@ -124,5 +124,5 @@ function renderResultData() {
     </div>
   </div>
 
-  <canvas id="chart"></canvas>
+  <canvas id="frequency-chart"></canvas>
 </template>

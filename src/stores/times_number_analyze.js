@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { formatData, countByGroup } from '@/assets/js/count'
 
-export const useNumberAnalyzeStore = defineStore('number_analyze', {
+export const useTimesNumberAnalyzeStore = defineStore('times_number_analyze', {
   state: () => ({
     startDataIndex: 6,
     endDataIndex: 0,
