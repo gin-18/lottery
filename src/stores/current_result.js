@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 
 export const useCurrentResultStore = defineStore('current_result', {
   state: () => ({
-    resultData: {},
+    currentData: {},
     currentDataIndex: 0,
   }),
   actions: {
     setCurrentData(data) {
-      this.resultData = data[this.currentDataIndex]
+      this.currentData = data[this.currentDataIndex]
     },
     addCurrentCode() {
       if (this.currentDataIndex <= 0) return

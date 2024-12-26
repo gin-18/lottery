@@ -4,7 +4,7 @@ import { useCurrentResultStore } from '@/stores/current_result'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const currentResultStore = useCurrentResultStore()
-const { resultData } = storeToRefs(currentResultStore)
+const { currentData } = storeToRefs(currentResultStore)
 
 function addCurrentCode() {
   currentResultStore.addCurrentCode()
@@ -22,7 +22,7 @@ function reduceCurrentCode() {
       <button class="btn" @click="reduceCurrentCode">
         <span class="icon-[octicon--triangle-left-24]"></span>
       </button>
-      <CodeDate :data="resultData" />
+      <CodeDate :data="currentData" />
       <button class="btn" @click="addCurrentCode">
         <span class="icon-[octicon--triangle-right-24]"></span>
       </button>

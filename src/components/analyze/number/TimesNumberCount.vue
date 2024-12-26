@@ -28,7 +28,7 @@ const {
   groupResultData,
 } = storeToRefs(timesNumberAnalyzeStore)
 const { resultData: repeatResultData } = storeToRefs(repeatAnalyzeStore)
-const { resultData: currentResultData } = storeToRefs(currentResultStore)
+const { currentData: currentCodeData } = storeToRefs(currentResultStore)
 
 const description =
   '这部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
@@ -46,7 +46,7 @@ function checkNumberCountArrowStatus() {
 }
 
 function setNumberColor(num) {
-  const currentData = formatData(currentResultData.value).balls
+  const currentData = formatData(currentCodeData.value).balls
 
   if (repeatResultData.value.includes(num)) {
     return 'bg-info'
