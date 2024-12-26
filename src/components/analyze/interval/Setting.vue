@@ -1,6 +1,6 @@
 <script setup>
 import SettingBox from '@/components/content/SettingBox.vue'
-import RepeatAnalyzeSetting from '@/components/setting/RepeatAnalyzeSetting.vue'
+import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import IntervalAnalyzeSetting from '@/components/setting/IntervalAnalyzeSetting.vue'
 
 const props = defineProps({
@@ -13,7 +13,7 @@ const props = defineProps({
 
 <template>
   <SettingBox :title="`${type}统计设置`">
-    <RepeatAnalyzeSetting />
+    <RepeatCountSetting />
     <IntervalAnalyzeSetting :type="type" />
   </SettingBox>
 </template>

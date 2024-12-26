@@ -3,8 +3,8 @@ import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { formatData } from '@/assets/js/count'
 import { useCurrentResultStore } from '@/stores/current_result'
-import { useTimesNumberAnalyzeStore } from '@/stores/times_number_analyze'
-import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
+import { useTimesNumberCountStore } from '@/stores/times_number_count'
+import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -16,8 +16,8 @@ const props = defineProps({
 })
 
 const currentResultStore = useCurrentResultStore()
-const timesNumberAnalyzeStore = useTimesNumberAnalyzeStore()
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
+const timesNumberCountStore = useTimesNumberCountStore()
+const repeatCountStore = useRepeatCountStore()
 
 const {
   startDataIndex,
@@ -25,32 +25,29 @@ const {
   codeStep,
   startData,
   endData,
-  groupResultData,
-} = storeToRefs(timesNumberAnalyzeStore)
-const { repeatData } = storeToRefs(repeatAnalyzeStore)
-const { currentData: currentCodeData } = storeToRefs(currentResultStore)
+  timesNumberCountData,
+  description,
+} = storeToRefs(timesNumberCountStore)
+const { repeatData } = storeToRefs(repeatCountStore)
+const { currentData } = storeToRefs(currentResultStore)
 
-const description =
-  '这部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。'
-
-watch([startDataIndex, endDataIndex, () => props.data], () => {
-  timesNumberAnalyzeStore.setStartData(props.data)
-  timesNumberAnalyzeStore.setEndData(props.data)
-  timesNumberAnalyzeStore.setGroupResultData(props.data)
-
+watch([() => props.data, startDataIndex, endDataIndex], () => {
+  timesNumberCountStore.setStartData(props.data)
+  timesNumberCountStore.setEndData(props.data)
+  timesNumberCountStore.countNumberByTimes(props.data)
   checkNumberCountArrowStatus()
 })
 
 function checkNumberCountArrowStatus() {
-  timesNumberAnalyzeStore.checkNumberCountArrowStatus(props.data)
+  timesNumberCountStore.checkNumberCountArrowStatus(props.data)
 }
 
 function setNumberColor(num) {
-  const currentData = formatData(currentCodeData.value).balls
+  const currentCodeData = formatData(currentData.value).balls
 
   if (repeatData.value.includes(num)) {
     return 'bg-info'
-  } else if (currentData.includes(num)) {
+  } else if (currentCodeData.includes(num)) {
     return 'bg-primary'
   }
 }
@@ -80,17 +77,17 @@ function setNumberColor(num) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) in groupResultData" :key="key">
-          <th>{{ key }}</th>
+        <tr v-for="(item, index) in timesNumberCountData" :key="index">
+          <th>{{ item.times }}</th>
           <td class="flex flex-wrap gap-2">
             <Ball
-              v-for="num in value.nums"
+              v-for="num in item.nums"
               :key="num"
               :num="num"
               :color="setNumberColor(num)"
             />
           </td>
-          <td>{{ value.total }}</td>
+          <td>{{ item.total }}</td>
         </tr>
       </tbody>
     </table>

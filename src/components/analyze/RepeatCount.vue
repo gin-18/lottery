@@ -4,7 +4,7 @@
  **/
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
+import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -15,14 +15,14 @@ const props = defineProps({
   },
 })
 
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
+const repeatCountStore = useRepeatCountStore()
 const { startData, currentData, repeatData, currentDataIndex, description } =
-  storeToRefs(repeatAnalyzeStore)
+  storeToRefs(repeatCountStore)
 
 watch([() => props.data, currentDataIndex], () => {
-  repeatAnalyzeStore.setStartData(props.data)
-  repeatAnalyzeStore.setCurrentData(props.data)
-  repeatAnalyzeStore.countRepeatNumber()
+  repeatCountStore.setStartData(props.data)
+  repeatCountStore.setCurrentData(props.data)
+  repeatCountStore.countRepeatNumber()
 })
 </script>
 

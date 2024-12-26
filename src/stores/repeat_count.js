@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { formatData } from '@/assets/js/count'
 
-export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
+export const useRepeatCountStore = defineStore('repeat_count', {
   state: () => ({
     startData: {},
     currentData: {},

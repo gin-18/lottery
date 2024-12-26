@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useIntervalAnalyzeStore } from '@/stores/interval_analyze'
-import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
+import { useRepeatCountStore } from '@/stores/repeat_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
 
@@ -18,10 +18,10 @@ const props = defineProps({
 })
 
 const intervalAnalyzeStore = useIntervalAnalyzeStore()
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
+const repeatCountStore = useRepeatCountStore()
 const { ballInterval, ballTailInterval, currentData, currentDataIndex } =
   storeToRefs(intervalAnalyzeStore)
-const { resultData: repeatNumber } = storeToRefs(repeatAnalyzeStore)
+const { repeatData } = storeToRefs(repeatCountStore)
 
 const renderInterval = ref([])
 
@@ -51,7 +51,7 @@ function setBallColor(num) {
   Object.values(currentData.value).forEach((item) => {
     if (item === num) {
       color = 'bg-error'
-    } else if (repeatNumber.value.includes(num)) {
+    } else if (repeatData.value.includes(num)) {
       color = 'bg-info'
     }
   })
