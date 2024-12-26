@@ -16,7 +16,7 @@
  */
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyAnalyzeStore } from '@/stores/frequency_analyze'
+import { useFrequencyCountStore } from '@/stores/frequency_count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -30,28 +30,24 @@ const props = defineProps({
 
 let chart = null // 图表实例
 
-const frequencyAnalyzeStore = useFrequencyAnalyzeStore()
-const { startData, lastData, resultData, codeStep, codes } = storeToRefs(
-  frequencyAnalyzeStore,
-)
-const description =
-  '这部分用于统计指定步长的期次的所有号码出现的次数的总个数, 例如：步长为7的情况下, 则以每7期作为一组数据，统计这一组数据中，出现0次的号码有多少个，出现1次的号码有多少个，以此类推，总共统计14组数据。'
+const frequencyCountStore = useFrequencyCountStore()
+const { startData, lastData, resultData, codeStep, codes, description } =
+  storeToRefs(frequencyCountStore)
 
 watch(
   () => props.data,
   () => {
-    frequencyAnalyzeStore.setStartData(props.data)
-    frequencyAnalyzeStore.setLastData(props.data)
-    frequencyAnalyzeStore.setResultData(props.data)
-
+    frequencyCountStore.setStartData(props.data)
+    frequencyCountStore.setLastData(props.data)
+    frequencyCountStore.setResultData(props.data)
     renderResultData()
   },
 )
 
 watch(codeStep, () => {
-  frequencyAnalyzeStore.setStartData(props.data)
-  frequencyAnalyzeStore.setLastData(props.data)
-  frequencyAnalyzeStore.setResultData(props.data)
+  frequencyCountStore.setStartData(props.data)
+  frequencyCountStore.setLastData(props.data)
+  frequencyCountStore.setResultData(props.data)
 
   chart.destroy()
   renderResultData()

@@ -188,20 +188,3 @@ export function countAllByRange(dataArray, type) {
     return acc
   }, {})
 }
-
-/**
- * 统计一个step内，每个元素出现的次数
- * */
-export function countByFrequency(arr, step) {
-  const obj = {}
-
-  for (let i = 0; i <= step; i++) {
-    obj[i] = 0
-  }
-
-  arr.forEach((item) => {
-    obj[item.count] = (obj[item.count] || 0) + 1
-  })
-
-  return obj
-}

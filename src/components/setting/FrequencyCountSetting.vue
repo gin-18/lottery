@@ -1,15 +1,15 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useFrequencyAnalyzeStore } from '@/stores/frequency_analyze'
+import { useFrequencyCountStore } from '@/stores/frequency_count'
 
-const frequencyAnalyzeStore = useFrequencyAnalyzeStore()
-const { codeStep } = storeToRefs(frequencyAnalyzeStore)
+const frequencyCountStore = useFrequencyCountStore()
+const { codeStep } = storeToRefs(frequencyCountStore)
 
 function addFrequencyStep() {
-  frequencyAnalyzeStore.addCodeStep()
+  frequencyCountStore.addCodeStep()
 }
 function reduceFrequencyStep() {
-  frequencyAnalyzeStore.reduceCodeStep()
+  frequencyCountStore.reduceCodeStep()
 }
 </script>
 
