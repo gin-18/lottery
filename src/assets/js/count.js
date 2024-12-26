@@ -77,13 +77,6 @@ export function formatData(data) {
 }
 
 /*
- * 返回两个数组的交集
- */
-export function findDuplicates(arr1, arr2) {
-  return arr1.filter((item) => arr2.includes(item))
-}
-
-/*
  * 以10为步长，返回80个球的分区
  */
 export function generateBallInterval(step = 10) {

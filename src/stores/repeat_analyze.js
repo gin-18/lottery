@@ -1,12 +1,14 @@
 import { defineStore } from 'pinia'
-import { formatData, findDuplicates } from '@/assets/js/count'
+import { formatData } from '@/assets/js/count'
 
 export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
   state: () => ({
     startData: {},
     currentData: {},
     currentDataIndex: 0,
-    resultData: {},
+    repeatData: {},
+    description:
+      '这部分只统计当前期次到前一期次，重复出现的号码个数，以及重复出现的号码。',
   }),
   actions: {
     setStartData(data) {
@@ -15,11 +17,14 @@ export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
     setCurrentData(data) {
       this.currentData = data[this.currentDataIndex]
     },
-    setResultData() {
+    countRepeatNumber() {
       const startDataNumbers = formatData(this.startData).balls
       const currentDataNumbers = formatData(this.currentData).balls
-      const resultData = findDuplicates(startDataNumbers, currentDataNumbers)
-      this.resultData = resultData
+      const repeatData = this.findDuplicates(
+        startDataNumbers,
+        currentDataNumbers,
+      )
+      this.repeatData = repeatData
     },
     reduceCurrentCode() {
       this.currentDataIndex += 1
@@ -27,6 +32,10 @@ export const useRepeatAnalyzeStore = defineStore('repeat_analyze', {
     addCurrentCode() {
       if (this.currentDataIndex <= 0) return
       this.currentDataIndex -= 1
+    },
+    // 返回两个数组的交集
+    findDuplicates(arr1, arr2) {
+      return arr1.filter((item) => arr2.includes(item))
     },
   },
 })

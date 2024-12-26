@@ -1,7 +1,7 @@
 <script setup>
 /**
- * 这个组件用于统计最近2期重复出现的号码
- */
+ * 这个组件用于统计最近2期重复出现的号码及个数
+ **/
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
@@ -16,16 +16,13 @@ const props = defineProps({
 })
 
 const repeatAnalyzeStore = useRepeatAnalyzeStore()
-const { startData, currentData, resultData, currentDataIndex } =
+const { startData, currentData, repeatData, currentDataIndex, description } =
   storeToRefs(repeatAnalyzeStore)
-
-const description =
-  '这部分只统计当前期次到它前一期，重复出现的个数，以及重复出现的号码。'
 
 watch([() => props.data, currentDataIndex], () => {
   repeatAnalyzeStore.setStartData(props.data)
   repeatAnalyzeStore.setCurrentData(props.data)
-  repeatAnalyzeStore.setResultData()
+  repeatAnalyzeStore.countRepeatNumber()
 })
 </script>
 
@@ -43,8 +40,8 @@ watch([() => props.data, currentDataIndex], () => {
     </div>
 
     <div class="flex items-center gap-4">
-      <p>共 {{ resultData.length }} 个:</p>
-      <Ball v-for="num in resultData" :key="num" :num="num" />
+      <p>共 {{ repeatData.length }} 个:</p>
+      <Ball v-for="num in repeatData" :key="num" :num="num" />
     </div>
   </div>
 </template>

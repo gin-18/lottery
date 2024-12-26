@@ -27,7 +27,7 @@ const {
   endData,
   groupResultData,
 } = storeToRefs(timesNumberAnalyzeStore)
-const { resultData: repeatResultData } = storeToRefs(repeatAnalyzeStore)
+const { repeatData } = storeToRefs(repeatAnalyzeStore)
 const { currentData: currentCodeData } = storeToRefs(currentResultStore)
 
 const description =
@@ -48,7 +48,7 @@ function checkNumberCountArrowStatus() {
 function setNumberColor(num) {
   const currentData = formatData(currentCodeData.value).balls
 
-  if (repeatResultData.value.includes(num)) {
+  if (repeatData.value.includes(num)) {
     return 'bg-info'
   } else if (currentData.includes(num)) {
     return 'bg-primary'

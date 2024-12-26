@@ -15,9 +15,8 @@ const props = defineProps({
 })
 
 const currentResultStore = useCurrentResultStore()
-const { currentData, currentDataIndex } = storeToRefs(currentResultStore)
-
-const description = '这部分用于显示当前期次的开奖结果。'
+const { currentData, currentDataIndex, description } =
+  storeToRefs(currentResultStore)
 
 watch([() => props.data, currentDataIndex], () => {
   currentResultStore.setCurrentData(props.data)
