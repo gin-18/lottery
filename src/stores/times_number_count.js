@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/count'
+import { countNumberInData } from '@/assets/js/count'
 
 export const useTimesNumberCountStore = defineStore('times_number_count', {
   state: () => ({
@@ -60,42 +60,14 @@ export const useTimesNumberCountStore = defineStore('times_number_count', {
     },
 
     countNumberByTimes(data) {
-      const numberCountData = this.getNumberCountData(data)
-      this.timesNumberCountData = this.timesByCount(numberCountData)
-    },
-    /**
-     * 返回以下格式的数据
-     * [
-     *   {
-     *     num: '01',
-     *     count: 0,
-     *   },
-     *   {
-     *     num: '02',
-     *     count: 2,
-     *   },
-     *   ...
-     * ]
-     **/
-    getNumberCountData(data) {
       const dataNeedToBeCount = data.slice(
         this.endDataIndex,
         this.startDataIndex + 1,
       )
-      const numbers = dataNeedToBeCount
-        .map((item) => formatData(item).balls)
-        .flatMap((item) => item)
-      const numberCountData = new Array(80).fill(null).map((item, index) => ({
-        num: (index + 1).toString().padStart(2, '0'),
-        count: 0,
-      }))
-
-      numberCountData.forEach((obj) => {
-        obj.count = numbers.filter((item) => item === obj.num).length
-      })
-
-      return numberCountData
+      const numberCountData = countNumberInData(dataNeedToBeCount)
+      this.timesNumberCountData = this.timesByCount(numberCountData)
     },
+
     /**
      * 传入:
      * [

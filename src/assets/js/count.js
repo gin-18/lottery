@@ -76,6 +76,37 @@ export function formatData(data) {
   }
 }
 
+/**
+ * 传入一个原始数据的数组
+ * 返回以下格式的数据
+ * [
+ *   {
+ *     num: '01',
+ *     count: 0,
+ *   },
+ *   {
+ *     num: '02',
+ *     count: 2,
+ *   },
+ *   ...
+ * ]
+ **/
+export function countNumberInData(dataArray) {
+  const numbers = dataArray
+    .map((item) => formatData(item).balls)
+    .flatMap((item) => item)
+  const numberCountData = new Array(80).fill(null).map((item, index) => ({
+    num: (index + 1).toString().padStart(2, '0'),
+    count: 0,
+  }))
+
+  numberCountData.forEach((obj) => {
+    obj.count = numbers.filter((item) => item === obj.num).length
+  })
+
+  return numberCountData
+}
+
 /*
  * 以10为步长，返回80个球的分区
  */

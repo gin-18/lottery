@@ -3,7 +3,7 @@ import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
 
 const frequencyCountStore = useFrequencyCountStore()
-const { codeStep } = storeToRefs(frequencyCountStore)
+const { countStep } = storeToRefs(frequencyCountStore)
 
 function addFrequencyStep() {
   frequencyCountStore.addCodeStep()
@@ -21,7 +21,7 @@ function reduceFrequencyStep() {
       <button class="btn" @click="reduceFrequencyStep">
         <span class="icon-[octicon--dash-16]"></span>
       </button>
-      <p>{{ codeStep }}</p>
+      <p>{{ countStep }}</p>
       <button class="btn" @click="addFrequencyStep">
         <span class="icon-[octicon--plus-16]"></span>
       </button>

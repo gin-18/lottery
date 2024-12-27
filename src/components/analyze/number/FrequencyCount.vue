@@ -28,39 +28,44 @@ const props = defineProps({
   },
 })
 
-let chart = null // 图表实例
+let chart = null
 
 const frequencyCountStore = useFrequencyCountStore()
-const { startData, lastData, resultData, codeStep, codes, description } =
-  storeToRefs(frequencyCountStore)
+const {
+  startData,
+  lastData,
+  countStep,
+  codes,
+  frequencyGroupData,
+  description,
+} = storeToRefs(frequencyCountStore)
 
 watch(
   () => props.data,
   () => {
     frequencyCountStore.setStartData(props.data)
     frequencyCountStore.setLastData(props.data)
-    frequencyCountStore.setResultData(props.data)
-    renderResultData()
+    frequencyCountStore.countByFrequency(props.data)
+    renderFrequencyGroupData()
   },
 )
 
-watch(codeStep, () => {
+watch(countStep, () => {
   frequencyCountStore.setStartData(props.data)
   frequencyCountStore.setLastData(props.data)
-  frequencyCountStore.setResultData(props.data)
-
+  frequencyCountStore.countByFrequency(props.data)
   chart.destroy()
-  renderResultData()
+  renderFrequencyGroupData()
 })
 
-function renderResultData() {
+function renderFrequencyGroupData() {
   const { tickColor, gridColor, labelColor, chartLine } = chartPalette
 
   chart = new Chart(document.getElementById('frequency-chart'), {
     type: 'line',
     data: {
-      labels: resultData.value.map((item) => Object.keys(item.list))[0],
-      datasets: resultData.value.map((item, index) => ({
+      labels: frequencyGroupData.value.map((item) => Object.keys(item.list))[0],
+      datasets: frequencyGroupData.value.map((item, index) => ({
         label: `${item.code}`,
         data: Object.values(item.list),
         borderWidth: 1,
@@ -115,7 +120,7 @@ function renderResultData() {
 
     <div class="self-end flex items-center gap-6">
       <p>共 {{ codes }} 期</p>
-      <p>步长: {{ codeStep }}</p>
+      <p>步长: {{ countStep }}</p>
     </div>
   </div>
 
