@@ -1,16 +1,16 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useCodeNumberAnalyzeStore } from '@/stores/code_number_analyze'
+import { useCodeNumberCountStore } from '@/stores/code_number_count'
 
-const codeNumberAnalyzeStore = useCodeNumberAnalyzeStore()
-const { codeStep } = storeToRefs(codeNumberAnalyzeStore)
+const codeNumberCountStore = useCodeNumberCountStore()
+const { codeStep } = storeToRefs(codeNumberCountStore)
 
 function reduceCodeStep() {
-  codeNumberAnalyzeStore.reduceCodeStep()
+  codeNumberCountStore.reduceCodeStep()
 }
 
 function addCodeStep() {
-  codeNumberAnalyzeStore.addCodeStep()
+  codeNumberCountStore.addCodeStep()
 }
 </script>
 

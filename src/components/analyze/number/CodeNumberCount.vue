@@ -13,7 +13,7 @@
  */
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCodeNumberAnalyzeStore } from '@/stores/code_number_analyze'
+import { useCodeNumberCountStore } from '@/stores/code_number_count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -27,10 +27,9 @@ const props = defineProps({
 
 let chart = null
 
-const codeNumberAnalyzeStore = useCodeNumberAnalyzeStore()
-const { startData, lastData, codeStep, resultData } = storeToRefs(
-  codeNumberAnalyzeStore,
-)
+const codeNumberCountStore = useCodeNumberCountStore()
+const { startData, lastData, codeStep, resultData } =
+  storeToRefs(codeNumberCountStore)
 const description =
   '这部分用于统计最近n期内每个号码出现的次数，并以柱状图展示。'
 
@@ -39,15 +38,15 @@ watch(
   () => {
     if (!props.data.length) return
 
-    codeNumberAnalyzeStore.setData(props.data)
-    codeNumberAnalyzeStore.countNumberByCode()
+    codeNumberCountStore.setData(props.data)
+    codeNumberCountStore.countNumberByCode()
     renderChart()
   },
 )
 
 watch(codeStep, () => {
-  codeNumberAnalyzeStore.setData(props.data)
-  codeNumberAnalyzeStore.countNumberByCode()
+  codeNumberCountStore.setData(props.data)
+  codeNumberCountStore.countNumberByCode()
   chart.destroy()
   renderChart()
 })
