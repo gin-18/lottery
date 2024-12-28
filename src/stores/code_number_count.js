@@ -1,37 +1,19 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/count'
+import { countNumberInData } from '@/assets/js/count'
 
 export const useCodeNumberCountStore = defineStore('code_number_count', {
   state: () => ({
     startData: {},
     lastData: {},
-    groupData: {},
     codeStep: 7,
-    resultData: {},
+    codeNumberData: {},
   }),
   actions: {
-    initResultData() {
-      this.resultData = new Array(80).fill(null).map((item, index) => ({
-        num: (index + 1).toString().padStart(2, '0'),
-        count: 0,
-        codes: [],
-      }))
-    },
     setData(data) {
-      this.groupData = data.slice(0, this.codeStep)
-      this.startData = this.groupData[this.codeStep - 1]
-      this.lastData = this.groupData[0]
+      this.startData = data[this.codeStep - 1]
+      this.lastData = data[0]
     },
-    countNumberByCode() {
-      this.initResultData()
 
-      for (const item of this.groupData) {
-        for (const ball of formatData(item).balls) {
-          this.resultData[ball - 1].codes.push(item.code)
-          this.resultData[ball - 1].count++
-        }
-      }
-    },
     reduceCodeStep() {
       if (this.codeStep > 1) {
         this.codeStep -= 1
@@ -39,6 +21,11 @@ export const useCodeNumberCountStore = defineStore('code_number_count', {
     },
     addCodeStep() {
       this.codeStep += 1
+    },
+
+    countNumberByCode(dataArray) {
+      const dataNeedToBeCount = dataArray.slice(0, this.codeStep)
+      this.codeNumberData = countNumberInData(dataNeedToBeCount)
     },
   },
 })

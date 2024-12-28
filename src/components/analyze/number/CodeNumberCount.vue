@@ -28,7 +28,7 @@ const props = defineProps({
 let chart = null
 
 const codeNumberCountStore = useCodeNumberCountStore()
-const { startData, lastData, codeStep, resultData } =
+const { startData, lastData, codeStep, codeNumberData } =
   storeToRefs(codeNumberCountStore)
 const description =
   '这部分用于统计最近n期内每个号码出现的次数，并以柱状图展示。'
@@ -36,17 +36,15 @@ const description =
 watch(
   () => props.data,
   () => {
-    if (!props.data.length) return
-
     codeNumberCountStore.setData(props.data)
-    codeNumberCountStore.countNumberByCode()
+    codeNumberCountStore.countNumberByCode(props.data)
     renderChart()
   },
 )
 
 watch(codeStep, () => {
   codeNumberCountStore.setData(props.data)
-  codeNumberCountStore.countNumberByCode()
+  codeNumberCountStore.countNumberByCode(props.data)
   chart.destroy()
   renderChart()
 })
@@ -57,11 +55,11 @@ function renderChart() {
   chart = new Chart(document.getElementById('code-number-count-chart'), {
     type: 'bar',
     data: {
-      labels: resultData.value.map((item) => item.num),
+      labels: codeNumberData.value.map((item) => item.num),
       datasets: [
         {
           label: '次数',
-          data: resultData.value.map((item) => item.count),
+          data: codeNumberData.value.map((item) => item.count),
           backgroundColor: barColor,
         },
       ],
