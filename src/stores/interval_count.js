@@ -5,7 +5,7 @@ import {
   countOneByRange,
 } from '@/assets/js/count'
 
-export const useIntervalAnalyzeStore = defineStore('interval_analyze', {
+export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
     ballInterval: [],
     ballTailInterval: [],

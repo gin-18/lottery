@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalAnalyzeStore } from '@/stores/interval_analyze'
+import { useIntervalCountStore } from '@/stores/interval_count'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
@@ -17,18 +17,18 @@ const props = defineProps({
   },
 })
 
-const intervalAnalyzeStore = useIntervalAnalyzeStore()
+const intervalCountStore = useIntervalCountStore()
 const repeatCountStore = useRepeatCountStore()
 const { ballInterval, ballTailInterval, currentData, currentDataIndex } =
-  storeToRefs(intervalAnalyzeStore)
+  storeToRefs(intervalCountStore)
 const { repeatData } = storeToRefs(repeatCountStore)
 
 const renderInterval = ref([])
 
 watch([() => props.data, currentDataIndex], () => {
-  intervalAnalyzeStore.setBallInterval()
-  intervalAnalyzeStore.setBallTailInterval()
-  intervalAnalyzeStore.setCurrentData(props.data)
+  intervalCountStore.setBallInterval()
+  intervalCountStore.setBallTailInterval()
+  intervalCountStore.setCurrentData(props.data)
   setRenderInterval()
 })
 
@@ -38,11 +38,11 @@ function setRenderInterval() {
 }
 
 function setIntervalColor(index) {
-  return intervalAnalyzeStore.setIntervalColor(index, props.type)
+  return intervalCountStore.setIntervalColor(index, props.type)
 }
 
 function getIntervalCount(index) {
-  return intervalAnalyzeStore.getIntervalCountValue(index, props.type)
+  return intervalCountStore.getIntervalCountValue(index, props.type)
 }
 
 function setBallColor(num) {

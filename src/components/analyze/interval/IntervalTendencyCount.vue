@@ -11,7 +11,7 @@
  **/
 import { watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalAnalyzeStore } from '@/stores/interval_analyze'
+import { useIntervalCountStore } from '@/stores/interval_count'
 import { countAllByRange } from '@/assets/js/count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
@@ -29,15 +29,15 @@ const props = defineProps({
 
 const typeText = computed(() => (props.type === 'interval' ? '区间' : '尾数'))
 
-const intervalAnalyzeStore = useIntervalAnalyzeStore()
-const { rangeData, rangeStep } = storeToRefs(intervalAnalyzeStore)
+const intervalCountStore = useIntervalCountStore()
+const { rangeData, rangeStep } = storeToRefs(intervalCountStore)
 
 const description = `这部分用于统计各个${typeText.value}号码出现的次数，以及出现的次数趋势。`
 
 let chart = null
 
 watch([() => props.data, rangeStep], () => {
-  intervalAnalyzeStore.setRangeData(props.data)
+  intervalCountStore.setRangeData(props.data)
   chart?.destroy()
   renderChart()
 })
