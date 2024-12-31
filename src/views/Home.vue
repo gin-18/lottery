@@ -9,6 +9,7 @@ const data = ref([])
 
 async function setLatestData() {
   data.value = await getLatestData()
+  console.log(data.value)
 }
 
 onMounted(() => {

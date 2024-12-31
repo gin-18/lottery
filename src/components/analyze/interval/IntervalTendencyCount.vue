@@ -12,7 +12,6 @@
 import { watch, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useIntervalCountStore } from '@/stores/interval_count'
-import { countAllByRange } from '@/assets/js/count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 
@@ -43,7 +42,7 @@ watch([() => props.data, rangeStep], () => {
 })
 
 function renderChart() {
-  const result = countAllByRange(rangeData.value, props.type)
+  const result = intervalCountStore.countAllByRange(rangeData.value, props.type)
   const suffix = props.type === 'interval' ? '区间' : '尾数'
   const { gridColor, tickColor, labelColor, chartLine } = chartPalette
 

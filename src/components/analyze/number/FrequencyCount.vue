@@ -40,21 +40,11 @@ const {
   description,
 } = storeToRefs(frequencyCountStore)
 
-watch(
-  () => props.data,
-  () => {
-    frequencyCountStore.setStartData(props.data)
-    frequencyCountStore.setLastData(props.data)
-    frequencyCountStore.countByFrequency(props.data)
-    renderFrequencyGroupData()
-  },
-)
-
-watch(countStep, () => {
+watch([() => props.data, countStep], () => {
   frequencyCountStore.setStartData(props.data)
   frequencyCountStore.setLastData(props.data)
   frequencyCountStore.countByFrequency(props.data)
-  chart.destroy()
+  chart?.destroy()
   renderFrequencyGroupData()
 })
 

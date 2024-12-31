@@ -1,14 +1,10 @@
 import { defineStore } from 'pinia'
-import {
-  generateBallInterval,
-  generateBallTailInterval,
-  countOneByRange,
-} from '@/assets/js/count'
+import { formatData, getAllNumbers } from '@/assets/js/count'
 
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
-    ballInterval: [],
-    ballTailInterval: [],
+    numberInterval: [],
+    numberTailInterval: [],
     currentData: {},
     rangeData: {},
     currentDataIndex: 0,
@@ -35,18 +31,20 @@ export const useIntervalCountStore = defineStore('interval_count', {
     ],
   }),
   actions: {
-    setBallInterval() {
-      this.ballInterval = generateBallInterval()
+    setNumberInterval() {
+      this.numberInterval = this.generateNumberInterval()
     },
-    setBallTailInterval() {
-      this.ballTailInterval = generateBallTailInterval()
+    setNumberTailInterval() {
+      this.numberTailInterval = this.generateNumberTailInterval()
     },
+
     setCurrentData(data) {
       this.currentData = data[this.currentDataIndex]
     },
     setRangeData(data) {
       this.rangeData = data.slice(0, this.rangeStep)
     },
+
     addCurrentCode() {
       if (this.currentDataIndex <= 0) return
       this.currentDataIndex -= 1
@@ -60,10 +58,10 @@ export const useIntervalCountStore = defineStore('interval_count', {
     reduceRangeStep() {
       this.rangeStep -= 1
     },
-    setIntervalColor(index, type) {
-      const countObj = countOneByRange(this.currentData, type)
-      const intervalValue = Object.values(countObj.data)[index]
 
+    setIntervalColor(index, type) {
+      const countObj = this.countOneByRange(this.currentData, type)
+      const intervalValue = Object.values(countObj.data)[index]
       if (intervalValue >= this.intervalCategory[0].weight) {
         return this.intervalCategory[0].textColor
       } else if (intervalValue >= this.intervalCategory[1].weight) {
@@ -72,8 +70,123 @@ export const useIntervalCountStore = defineStore('interval_count', {
         return this.intervalCategory[2].textColor
       }
     },
+
     getIntervalCountValue(index, type) {
-      return Object.values(countOneByRange(this.currentData, type).data)[index]
+      const result = this.countOneByRange(this.currentData, type)
+      return Object.values(result.data)[index]
+    },
+
+    /**
+     * 返回的数据格式：
+     * {
+     *    code: 'code1',
+     *    data: {
+     *      'interval': times,
+     *      ...
+     *    }
+     * }
+     **/
+    countOneByRange(data, type) {
+      let numberRange, ranges
+
+      if (type === 'interval') {
+        numberRange = this.generateNumberInterval()
+        ranges = [
+          '[01, 10]',
+          '[11, 20]',
+          '[21, 30]',
+          '[31, 40]',
+          '[41, 50]',
+          '[51, 60]',
+          '[61, 70]',
+          '[71, 80]',
+        ]
+      } else {
+        numberRange = this.generateNumberTailInterval()
+        ranges = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      }
+
+      const dataFormat = formatData(data)
+      const result = {
+        code: `第${dataFormat.code}期`,
+        data: Object.fromEntries(ranges.map((item) => [item, 0])),
+      }
+
+      dataFormat.balls.forEach((num) => {
+        const index = numberRange.findIndex((subBall) => subBall.includes(num))
+        if (index !== -1) {
+          result.data[ranges[index]]++
+        }
+      })
+
+      return result
+    },
+
+    /**
+     * 返回: {
+     *   '[01, 10]': {
+     *     'code1': times,
+     *     'code2': times,
+     *   },
+     *   '[11, 20]': {
+     *     'code1': times,
+     *     'code2': times,
+     *   },
+     *   ...
+     * }
+     **/
+    countAllByRange(dataArray, type) {
+      const dataList = dataArray.map((item) => this.countOneByRange(item, type))
+
+      return dataList.reduce((acc, curr) => {
+        if (!acc) {
+          acc = {}
+        }
+
+        Object.keys(curr.data).forEach((item) => {
+          if (acc[item]) {
+            acc[item][curr.code] = curr.data[item]
+          } else {
+            acc[item] = {}
+            acc[item][curr.code] = curr.data[item]
+          }
+        })
+
+        return acc
+      }, {})
+    },
+
+    /**
+     * 以10为步长，返回80个球的分区
+     **/
+    generateNumberInterval(step = 10) {
+      const result = []
+      const numbers = getAllNumbers()
+
+      for (let i = 0; i < numbers.length; i += step) {
+        result.push(numbers.slice(i, i + step))
+      }
+
+      return result
+    },
+
+    /**
+     * 将尾号相同的球分为一组
+     **/
+    generateNumberTailInterval() {
+      const numbers = getAllNumbers()
+
+      return numbers.reduce((acc, curr) => {
+        const lastDigit = curr.slice(-1)
+
+        if (!acc[lastDigit]) {
+          acc[lastDigit] = []
+        }
+
+        acc[lastDigit].push(curr)
+
+        return acc
+      }, [])
     },
   },
 })

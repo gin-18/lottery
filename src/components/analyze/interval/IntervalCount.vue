@@ -19,22 +19,22 @@ const props = defineProps({
 
 const intervalCountStore = useIntervalCountStore()
 const repeatCountStore = useRepeatCountStore()
-const { ballInterval, ballTailInterval, currentData, currentDataIndex } =
+const { numberInterval, numberTailInterval, currentData, currentDataIndex } =
   storeToRefs(intervalCountStore)
 const { repeatData } = storeToRefs(repeatCountStore)
 
 const renderInterval = ref([])
 
 watch([() => props.data, currentDataIndex], () => {
-  intervalCountStore.setBallInterval()
-  intervalCountStore.setBallTailInterval()
+  intervalCountStore.setNumberInterval()
+  intervalCountStore.setNumberTailInterval()
   intervalCountStore.setCurrentData(props.data)
   setRenderInterval()
 })
 
 function setRenderInterval() {
   renderInterval.value =
-    props.type === 'interval' ? ballInterval.value : ballTailInterval.value
+    props.type === 'interval' ? numberInterval.value : numberTailInterval.value
 }
 
 function setIntervalColor(index) {
@@ -92,7 +92,7 @@ function setBallColor(num) {
             />
           </td>
           <td>
-            {{ getIntervalCount(index) }}
+            <!-- {{ getIntervalCount(index) }} -->
           </td>
         </tr>
       </tbody>

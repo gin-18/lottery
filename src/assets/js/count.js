@@ -95,7 +95,8 @@ export function countNumberInData(dataArray) {
   const numbers = dataArray
     .map((item) => formatData(item).balls)
     .flatMap((item) => item)
-  const numberCountData = new Array(80).fill(null).map((item, index) => ({
+
+  const numberCountData = Array.from({ length: 80 }, (_, index) => ({
     num: (index + 1).toString().padStart(2, '0'),
     count: 0,
   }))
@@ -107,115 +108,11 @@ export function countNumberInData(dataArray) {
   return numberCountData
 }
 
-/*
- * 以10为步长，返回80个球的分区
- */
-export function generateBallInterval(step = 10) {
-  const result = []
-  const balls = new Array(80)
-    .fill(null)
-    .map((item, index) => (index + 1).toString().padStart(2, '0'))
-
-  for (let i = 0; i < balls.length; i += step) {
-    result.push(balls.slice(i, i + step))
-  }
-
-  return result
-}
-
-export function generateBallTailInterval() {
-  const balls = new Array(80)
-    .fill(null)
-    .map((item, index) => (index + 1).toString().padStart(2, '0'))
-
-  return balls.reduce((acc, curr) => {
-    const lastDigit = curr.slice(-1)
-
-    if (!acc[lastDigit]) {
-      acc[lastDigit] = []
-    }
-
-    acc[lastDigit].push(curr)
-
-    return acc
-  }, [])
-}
-
 /**
- * 返回的数据格式：
- * {
- *    code: 'code1',
- *    data: {
- *      'interval': times,
- *      ...
- *    }
- * }
+ * 返回80个数字
  **/
-export function countOneByRange(data, type) {
-  let ballRange, ranges
-
-  if (type === 'tail') {
-    ballRange = generateBallTailInterval()
-    ranges = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-  } else {
-    ballRange = generateBallInterval()
-    ranges = [
-      '[01, 10]',
-      '[11, 20]',
-      '[21, 30]',
-      '[31, 40]',
-      '[41, 50]',
-      '[51, 60]',
-      '[61, 70]',
-      '[71, 80]',
-    ]
-  }
-  const dataFormat = formatData(data)
-  const result = {
-    code: `第${dataFormat.code}期`,
-    data: Object.fromEntries(ranges.map((item) => [item, 0])),
-  }
-
-  dataFormat.balls.forEach((num) => {
-    const index = ballRange.findIndex((subBall) => subBall.includes(num))
-    if (index !== -1) {
-      result.data[ranges[index]]++
-    }
-  })
-
-  return result
-}
-
-/**
- * 返回: {
- *   '[01, 10]': {
- *     'code1': times,
- *     'code2': times,
- *   },
- *   '[11, 20]': {
- *     'code1': times,
- *     'code2': times,
- *   },
- *   ...
- * }
- **/
-export function countAllByRange(dataArray, type) {
-  const dataList = dataArray.map((item) => countOneByRange(item, type))
-
-  return dataList.reduce((acc, curr) => {
-    if (!acc) {
-      acc = {}
-    }
-
-    Object.keys(curr.data).forEach((item) => {
-      if (acc[item]) {
-        acc[item][curr.code] = curr.data[item]
-      } else {
-        acc[item] = {}
-        acc[item][curr.code] = curr.data[item]
-      }
-    })
-
-    return acc
-  }, {})
+export function getAllNumbers() {
+  return Array.from({ length: 80 }, (_, i) =>
+    (i + 1).toString().padStart(2, '0'),
+  )
 }

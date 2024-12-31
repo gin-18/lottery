@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useIntervalCountStore } from '@/stores/interval_count'
-import CodeDate from '../content/CodeDate.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   type: {
