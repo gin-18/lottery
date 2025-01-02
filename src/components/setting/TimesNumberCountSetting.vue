@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useTimesNumberAnalyzeStore } from '@/stores/times_number_analyze'
+import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
@@ -10,36 +10,36 @@ const props = defineProps({
   },
 })
 
-const timesNumberAnalyzeStore = useTimesNumberAnalyzeStore()
+const timesNumberCountStore = useTimesNumberCountStore()
 const {
-  codeStep: numberCodeStep,
-  startData: numberStartData,
-  endData: numberEndData,
+  codeStep,
+  startData,
+  endData,
   startAddArrowStatus,
   startReduceArrowStatus,
   endAddArrowStatus,
   endReduceArrowStatus,
-} = storeToRefs(timesNumberAnalyzeStore)
+} = storeToRefs(timesNumberCountStore)
 
-function addNumberStartCode() {
-  timesNumberAnalyzeStore.addStartCode()
+function addStartCode() {
+  timesNumberCountStore.addStartCode()
 }
-function reduceNumberStartCode() {
-  timesNumberAnalyzeStore.reduceStartCode(props.data)
+function reduceStartCode() {
+  timesNumberCountStore.reduceStartCode(props.data)
 }
 
-function addNumberEndCode() {
-  timesNumberAnalyzeStore.addEndCode()
+function addEndCode() {
+  timesNumberCountStore.addEndCode()
 }
-function reduceNumberEndCode() {
-  timesNumberAnalyzeStore.reduceEndCode()
+function reduceEndCode() {
+  timesNumberCountStore.reduceEndCode()
 }
 </script>
 
 <template>
   <div>
     <h3>号码统计设置</h3>
-    <p>共 {{ numberCodeStep }} 期</p>
+    <p>共 {{ codeStep }} 期</p>
     <div>
       <div>
         <h4>起始期次：</h4>
@@ -47,15 +47,15 @@ function reduceNumberEndCode() {
           <button
             class="btn"
             :class="{ 'btn-disabled': startAddArrowStatus }"
-            @click="reduceNumberStartCode"
+            @click="reduceStartCode"
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="numberStartData" />
+          <CodeDate :data="startData" />
           <button
             class="btn"
             :class="{ 'btn-disabled': startReduceArrowStatus }"
-            @click="addNumberStartCode"
+            @click="addStartCode"
           >
             <span class="icon-[octicon--triangle-right-24]"></span>
           </button>
@@ -68,15 +68,15 @@ function reduceNumberEndCode() {
           <button
             class="btn"
             :class="{ 'btn-disabled': endAddArrowStatus }"
-            @click="reduceNumberEndCode"
+            @click="reduceEndCode"
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="numberEndData" />
+          <CodeDate :data="endData" />
           <button
             class="btn"
             :class="{ 'btn-disabled': endReduceArrowStatus }"
-            @click="addNumberEndCode"
+            @click="addEndCode"
           >
             <span class="icon-[octicon--triangle-right-24]"></span>
           </button>

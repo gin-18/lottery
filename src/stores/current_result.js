@@ -2,12 +2,13 @@ import { defineStore } from 'pinia'
 
 export const useCurrentResultStore = defineStore('current_result', {
   state: () => ({
-    resultData: {},
+    currentData: {},
     currentDataIndex: 0,
+    description: '这部分用于显示当前期次的开奖结果。',
   }),
   actions: {
     setCurrentData(data) {
-      this.resultData = data[this.currentDataIndex]
+      this.currentData = data[this.currentDataIndex]
     },
     addCurrentCode() {
       if (this.currentDataIndex <= 0) return

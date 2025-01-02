@@ -1,4 +1,7 @@
 <script setup>
+/**
+ * 这个组件用于显示当前期次的开奖结果
+ **/
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/current_result'
@@ -12,9 +15,8 @@ const props = defineProps({
 })
 
 const currentResultStore = useCurrentResultStore()
-const { resultData, currentDataIndex } = storeToRefs(currentResultStore)
-
-const description = '这部分用于显示当前期次的开奖结果。'
+const { currentData, currentDataIndex, description } =
+  storeToRefs(currentResultStore)
 
 watch([() => props.data, currentDataIndex], () => {
   currentResultStore.setCurrentData(props.data)
@@ -27,6 +29,6 @@ watch([() => props.data, currentDataIndex], () => {
   </div>
   <div v-else>
     <p>{{ description }}</p>
-    <ResultContainer :data="resultData" />
+    <ResultContainer :data="currentData" />
   </div>
 </template>

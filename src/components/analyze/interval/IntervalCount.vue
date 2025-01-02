@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalAnalyzeStore } from '@/stores/interval_analyze'
-import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
+import { useIntervalCountStore } from '@/stores/interval_count'
+import { useRepeatCountStore } from '@/stores/repeat_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
 
@@ -17,32 +17,32 @@ const props = defineProps({
   },
 })
 
-const intervalAnalyzeStore = useIntervalAnalyzeStore()
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
-const { ballInterval, ballTailInterval, currentData, currentDataIndex } =
-  storeToRefs(intervalAnalyzeStore)
-const { resultData: repeatNumber } = storeToRefs(repeatAnalyzeStore)
+const intervalCountStore = useIntervalCountStore()
+const repeatCountStore = useRepeatCountStore()
+const { numberInterval, numberTailInterval, currentData, currentDataIndex } =
+  storeToRefs(intervalCountStore)
+const { repeatData } = storeToRefs(repeatCountStore)
 
 const renderInterval = ref([])
 
 watch([() => props.data, currentDataIndex], () => {
-  intervalAnalyzeStore.setBallInterval()
-  intervalAnalyzeStore.setBallTailInterval()
-  intervalAnalyzeStore.setCurrentData(props.data)
+  intervalCountStore.setNumberInterval()
+  intervalCountStore.setNumberTailInterval()
+  intervalCountStore.setCurrentData(props.data)
   setRenderInterval()
 })
 
 function setRenderInterval() {
   renderInterval.value =
-    props.type === 'interval' ? ballInterval.value : ballTailInterval.value
+    props.type === 'interval' ? numberInterval.value : numberTailInterval.value
 }
 
 function setIntervalColor(index) {
-  return intervalAnalyzeStore.setIntervalColor(index, props.type)
+  return intervalCountStore.setIntervalColor(index, props.type)
 }
 
 function getIntervalCount(index) {
-  return intervalAnalyzeStore.getIntervalCountValue(index, props.type)
+  return intervalCountStore.getIntervalCountValue(index, props.type)
 }
 
 function setBallColor(num) {
@@ -51,7 +51,7 @@ function setBallColor(num) {
   Object.values(currentData.value).forEach((item) => {
     if (item === num) {
       color = 'bg-error'
-    } else if (repeatNumber.value.includes(num)) {
+    } else if (repeatData.value.includes(num)) {
       color = 'bg-info'
     }
   })
@@ -69,7 +69,7 @@ function setBallColor(num) {
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">区域</th>
+          <th scope="col">{{ props.type === 'interval' ? '区间' : '尾数' }}</th>
           <th scope="col">号码</th>
           <th scope="col">次数</th>
         </tr>

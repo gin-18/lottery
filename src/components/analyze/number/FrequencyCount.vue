@@ -16,7 +16,7 @@
  */
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyAnalyzeStore } from '@/stores/frequency_analyze'
+import { useFrequencyCountStore } from '@/stores/frequency_count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -28,43 +28,34 @@ const props = defineProps({
   },
 })
 
-let chart = null // 图表实例
+let chart = null
 
-const frequencyAnalyzeStore = useFrequencyAnalyzeStore()
-const { startData, lastData, resultData, codeStep, codes } = storeToRefs(
-  frequencyAnalyzeStore,
-)
-const description =
-  '这部分用于统计指定步长的期次的所有号码出现的次数的总个数, 例如：步长为7的情况下, 则以每7期作为一组数据，统计这一组数据中，出现0次的号码有多少个，出现1次的号码有多少个，以此类推，总共统计14组数据。'
+const frequencyCountStore = useFrequencyCountStore()
+const {
+  startData,
+  lastData,
+  countStep,
+  codes,
+  frequencyGroupData,
+  description,
+} = storeToRefs(frequencyCountStore)
 
-watch(
-  () => props.data,
-  () => {
-    frequencyAnalyzeStore.setStartData(props.data)
-    frequencyAnalyzeStore.setLastData(props.data)
-    frequencyAnalyzeStore.setResultData(props.data)
-
-    renderResultData()
-  },
-)
-
-watch(codeStep, () => {
-  frequencyAnalyzeStore.setStartData(props.data)
-  frequencyAnalyzeStore.setLastData(props.data)
-  frequencyAnalyzeStore.setResultData(props.data)
-
-  chart.destroy()
-  renderResultData()
+watch([() => props.data, countStep], () => {
+  frequencyCountStore.setStartData(props.data)
+  frequencyCountStore.setLastData(props.data)
+  frequencyCountStore.countByFrequency(props.data)
+  chart?.destroy()
+  renderFrequencyGroupData()
 })
 
-function renderResultData() {
+function renderFrequencyGroupData() {
   const { tickColor, gridColor, labelColor, chartLine } = chartPalette
 
   chart = new Chart(document.getElementById('frequency-chart'), {
     type: 'line',
     data: {
-      labels: resultData.value.map((item) => Object.keys(item.list))[0],
-      datasets: resultData.value.map((item, index) => ({
+      labels: frequencyGroupData.value.map((item) => Object.keys(item.list))[0],
+      datasets: frequencyGroupData.value.map((item, index) => ({
         label: `${item.code}`,
         data: Object.values(item.list),
         borderWidth: 1,
@@ -119,7 +110,7 @@ function renderResultData() {
 
     <div class="self-end flex items-center gap-6">
       <p>共 {{ codes }} 期</p>
-      <p>步长: {{ codeStep }}</p>
+      <p>步长: {{ countStep }}</p>
     </div>
   </div>
 

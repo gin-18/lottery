@@ -1,16 +1,16 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useRepeatAnalyzeStore } from '@/stores/repeat_analyze'
+import { useRepeatCountStore } from '@/stores/repeat_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const repeatAnalyzeStore = useRepeatAnalyzeStore()
-const { currentData } = storeToRefs(repeatAnalyzeStore)
+const repeatCountStore = useRepeatCountStore()
+const { currentData } = storeToRefs(repeatCountStore)
 
 function addRepeatCurrentCode() {
-  repeatAnalyzeStore.addCurrentCode()
+  repeatCountStore.addCurrentCode()
 }
 function reduceRepeatCurrentCode() {
-  repeatAnalyzeStore.reduceCurrentCode()
+  repeatCountStore.reduceCurrentCode()
 }
 </script>
 

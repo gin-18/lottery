@@ -1,9 +1,9 @@
 <script setup>
 import SettingBox from '@/components/content/SettingBox.vue'
 import CurrentResultSetting from '@/components/setting/CurrentResultSetting.vue'
-import RepeatAnalyzeSetting from '@/components/setting/RepeatAnalyzeSetting.vue'
-import TimesNumberCountAnalyzeSetting from '@/components/setting/TimesNumberCountAnalyzeSetting.vue'
-import FrequencyCountAnalyzeSetting from '@/components/setting/FrequencyCountAnalyzeSetting.vue'
+import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
+import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSetting.vue'
+import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
 import CodeNumberCountSetting from '@/components/setting/CodeNumberCountSetting.vue'
 
 const props = defineProps({
@@ -17,9 +17,9 @@ const props = defineProps({
 <template>
   <SettingBox title="号码分析设置">
     <CurrentResultSetting />
-    <RepeatAnalyzeSetting />
-    <TimesNumberCountAnalyzeSetting :data="data" />
-    <FrequencyCountAnalyzeSetting />
+    <RepeatCountSetting />
+    <TimesNumberCountSetting :data="data" />
+    <FrequencyCountSetting />
     <CodeNumberCountSetting />
   </SettingBox>
 </template>

@@ -3,9 +3,9 @@ import { ref, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 
 import Header from '@/components/header/Header.vue'
+import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import IntervalCount from '@/components/analyze/interval/IntervalCount.vue'
 import IntervalTendencyCount from '@/components/analyze/interval/IntervalTendencyCount.vue'
-import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import Setting from '@/components/analyze/interval/Setting.vue'
 
 const data = ref([])

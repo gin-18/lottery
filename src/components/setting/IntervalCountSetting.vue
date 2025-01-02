@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useIntervalAnalyzeStore } from '@/stores/interval_analyze'
-import CodeDate from '../content/CodeDate.vue'
+import { useIntervalCountStore } from '@/stores/interval_count'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   type: {
@@ -10,21 +10,21 @@ const props = defineProps({
   },
 })
 
-const intervalAnalyzeStore = useIntervalAnalyzeStore()
-const { currentData, rangeStep } = storeToRefs(intervalAnalyzeStore)
+const intervalCountStore = useIntervalCountStore()
+const { currentData, rangeStep } = storeToRefs(intervalCountStore)
 
 function addIntervalCurrentCode() {
-  intervalAnalyzeStore.addCurrentCode()
+  intervalCountStore.addCurrentCode()
 }
 function reduceIntervalCurrentCode() {
-  intervalAnalyzeStore.reduceCurrentCode()
+  intervalCountStore.reduceCurrentCode()
 }
 
 function addIntervalRangeStep() {
-  intervalAnalyzeStore.addRangeStep()
+  intervalCountStore.addRangeStep()
 }
 function reduceIntervalRangeStep() {
-  intervalAnalyzeStore.reduceRangeStep()
+  intervalCountStore.reduceRangeStep()
 }
 </script>
 
