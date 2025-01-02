@@ -1,7 +1,7 @@
 <script setup>
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { formatData } from '@/assets/js/count'
+import { formatData } from '@/assets/js/utils'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { useRepeatCountStore } from '@/stores/repeat_count'

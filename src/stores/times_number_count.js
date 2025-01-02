@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { countNumberInData } from '@/assets/js/count'
+import { countNumberInData } from '@/assets/js/utils'
 
 export const useTimesNumberCountStore = defineStore('times_number_count', {
   state: () => ({

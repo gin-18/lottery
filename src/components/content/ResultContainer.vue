@@ -4,8 +4,7 @@
  * 传入一期的数据，渲染开奖期次，开奖日期，开奖号码
  */
 import { computed } from 'vue'
-import { formatData } from '@/assets/js/count'
-import { formatDay } from '@/assets/js/utils'
+import { formatDay, formatData } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 
 const props = defineProps({

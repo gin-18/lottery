@@ -30,10 +30,10 @@ onMounted(async () => {
       <IntervalCount :data="data" type="interval" />
     </div>
 
-    <!-- <div> -->
-    <!--   <h2>区间走势</h2> -->
-    <!--   <IntervalTendencyCount :data="data" type="interval" /> -->
-    <!-- </div> -->
+    <div>
+      <h2>区间走势</h2>
+      <IntervalTendencyCount :data="data" type="interval" />
+    </div>
 
     <Setting type="区间" />
   </main>

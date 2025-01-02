@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/count'
+import { formatData } from '@/assets/js/utils'
 
 export const useRepeatCountStore = defineStore('repeat_count', {
   state: () => ({

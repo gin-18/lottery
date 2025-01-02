@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData, getAllNumbers } from '@/assets/js/count'
+import { formatData, getAllNumbers } from '@/assets/js/utils'
 
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({

@@ -69,7 +69,7 @@ function setBallColor(num) {
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">区域</th>
+          <th scope="col">{{ props.type === 'interval' ? '区间' : '尾数' }}</th>
           <th scope="col">号码</th>
           <th scope="col">次数</th>
         </tr>
@@ -92,7 +92,7 @@ function setBallColor(num) {
             />
           </td>
           <td>
-            <!-- {{ getIntervalCount(index) }} -->
+            {{ getIntervalCount(index) }}
           </td>
         </tr>
       </tbody>
