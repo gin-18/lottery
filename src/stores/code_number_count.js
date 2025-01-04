@@ -7,6 +7,7 @@ export const useCodeNumberCountStore = defineStore('code_number_count', {
     lastData: {},
     codeStep: 7,
     codeNumberData: {},
+    description: '这部分用于统计最近n期内每个号码出现的次数。',
   }),
   actions: {
     setData(data) {

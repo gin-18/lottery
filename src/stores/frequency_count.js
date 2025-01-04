@@ -32,31 +32,65 @@ export const useFrequencyCountStore = defineStore('frequency_count', {
 
     countByFrequency(data) {
       const dataNeedToBeCount = data.slice(0, this.codes)
-      this.frequencyGroupData = this.splitDataIntoSegments(
-        dataNeedToBeCount,
-        this.countStep,
+      this.frequencyGroupData = this.splitDataIntoSegments(dataNeedToBeCount)
+    },
+
+    /**
+     * 传入一组原始数据的数组，以及分组的step，把这组原始的数据分成step个一组
+     * 返回的数据格式为:
+     * {
+     *   code: '第i期 - 第i+step-1期',
+     *   list: {
+     *     0: 32,
+     *     1: 28,
+     *     ...
+     *   },
+     * }
+     **/
+    splitDataIntoSegments(data) {
+      return Array.from(
+        { length: data.length - this.countStep + 1 },
+        (_, i) => {
+          const dataGroup = data.slice(i, i + this.countStep)
+          const dataNeedToBeCount = countNumberInData(dataGroup)
+          const code = `第${data[i].code}期 - 第${data[i + this.countStep - 1].code}`
+          const list = this.calculateFrequencyDistribution(dataNeedToBeCount)
+          return { code, list }
+        },
       )
     },
 
-    splitDataIntoSegments(arr, step) {
-      return Array.from({ length: arr.length - step + 1 }, (_, i) => {
-        const dataNeedToBeCount = countNumberInData(arr.slice(i, i + step))
-        const code = `第${arr[i].code}期 - 第${arr[i + step - 1].code}`
-        const list = this.calculateFrequencyDistribution(
-          dataNeedToBeCount,
-          this.countStep,
-        )
-        return { code, list }
-      })
-    },
-
-    calculateFrequencyDistribution(arr, step) {
+    /**
+     * 用于统计step期次内，号码出现次数的分布
+     * 例如： step为时，统计7期内，出现0次的号码有多少个，出现1次的号码有多少个，以此类推。
+     * 传入的arr格式为:
+     * [
+     *   {
+     *     num: '01',
+     *     count: 0,
+     *   },
+     *   {
+     *     num: '02',
+     *     count: 2,
+     *   },
+     *   ...
+     * ]
+     * 返回的数据格式为:
+     * {
+     *   0: 32,
+     *   1: 28,
+     *   ...
+     * }
+     **/
+    calculateFrequencyDistribution(arr) {
       return arr.reduce(
         (acc, item) => {
           acc[item.count] = (acc[item.count] || 0) + 1
           return acc
         },
-        Array.from({ length: step + 1 }, () => 0),
+        Object.fromEntries(
+          Array.from({ length: this.countStep + 1 }, (_, i) => [i, 0]),
+        ),
       )
     },
   },
