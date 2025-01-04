@@ -28,10 +28,8 @@ const props = defineProps({
 let chart = null
 
 const codeNumberCountStore = useCodeNumberCountStore()
-const { startData, lastData, codeStep, codeNumberData } =
+const { startData, lastData, codeStep, codeNumberData, description } =
   storeToRefs(codeNumberCountStore)
-const description =
-  '这部分用于统计最近n期内每个号码出现的次数，并以柱状图展示。'
 
 watch(
   () => props.data,

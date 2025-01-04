@@ -38,6 +38,14 @@ export const useFrequencyCountStore = defineStore('frequency_count', {
     /**
      * 传入一组原始数据的数组，以及分组的step，把这组原始的数据分成step个一组
      * 返回的数据格式为:
+     * {
+     *   code: '第i期 - 第i+step-1期',
+     *   list: {
+     *     0: 32,
+     *     1: 28,
+     *     ...
+     *   },
+     * }
      **/
     splitDataIntoSegments(data) {
       return Array.from(
@@ -69,7 +77,9 @@ export const useFrequencyCountStore = defineStore('frequency_count', {
      * ]
      * 返回的数据格式为:
      * {
-     *   出现次数: 号码个数,
+     *   0: 32,
+     *   1: 28,
+     *   ...
      * }
      **/
     calculateFrequencyDistribution(arr) {
