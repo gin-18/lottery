@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { getLatestData } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
+import NextCode from '@/components/content/NextCode.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 import RewardTable from '@/components/content/RewardTable.vue'
 
@@ -9,7 +10,6 @@ const data = ref([])
 
 async function setLatestData() {
   data.value = await getLatestData()
-  console.log(data.value)
 }
 
 onMounted(() => {
@@ -21,17 +21,20 @@ onMounted(() => {
   <Header />
 
   <main>
-    <div>
-      <h2>最新开奖</h2>
-      <div v-if="!data.code">
-        <span class="loading loading-dots loading-sm"></span>
-      </div>
-      <ResultContainer v-else :data="data" />
-    </div>
+    <section>
+      <span v-if="!data.code" class="loading loading-dots loading-sm"></span>
+      <NextCode v-else :data="data" />
+    </section>
 
-    <div>
+    <section>
+      <h2>最新开奖</h2>
+      <span v-if="!data.code" class="loading loading-dots loading-sm"></span>
+      <ResultContainer v-else :data="data" />
+    </section>
+
+    <section>
       <h2>奖金对照表</h2>
       <RewardTable />
-    </div>
+    </section>
   </main>
 </template>
