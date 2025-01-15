@@ -6,13 +6,13 @@ import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
-import NumberDistributionTable from '@/components/analyze/number/NumberDistributionTable.vue'
+import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import Setting from '@/components/analyze/number/Setting.vue'
 
 const data = ref([])
 
 onMounted(async () => {
-  const res = await getDataByNum(100)
+  const res = await getDataByNum(200)
   data.value = res.data.list
 })
 </script>
@@ -41,9 +41,9 @@ onMounted(async () => {
       <FrequencyCount :data="data" />
     </section>
 
-    <section class="overflow-auto">
+    <section>
       <h2>号码分布</h2>
-      <NumberDistributionTable :data="data" />
+      <NumberDistribution :data="data" />
     </section>
 
     <Setting :data="data" />

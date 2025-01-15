@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from 'vue'
+
 const props = defineProps({
   num: String,
   color: {
@@ -6,13 +8,14 @@ const props = defineProps({
     default: 'bg-error',
   },
 })
+
+const classList = computed(() => ({
+  'flex justify-center items-center w-6 h-6 rounded-full text-base-100 text-xs font-semibold': true,
+}))
 </script>
 
 <template>
-  <span
-    class="flex justify-center items-center w-7 h-7 rounded-full text-base-100 text-sm font-semibold"
-    :class="color"
-  >
+  <span :class="[classList, color]">
     {{ num }}
   </span>
 </template>
