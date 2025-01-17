@@ -14,14 +14,18 @@ const props = defineProps({
 })
 
 const numberDistributionStore = useNumberDistributionStore()
-const { allNumbers, codeStep, renderData, startData, lastData, description } =
-  storeToRefs(numberDistributionStore)
-watch(
-  () => props.data,
-  () => {
-    numberDistributionStore.setData(props.data)
-  },
-)
+const {
+  allNumbers,
+  codeStep,
+  renderData,
+  numberCountData,
+  startData,
+  lastData,
+  description,
+} = storeToRefs(numberDistributionStore)
+watch([() => props.data, () => codeStep.value], () => {
+  numberDistributionStore.setData(props.data)
+})
 
 function checkNumberIsHot(num, data) {
   const numbers = formatData(data).balls
@@ -53,6 +57,12 @@ function checkNumberIsHot(num, data) {
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>出现次数</td>
+            <td v-for="item in numberCountData" :key="item.num">
+              {{ item.count }}
+            </td>
+          </tr>
           <tr v-for="item in renderData" :key="item.code">
             <td>{{ item.code }}</td>
             <td v-for="num in allNumbers" :key="num">

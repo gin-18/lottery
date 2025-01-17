@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getAllNumbers } from '@/assets/js/utils'
+import { getAllNumbers, countNumberInData } from '@/assets/js/utils'
 
 export const useNumberDistributionStore = defineStore('number_distribution', {
   state: () => ({
@@ -9,6 +9,7 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
     startData: {},
     lastData: {},
     renderData: [],
+    numberCountData: [],
     description: '这部分用于展示近n期的所有号码的分布情况。',
   }),
   getters: {
@@ -16,14 +17,15 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
   },
   actions: {
     setData(data) {
-      this.renderData = data.slice(0, this.codeStep).reverse()
+      this.renderData = data.slice(0, this.codeStep)
       this.startData = this.renderData[0]
       this.lastData = this.renderData[this.renderData.length - 1]
+      this.numberCountData = countNumberInData(this.renderData)
     },
-    goNextCodeStep() {
+    goToNextCodeStep() {
       this.codeStepIndex += 1
     },
-    goPreviousCodeStep() {
+    goToPreviousCodeStep() {
       this.codeStepIndex -= 1
     },
   },
