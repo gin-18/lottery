@@ -57,17 +57,23 @@ function checkNumberIsHot(num, data) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>出现次数</td>
-            <td v-for="item in numberCountData" :key="item.num">
-              {{ item.count }}
-            </td>
-          </tr>
           <tr v-for="item in renderData" :key="item.code">
             <td>{{ item.code }}</td>
             <td v-for="num in allNumbers" :key="num">
               <Ball v-if="checkNumberIsHot(num, item)" :num="num" />
               <span v-else></span>
+            </td>
+          </tr>
+          <tr>
+            <td>号码</td>
+            <td v-for="num in allNumbers" :key="num">
+              {{ num }}
+            </td>
+          </tr>
+          <tr>
+            <td>出现次数</td>
+            <td v-for="item in numberCountData" :key="item.num">
+              {{ item.count }}
             </td>
           </tr>
         </tbody>

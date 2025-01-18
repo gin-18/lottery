@@ -17,7 +17,7 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
   },
   actions: {
     setData(data) {
-      this.renderData = data.slice(0, this.codeStep)
+      this.renderData = data.slice(0, this.codeStep).reverse()
       this.startData = this.renderData[0]
       this.lastData = this.renderData[this.renderData.length - 1]
       this.numberCountData = countNumberInData(this.renderData)
