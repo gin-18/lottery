@@ -54,9 +54,7 @@ function setNumberColor(num) {
 </script>
 
 <template>
-  <div v-if="!data.length">
-    <span class="loading loading-dots loading-sm"></span>
-  </div>
+  <span v-if="!data.length" class="loading loading-dots"></span>
   <div v-else>
     <p>{{ description }}</p>
 
@@ -78,7 +76,7 @@ function setNumberColor(num) {
       </thead>
       <tbody>
         <tr v-for="(item, index) in timesNumberCountData" :key="index">
-          <th>{{ item.times }}</th>
+          <td>{{ item.times }}</td>
           <td class="flex flex-wrap gap-2">
             <Ball
               v-for="num in item.nums"
@@ -93,12 +91,12 @@ function setNumberColor(num) {
     </table>
 
     <div class="flex justify-center gap-12">
-      <div class="flex items-center">
+      <div class="flex items-center gap-2">
         <p class="m-0">重复号码:</p>
         <div class="w-4 h-4 rounded bg-info"></div>
       </div>
 
-      <div class="flex items-center">
+      <div class="flex items-center gap-2">
         <p class="m-0">当前期次号码:</p>
         <div class="w-4 h-4 rounded bg-primary"></div>
       </div>

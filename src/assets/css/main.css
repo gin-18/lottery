@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 main {
-  @apply container mx-auto prose prose-lg;
+  @apply container mx-auto prose prose-base;
 }

@@ -96,9 +96,7 @@ function renderFrequencyGroupData() {
 </script>
 
 <template>
-  <div v-if="!data.length">
-    <span class="loading loading-dots loading-sm"></span>
-  </div>
+  <span v-if="!data.length" class="loading loading-dots"></span>
   <div v-else>
     <p>{{ description }}</p>
 

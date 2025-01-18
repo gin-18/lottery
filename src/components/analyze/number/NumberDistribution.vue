@@ -45,7 +45,8 @@ function renderDataInTable(data) {
 </script>
 
 <template>
-  <div>
+  <span v-if="!data.length" class="loading loading-dots"></span>
+  <div v-else>
     <p>{{ description }}</p>
 
     <div>
@@ -81,7 +82,7 @@ function renderDataInTable(data) {
             </td>
           </tr>
           <tr>
-            <th class="text-xs">数据</th>
+            <th class="text-xs">数据统计</th>
             <th class="text-xs" v-for="num in allNumbers" :key="num">
               {{ num }}
             </th>

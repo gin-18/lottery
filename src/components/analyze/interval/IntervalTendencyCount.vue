@@ -90,6 +90,7 @@ function renderChart() {
 </script>
 
 <template>
-  <p v-if="data.length">{{ description }}</p>
+  <span v-if="!data.length" class="loading loading-dots"></span>
+  <p v-else>{{ description }}</p>
   <canvas :id="props.type"></canvas>
 </template>

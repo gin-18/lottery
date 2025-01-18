@@ -19,8 +19,13 @@ const props = defineProps({
 
 const intervalCountStore = useIntervalCountStore()
 const repeatCountStore = useRepeatCountStore()
-const { numberInterval, numberTailInterval, currentData, currentDataIndex } =
-  storeToRefs(intervalCountStore)
+const {
+  numberInterval,
+  numberTailInterval,
+  currentData,
+  currentDataIndex,
+  intervalCategory,
+} = storeToRefs(intervalCountStore)
 const { repeatData } = storeToRefs(repeatCountStore)
 
 const renderInterval = ref([])
@@ -61,9 +66,7 @@ function setBallColor(num) {
 </script>
 
 <template>
-  <div v-if="!data.length">
-    <span class="loading loading-dots loading-sm"></span>
-  </div>
+  <span v-if="!data.length" class="loading loading-dots"></span>
   <div v-else>
     <CodeDate :data="currentData" />
     <table class="table">
@@ -97,5 +100,12 @@ function setBallColor(num) {
         </tr>
       </tbody>
     </table>
+
+    <div class="flex justify-center items-center gap-12">
+      <div class="flex items-center gap-2" v-for="interval in intervalCategory">
+        <p class="m-0">{{ interval.title }}(>={{ interval.weight }}):</p>
+        <span class="w-4 h-4 rounded" :class="interval.backgroundColor"></span>
+      </div>
+    </div>
   </div>
 </template>

@@ -12,7 +12,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
     intervalCategory: [
       {
         title: '热',
-        weight: 3,
+        weight: 4,
         backgroundColor: 'bg-error',
         textColor: 'text-error',
       },
