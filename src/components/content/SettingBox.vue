@@ -7,14 +7,18 @@ const props = defineProps({
 
 const show = ref(false)
 
-function toggleShowSetting() {
+function toggleSetting() {
   show.value = !show.value
+}
+
+function closeSetting() {
+  show.value = false
 }
 </script>
 
 <template>
-  <button class="btn fixed bottom-8 right-8" @click="toggleShowSetting">
-    <span class="icon-[octicon--gear-24] text-xl"></span>
+  <button class="btn fixed bottom-8 right-8" @click="toggleSetting">
+    <span class="icon-[octicon--gear-16]"></span>
   </button>
 
   <Transition
@@ -25,7 +29,7 @@ function toggleShowSetting() {
     <div
       v-show="show"
       class="fixed top-0 right-0 w-full h-full bg-neutral opacity-60"
-      @click="toggleShowSetting"
+      @click="closeSetting"
     ></div>
   </Transition>
 
@@ -36,13 +40,14 @@ function toggleShowSetting() {
   >
     <div
       v-show="show"
-      class="fixed top-0 right-0 overflow-y-auto w-2/5 h-full max-h-full bg-base-100"
+      class="fixed top-0 right-0 overflow-y-auto w-1/3 h-full max-h-full bg-base-100"
     >
       <div class="flex justify-between items-center pt-6 px-6">
         <h2 class="m-0">{{ title }}</h2>
-        <button class="btn btn-sm" @click="toggleShowSetting">
-          <span class="icon-[octicon--x-24] text-xl"></span>
-        </button>
+        <span
+          class="icon-[octicon--x-circle-16] text-xl cursor-pointer"
+          @click="closeSetting"
+        ></span>
       </div>
       <div class="p-6">
         <slot></slot>

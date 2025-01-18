@@ -20,20 +20,20 @@ onMounted(async () => {
   <Header />
 
   <main>
-    <div>
+    <section>
       <h2>重号统计</h2>
       <RepeatCount :data="data" />
-    </div>
+    </section>
 
-    <div>
+    <section>
       <h2>区间统计</h2>
       <IntervalCount :data="data" type="interval" />
-    </div>
+    </section>
 
-    <div>
+    <section>
       <h2>区间走势</h2>
       <IntervalTendencyCount :data="data" type="interval" />
-    </div>
+    </section>
 
     <Setting type="区间" />
   </main>

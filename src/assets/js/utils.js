@@ -102,17 +102,16 @@ export function formatData(data) {
  * ]
  **/
 export function countNumberInData(dataArray) {
-  const numbers = dataArray
-    .map((item) => formatData(item).balls)
-    .flatMap((item) => item)
+  const numbers = dataArray.map((item) => formatData(item).balls)
 
   const numberCountData = Array.from({ length: 80 }, (_, index) => ({
     num: (index + 1).toString().padStart(2, '0'),
-    count: 0,
   }))
 
   numberCountData.forEach((obj) => {
-    obj.count = numbers.filter((item) => item === obj.num).length
+    obj.count = numbers
+      .flatMap((nums) => nums)
+      .filter((num) => num === obj.num).length
   })
 
   return numberCountData
@@ -121,7 +120,7 @@ export function countNumberInData(dataArray) {
 /**
  * 返回80个数字
  **/
-export function getAllNumbers() {
+export function generateAllNumbers() {
   return Array.from({ length: 80 }, (_, i) =>
     (i + 1).toString().padStart(2, '0'),
   )
