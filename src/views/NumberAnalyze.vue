@@ -12,7 +12,7 @@ import Setting from '@/components/analyze/number/Setting.vue'
 const data = ref([])
 
 onMounted(async () => {
-  const res = await getDataByNum(200)
+  const res = await getDataByNum(150)
   data.value = res.data.list
 })
 </script>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData, getAllNumbers } from '@/assets/js/utils'
+import { formatData, generateAllNumbers } from '@/assets/js/utils'
 
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
@@ -161,7 +161,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
      **/
     generateNumberInterval(step = 10) {
       const result = []
-      const numbers = getAllNumbers()
+      const numbers = generateAllNumbers()
 
       for (let i = 0; i < numbers.length; i += step) {
         result.push(numbers.slice(i, i + step))
@@ -174,7 +174,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
      * 将尾号相同的球分为一组
      **/
     generateNumberTailInterval() {
-      const numbers = getAllNumbers()
+      const numbers = generateAllNumbers()
 
       return numbers.reduce((acc, curr) => {
         const lastDigit = curr.slice(-1)

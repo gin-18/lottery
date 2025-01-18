@@ -1,8 +1,7 @@
 <script setup>
-import { watch } from 'vue'
+import { h, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
-import { formatData } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -25,11 +24,23 @@ const {
 } = storeToRefs(numberDistributionStore)
 watch([() => props.data, () => codeStep.value], () => {
   numberDistributionStore.setData(props.data)
+  numberDistributionStore.countNumberOmission(props.data)
 })
 
-function checkNumberIsHot(num, data) {
-  const numbers = formatData(data).balls
-  return numbers.includes(num)
+function handelNumberOmission(omissions) {
+  return omissions.slice(0, codeStep.value).reverse()
+}
+
+function getMaxOmission(omissions) {
+  const numbers = handelNumberOmission(omissions).filter(
+    (item) => typeof item === 'number',
+  )
+  return Math.max(...numbers)
+}
+
+function renderDataInTable(data) {
+  if (typeof data.num === 'number') return h('span', data.num)
+  return h(Ball, { num: data.num })
 }
 </script>
 
@@ -50,30 +61,41 @@ function checkNumberIsHot(num, data) {
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">期次</th>
+            <th scope>期次</th>
             <th scope="col" v-for="num in allNumbers" :key="num">
               {{ num }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in renderData" :key="item.code">
+          <tr
+            class="hover:bg-base-200"
+            v-for="(item, index) in renderData"
+            :key="item.code"
+          >
             <td>{{ item.code }}</td>
-            <td v-for="num in allNumbers" :key="num">
-              <Ball v-if="checkNumberIsHot(num, item)" :num="num" />
-              <span v-else></span>
+            <td v-for="item in numberCountData" :key="item">
+              <render-data-in-table
+                :num="handelNumberOmission(item.omission)[index]"
+              />
             </td>
           </tr>
           <tr>
-            <td>号码</td>
-            <td v-for="num in allNumbers" :key="num">
+            <th class="text-xs">数据</th>
+            <th class="text-xs" v-for="num in allNumbers" :key="num">
               {{ num }}
-            </td>
+            </th>
           </tr>
           <tr>
             <td>出现次数</td>
             <td v-for="item in numberCountData" :key="item.num">
               {{ item.count }}
+            </td>
+          </tr>
+          <tr>
+            <td>最大遗漏期数</td>
+            <td v-for="item in numberCountData" :key="item.num">
+              {{ getMaxOmission(item.omission) }}
             </td>
           </tr>
         </tbody>
