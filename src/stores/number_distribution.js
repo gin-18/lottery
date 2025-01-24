@@ -47,6 +47,7 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
         })
 
         obj.omission = this.reverseNumbersBetweenString(omission)
+        obj.currentOmission = this.getNumberCurrentOmission(obj.omission)
       })
     },
     reverseNumbersBetweenString(arr) {
@@ -70,6 +71,9 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
       }
 
       return result
+    },
+    getNumberCurrentOmission(omission) {
+      return typeof omission[0] === 'string' ? 0 : omission[0]
     },
   },
 })
