@@ -6,6 +6,7 @@ import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
+import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import Setting from '@/components/analyze/number/Setting.vue'
 
@@ -39,6 +40,11 @@ onMounted(async () => {
     <section>
       <h2>号码频率</h2>
       <FrequencyCount :data="data" />
+    </section>
+
+    <section>
+      <h2>号码遗漏</h2>
+      <CurrentOmissionCount :data="data" />
     </section>
 
     <section>
