@@ -21,7 +21,7 @@ const props = defineProps({
     <RepeatCountSetting />
     <TimesNumberCountSetting :data="data" />
     <FrequencyCountSetting />
-    <OmissionCountSetting />
+    <OmissionCountSetting :data="data" />
     <NumberDistributionSetting />
   </SettingBox>
 </template>

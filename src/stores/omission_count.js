@@ -7,21 +7,36 @@ export const useOmissionCountStore = defineStore('omission_count', {
     codeStep: 50,
     currentCodeIndex: 0,
     result: {},
+    previousArrowDisable: false,
+    nextArrowDisable: true,
     description: '这部分用于统计某一期次号码的当前遗漏值情况。',
   }),
   actions: {
-    goToPreviousCode() {
+    goToPreviousCode(rawDataArray) {
+      if (this.currentCodeIndex >= rawDataArray.length - 1) return
       this.currentCodeIndex += 1
     },
-    // FIXME: limit index to get -1
     goToNextCode() {
+      if (this.currentCodeIndex <= 0) return
       this.currentCodeIndex -= 1
     },
-    initData(dataArray) {
+    initData(rawDataArray) {
       const startIndex = this.currentCodeIndex
       const endIndex = this.currentCodeIndex + this.codeStep
-      this.groupCode = dataArray.slice(startIndex, endIndex)
+      this.groupCode = rawDataArray.slice(startIndex, endIndex)
       this.currentCode = this.groupCode[0]
+
+      if (this.currentCodeIndex >= rawDataArray.length - 1) {
+        this.previousArrowDisable = true
+      } else {
+        this.previousArrowDisable = false
+      }
+
+      if (this.currentCodeIndex <= 0) {
+        this.nextArrowDisable = true
+      } else {
+        this.nextArrowDisable = false
+      }
     },
     countNumberByOmission(numberCountArray) {
       this.result = numberCountArray.reduce((acc, item) => {
