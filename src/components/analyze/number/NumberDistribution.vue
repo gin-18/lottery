@@ -94,6 +94,12 @@ function renderDataInTable(data) {
             </td>
           </tr>
           <tr>
+            <td>当前遗漏期数</td>
+            <td v-for="item in numberCountData" :key="item.num">
+              {{ item.currentOmission }}
+            </td>
+          </tr>
+          <tr>
             <td>最大遗漏期数</td>
             <td v-for="item in numberCountData" :key="item.num">
               {{ getMaxOmission(item.omission) }}
