@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, provide, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
 import { getDataByNum } from '@/assets/js/request'
@@ -11,9 +11,6 @@ import IntervalTendencyCount from '@/components/analyze/interval/IntervalTendenc
 import RangeTimesCount from '@/components/analyze/interval/RangeTimesCount.vue'
 import Setting from '@/components/analyze/interval/Setting.vue'
 
-// TODO: remove this line after refactor
-const data = ref([])
-
 const intervalTimesCountStore = useIntervalTimesCountStore()
 const {
   codeStep: intervalTimesCountCodeStep,
@@ -23,16 +20,27 @@ const {
   description: intervalTimesCountDescription,
 } = storeToRefs(intervalTimesCountStore)
 
+const rawDataArray = ref([])
+provide('rawDataArray', rawDataArray)
+
 onMounted(async () => {
   const res = await getDataByNum(100)
-  const rawDataArray = res.data.list
+  rawDataArray.value = res.data.list
 
-  // TODO: remove this line after refactor
-  data.value = res.data.list
-
-  intervalTimesCountStore.initData(rawDataArray)
-  intervalTimesCountStore.countInRange(rawDataArray)
+  loadIntervalTimesCount()
 })
+
+watch(
+  () => intervalTimesCountCodeStep.value,
+  () => {
+    loadIntervalTimesCount()
+  },
+)
+
+function loadIntervalTimesCount() {
+  intervalTimesCountStore.initData(rawDataArray.value)
+  intervalTimesCountStore.countInRange(rawDataArray.value)
+}
 </script>
 
 <template>
@@ -41,12 +49,12 @@ onMounted(async () => {
   <main>
     <section>
       <h2>重号统计</h2>
-      <RepeatCount :data="data" />
+      <RepeatCount :data="rawDataArray" />
     </section>
 
     <section>
       <h2>区间统计</h2>
-      <IntervalCount :data="data" type="interval" />
+      <IntervalCount :data="rawDataArray" type="interval" />
     </section>
 
     <section>
@@ -63,7 +71,7 @@ onMounted(async () => {
 
     <section>
       <h2>区间走势</h2>
-      <IntervalTendencyCount :data="data" type="interval" />
+      <IntervalTendencyCount :data="rawDataArray" type="interval" />
     </section>
 
     <Setting type="区间" />
