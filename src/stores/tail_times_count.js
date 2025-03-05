@@ -39,11 +39,16 @@ export const useTailTimesCountStore = defineStore('tail_times_count', {
     countInDigit(rawDataArray) {
       const rangeCodes = rawDataArray.slice(0, this.codeStep)
       const numbers = rangeCodes.map((item) => formatData(item).balls).flat()
-      this.result = numbers.reduce((acc, numStr) => {
-        const digit = numStr[1]
-        acc[digit] = (acc[digit] || 0) + 1
-        return acc
-      }, {})
+      this.result = numbers.reduce(
+        (acc, numStr) => {
+          const digit = numStr[1]
+          acc[digit] += 1
+          return acc
+        },
+        Object.fromEntries(
+          Array.from({ length: 10 }, (_, i) => [i.toString(), 0]),
+        ),
+      )
     },
   },
 })
