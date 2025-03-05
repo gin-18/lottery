@@ -9,7 +9,7 @@ import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import IntervalCount from '@/components/analyze/interval/IntervalCount.vue'
 import IntervalTendencyCount from '@/components/analyze/interval/IntervalTendencyCount.vue'
 import RangeTimesCount from '@/components/analyze/interval/RangeTimesCount.vue'
-import Setting from '@/components/analyze/interval/Setting.vue'
+import IntervalSetting from '@/components/analyze/interval/IntervalSetting.vue'
 
 const intervalTimesCountStore = useIntervalTimesCountStore()
 const {
@@ -74,6 +74,6 @@ function loadIntervalTimesCount() {
       <IntervalTendencyCount :data="rawDataArray" type="interval" />
     </section>
 
-    <Setting type="区间" />
+    <IntervalSetting />
   </main>
 </template>
