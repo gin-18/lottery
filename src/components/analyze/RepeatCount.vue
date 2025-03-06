@@ -5,20 +5,13 @@ import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-
 const rawDataArray = inject('rawDataArray')
 
 const repeatCountStore = useRepeatCountStore()
 const { startCode, currentCode, currentCodeIndex, result, description } =
   storeToRefs(repeatCountStore)
 
-watch([() => rawDataArray.value, currentCodeIndex], () => {
+watch([rawDataArray, currentCodeIndex], () => {
   repeatCountStore.initData(rawDataArray.value)
   repeatCountStore.countRepeatNumber()
 })

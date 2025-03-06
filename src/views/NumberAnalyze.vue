@@ -35,7 +35,7 @@ onMounted(async () => {
 
     <section>
       <h2>号码统计</h2>
-      <!-- <TimesNumberCount :data="rawDataArray" /> -->
+      <TimesNumberCount :data="rawDataArray" />
     </section>
 
     <section>

@@ -10,7 +10,7 @@ const currentResultStore = useCurrentResultStore()
 const { currentCode, currentCodeIndex, description } =
   storeToRefs(currentResultStore)
 
-watch([() => rawDataArray.value, currentCodeIndex], () => {
+watch([rawDataArray, currentCodeIndex], () => {
   currentResultStore.initData(rawDataArray.value)
 })
 </script>

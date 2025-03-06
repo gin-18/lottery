@@ -6,7 +6,7 @@ export const useRepeatCountStore = defineStore('repeat_count', {
     startCode: {},
     currentCode: {},
     currentCodeIndex: 0,
-    result: {},
+    result: [],
     previousButtonDisable: false,
     nextButtonDisable: true,
     description:

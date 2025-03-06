@@ -125,3 +125,13 @@ export function generateAllNumbers() {
     (i + 1).toString().padStart(2, '0'),
   )
 }
+
+export function setBallColor(currentCodeNumbers, repeatNumbers, number) {
+  const repeatNumbersColor = 'bg-info'
+  const currentCodeNumbersColor = 'bg-primary'
+  if (repeatNumbers.includes(number)) {
+    return repeatNumbersColor
+  } else if (currentCodeNumbers.includes(number)) {
+    return currentCodeNumbersColor
+  }
+}
