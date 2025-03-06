@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, provide, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
@@ -10,11 +10,12 @@ import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCou
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import Setting from '@/components/analyze/number/Setting.vue'
 
-const data = ref([])
+const rawDataArray = ref([])
+provide('rawDataArray', rawDataArray)
 
 onMounted(async () => {
   const res = await getDataByNum(150)
-  data.value = res.data.list
+  rawDataArray.value = res.data.list
 })
 </script>
 
@@ -23,35 +24,35 @@ onMounted(async () => {
 
   <main>
     <section>
-      <h2>当前期次开奖</h2>
-      <CurrentResult :data="data" />
+      <h2>当前开奖</h2>
+      <CurrentResult />
     </section>
 
     <section>
       <h2>重号统计</h2>
-      <RepeatCount :data="data" />
+      <RepeatCount :data="rawDataArray" />
     </section>
 
     <section>
       <h2>号码统计</h2>
-      <TimesNumberCount :data="data" />
+      <TimesNumberCount :data="rawDataArray" />
     </section>
 
     <section>
       <h2>号码频率</h2>
-      <FrequencyCount :data="data" />
+      <FrequencyCount :data="rawDataArray" />
     </section>
 
     <section>
       <h2>号码遗漏</h2>
-      <CurrentOmissionCount :data="data" />
+      <CurrentOmissionCount :data="rawDataArray" />
     </section>
 
     <section>
       <h2>号码分布</h2>
-      <NumberDistribution :data="data" />
+      <NumberDistribution :data="rawDataArray" />
     </section>
 
-    <Setting :data="data" />
+    <Setting :data="rawDataArray" />
   </main>
 </template>

@@ -29,7 +29,7 @@ const {
   description,
 } = storeToRefs(timesNumberCountStore)
 const { repeatData } = storeToRefs(repeatCountStore)
-const { currentData } = storeToRefs(currentResultStore)
+const { currentCode } = storeToRefs(currentResultStore)
 
 watch([() => props.data, startDataIndex, endDataIndex], () => {
   timesNumberCountStore.setStartData(props.data)
@@ -43,7 +43,7 @@ function checkNumberCountArrowStatus() {
 }
 
 function setNumberColor(num) {
-  const currentCodeData = formatData(currentData.value).balls
+  const currentCodeData = formatData(currentCode.value).balls
 
   if (repeatData.value.includes(num)) {
     return 'bg-info'

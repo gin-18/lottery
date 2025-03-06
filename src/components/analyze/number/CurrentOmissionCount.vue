@@ -22,7 +22,7 @@ const currentResultStore = useCurrentResultStore()
 const repeatCountStore = useRepeatCountStore()
 
 const { numberCountData } = storeToRefs(numberDistributionStore)
-const { currentData } = storeToRefs(currentResultStore)
+const { currentCode: currentResultCode } = storeToRefs(currentResultStore)
 const { repeatData } = storeToRefs(repeatCountStore)
 const { currentCode, groupCode, currentCodeIndex, result, description } =
   storeToRefs(omissionCountStore)
@@ -36,7 +36,7 @@ watch([() => props.data, currentCodeIndex], () => {
 
 // TODO: this function repeated in multiple components
 function setNumberColor(num) {
-  const currentCodeData = formatData(currentData.value).balls
+  const currentCodeData = formatData(currentResultCode.value).balls
 
   if (repeatData.value.includes(num)) {
     return 'bg-info'
