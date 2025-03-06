@@ -1,48 +1,45 @@
 <script setup>
-import { watch } from 'vue'
+import { inject, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useOmissionCountStore } from '@/stores/omission_count'
-import { formatData } from '@/assets/js/utils'
+import { formatData, setBallColor } from '@/assets/js/utils'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
+const omissionCountStore = useOmissionCountStore()
+const {
+  currentCode,
+  rangeCode,
+  currentCodeIndex,
+  result: currentOmissionResult,
+  description,
+} = storeToRefs(omissionCountStore)
+
+const currentResultStore = useCurrentResultStore()
+const { currentCode: currentResultCode } = storeToRefs(currentResultStore)
+
+const repeatCountStore = useRepeatCountStore()
+const { result: repeatResult } = storeToRefs(repeatCountStore)
 
 const numberDistributionStore = useNumberDistributionStore()
-const omissionCountStore = useOmissionCountStore()
-const currentResultStore = useCurrentResultStore()
-const repeatCountStore = useRepeatCountStore()
-
 const { numberCountData } = storeToRefs(numberDistributionStore)
-const { currentCode: currentResultCode } = storeToRefs(currentResultStore)
-const { repeatData } = storeToRefs(repeatCountStore)
-const { currentCode, groupCode, currentCodeIndex, result, description } =
-  storeToRefs(omissionCountStore)
 
-watch([() => props.data, currentCodeIndex], () => {
-  omissionCountStore.initData(props.data)
-  numberDistributionStore.setData(groupCode.value)
-  numberDistributionStore.countNumberOmission(groupCode.value)
+const rawDataArray = inject('rawDataArray')
+
+watch([rawDataArray, currentCodeIndex], () => {
+  omissionCountStore.initData(rawDataArray.value)
+  numberDistributionStore.setData(rangeCode.value)
+  numberDistributionStore.countNumberOmission(rangeCode.value)
   omissionCountStore.countNumberByOmission(numberCountData.value)
 })
 
-// TODO: this function repeated in multiple components
 function setNumberColor(num) {
-  const currentCodeData = formatData(currentResultCode.value).balls
-
-  if (repeatData.value.includes(num)) {
-    return 'bg-info'
-  } else if (currentCodeData.includes(num)) {
-    return 'bg-primary'
-  }
+  const currentCodeNumbers = formatData(currentResultCode.value).balls
+  const repeatNumbers = repeatResult.value
+  return setBallColor(currentCodeNumbers, repeatNumbers, num)
 }
 </script>
 
@@ -60,7 +57,7 @@ function setNumberColor(num) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(value, key, index) in result" :key="index">
+      <tr v-for="(value, key, index) in currentOmissionResult" :key="index">
         <td>{{ key }}</td>
         <td class="flex flex-wrap gap-2">
           <Ball

@@ -18,7 +18,7 @@ function reduceCodeStep() {
 </script>
 
 <template>
-  <h3>号码频率设置</h3>
+  <h3>号码频率</h3>
   <div>
     <h4>统计步长：</h4>
     <div class="flex justify-between items-center">

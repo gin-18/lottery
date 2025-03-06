@@ -1,21 +1,17 @@
 <script setup>
+import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useOmissionCountStore } from '@/stores/omission_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-
 const omissionCountStore = useOmissionCountStore()
-const { currentCode, previousArrowDisable, nextArrowDisable } =
+const { currentCode, previousButtonDisable, nextButtonDisable } =
   storeToRefs(omissionCountStore)
 
+const rawDataArray = inject('rawDataArray')
+
 function goToPreviousCode() {
-  omissionCountStore.goToPreviousCode(props.data)
+  omissionCountStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
   omissionCountStore.goToNextCode()
@@ -23,19 +19,19 @@ function goToNextCode() {
 </script>
 
 <template>
-  <h3>遗漏统计设置</h3>
+  <h3>遗漏统计</h3>
   <div>
     <h4>当前期次:</h4>
     <div class="flex justify-between items-center">
       <button
         class="btn"
-        :disabled="previousArrowDisable"
+        :disabled="previousButtonDisable"
         @click="goToPreviousCode"
       >
         <span class="icon-[octicon--triangle-left-24]"></span>
       </button>
       <CodeDate :data="currentCode" />
-      <button class="btn" :disabled="nextArrowDisable" @click="goToNextCode">
+      <button class="btn" :disabled="nextButtonDisable" @click="goToNextCode">
         <span class="icon-[octicon--triangle-right-24]"></span>
       </button>
     </div>

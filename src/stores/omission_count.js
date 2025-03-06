@@ -3,12 +3,12 @@ import { defineStore } from 'pinia'
 export const useOmissionCountStore = defineStore('omission_count', {
   state: () => ({
     currentCode: {},
-    groupCode: {},
+    rangeCode: {},
     codeStep: 50,
     currentCodeIndex: 0,
     result: {},
-    previousArrowDisable: false,
-    nextArrowDisable: true,
+    previousButtonDisable: false,
+    nextButtonDisable: true,
     description: '这部分用于统计某一期次号码的当前遗漏值情况。',
   }),
   actions: {
@@ -23,19 +23,19 @@ export const useOmissionCountStore = defineStore('omission_count', {
     initData(rawDataArray) {
       const startIndex = this.currentCodeIndex
       const endIndex = this.currentCodeIndex + this.codeStep
-      this.groupCode = rawDataArray.slice(startIndex, endIndex)
-      this.currentCode = this.groupCode[0]
+      this.rangeCode = rawDataArray.slice(startIndex, endIndex)
+      this.currentCode = this.rangeCode[0]
 
       if (this.currentCodeIndex >= rawDataArray.length - 1) {
-        this.previousArrowDisable = true
+        this.previousButtonDisable = true
       } else {
-        this.previousArrowDisable = false
+        this.previousButtonDisable = false
       }
 
       if (this.currentCodeIndex <= 0) {
-        this.nextArrowDisable = true
+        this.nextButtonDisable = true
       } else {
-        this.nextArrowDisable = false
+        this.nextButtonDisable = false
       }
     },
     countNumberByOmission(numberCountArray) {

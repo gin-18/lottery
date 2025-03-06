@@ -45,7 +45,7 @@ onMounted(async () => {
 
     <section>
       <h2>号码遗漏</h2>
-      <!-- <CurrentOmissionCount :data="rawDataArray" /> -->
+      <CurrentOmissionCount />
     </section>
 
     <section>
