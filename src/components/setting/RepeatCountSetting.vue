@@ -1,29 +1,38 @@
 <script setup>
+import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const repeatCountStore = useRepeatCountStore()
-const { currentData } = storeToRefs(repeatCountStore)
+const { currentCode, previousButtonDisable, nextButtonDisable } =
+  storeToRefs(repeatCountStore)
 
-function addRepeatCurrentCode() {
-  repeatCountStore.addCurrentCode()
+const rawDataArray = inject('rawDataArray')
+
+function goToPreviousCode() {
+  repeatCountStore.goToPreviousCode(rawDataArray.value)
 }
-function reduceRepeatCurrentCode() {
-  repeatCountStore.reduceCurrentCode()
+
+function goToNextCode() {
+  repeatCountStore.goToNextCode()
 }
 </script>
 
 <template>
-  <h3>重号设置</h3>
+  <h3>重号统计</h3>
   <div>
-    <h4>重号当前期次:</h4>
+    <h4>当前期次:</h4>
     <div class="flex justify-between items-center">
-      <button class="btn" @click="reduceRepeatCurrentCode">
+      <button
+        class="btn"
+        :disabled="previousButtonDisable"
+        @click="goToPreviousCode"
+      >
         <span class="icon-[octicon--triangle-left-24]"></span>
       </button>
-      <CodeDate :data="currentData" />
-      <button class="btn" @click="addRepeatCurrentCode">
+      <CodeDate :data="currentCode" />
+      <button class="btn" :disabled="nextButtonDisable" @click="goToNextCode">
         <span class="icon-[octicon--triangle-right-24]"></span>
       </button>
     </div>

@@ -19,7 +19,7 @@ function goToNextCode() {
 </script>
 
 <template>
-  <h3>当前开奖设置</h3>
+  <h3>当前开奖</h3>
   <div>
     <h4>当前期次:</h4>
     <div class="flex justify-between items-center">

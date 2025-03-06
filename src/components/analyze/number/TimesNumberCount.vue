@@ -1,10 +1,10 @@
 <script setup>
 import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { formatData } from '@/assets/js/utils'
 import { useCurrentResultStore } from '@/stores/current_result'
-import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { useRepeatCountStore } from '@/stores/repeat_count'
+import { useTimesNumberCountStore } from '@/stores/times_number_count'
+import { formatData } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -16,9 +16,12 @@ const props = defineProps({
 })
 
 const currentResultStore = useCurrentResultStore()
-const timesNumberCountStore = useTimesNumberCountStore()
-const repeatCountStore = useRepeatCountStore()
+const { currentCode } = storeToRefs(currentResultStore)
 
+const repeatCountStore = useRepeatCountStore()
+const { result: repeatResult } = storeToRefs(repeatCountStore)
+
+const timesNumberCountStore = useTimesNumberCountStore()
 const {
   startDataIndex,
   endDataIndex,
@@ -28,8 +31,6 @@ const {
   timesNumberCountData,
   description,
 } = storeToRefs(timesNumberCountStore)
-const { repeatData } = storeToRefs(repeatCountStore)
-const { currentCode } = storeToRefs(currentResultStore)
 
 watch([() => props.data, startDataIndex, endDataIndex], () => {
   timesNumberCountStore.setStartData(props.data)
@@ -45,7 +46,7 @@ function checkNumberCountArrowStatus() {
 function setNumberColor(num) {
   const currentCodeData = formatData(currentCode.value).balls
 
-  if (repeatData.value.includes(num)) {
+  if (repeatResult.value.includes(num)) {
     return 'bg-info'
   } else if (currentCodeData.includes(num)) {
     return 'bg-primary'

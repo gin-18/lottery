@@ -30,12 +30,12 @@ onMounted(async () => {
 
     <section>
       <h2>重号统计</h2>
-      <RepeatCount :data="rawDataArray" />
+      <RepeatCount />
     </section>
 
     <section>
       <h2>号码统计</h2>
-      <TimesNumberCount :data="rawDataArray" />
+      <!-- <TimesNumberCount :data="rawDataArray" /> -->
     </section>
 
     <section>
@@ -45,7 +45,7 @@ onMounted(async () => {
 
     <section>
       <h2>号码遗漏</h2>
-      <CurrentOmissionCount :data="rawDataArray" />
+      <!-- <CurrentOmissionCount :data="rawDataArray" /> -->
     </section>
 
     <section>
