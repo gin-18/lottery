@@ -50,9 +50,9 @@ onMounted(async () => {
 
     <section>
       <h2>号码分布</h2>
-      <NumberDistribution :data="rawDataArray" />
+      <NumberDistribution />
     </section>
 
-    <Setting :data="rawDataArray" />
+    <Setting />
   </main>
 </template>

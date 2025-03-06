@@ -1,30 +1,26 @@
 <script setup>
-import { h, watch } from 'vue'
+import { inject, h, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-
 const numberDistributionStore = useNumberDistributionStore()
 const {
   allNumbers,
   codeStep,
-  renderData,
+  startCode,
+  lastCode,
+  result,
   numberCountData,
-  startData,
-  lastData,
   description,
 } = storeToRefs(numberDistributionStore)
-watch([() => props.data, () => codeStep.value], () => {
-  numberDistributionStore.setData(props.data)
-  numberDistributionStore.countNumberOmission(props.data)
+
+const rawDataArray = inject('rawDataArray')
+
+watch([rawDataArray, codeStep], () => {
+  numberDistributionStore.initData(rawDataArray.value)
+  numberDistributionStore.countNumberOmission(rawDataArray.value)
 })
 
 function handelNumberOmission(omissions) {
@@ -45,15 +41,15 @@ function renderDataInTable(data) {
 </script>
 
 <template>
-  <span v-if="!data.length" class="loading loading-dots"></span>
+  <span v-if="!rawDataArray.length" class="loading loading-dots"></span>
   <div v-else>
     <p>{{ description }}</p>
 
     <div>
       <div class="flex items-center gap-6">
-        <CodeDate :data="startData" />
+        <CodeDate :data="startCode" />
         <p>-</p>
-        <CodeDate :data="lastData" />
+        <CodeDate :data="lastCode" />
       </div>
       <p>近 {{ codeStep }} 期</p>
     </div>
@@ -71,7 +67,7 @@ function renderDataInTable(data) {
         <tbody>
           <tr
             class="hover:bg-base-200"
-            v-for="(item, index) in renderData"
+            v-for="(item, index) in result"
             :key="item.code"
           >
             <td>{{ item.code }}</td>

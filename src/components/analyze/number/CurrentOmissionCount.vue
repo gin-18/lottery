@@ -31,7 +31,7 @@ const rawDataArray = inject('rawDataArray')
 
 watch([rawDataArray, currentCodeIndex], () => {
   omissionCountStore.initData(rawDataArray.value)
-  numberDistributionStore.setData(rangeCode.value)
+  numberDistributionStore.initData(rangeCode.value)
   numberDistributionStore.countNumberOmission(rangeCode.value)
   omissionCountStore.countNumberByOmission(numberCountData.value)
 })
