@@ -1,14 +1,18 @@
 <script setup>
+import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
 
 const frequencyCountStore = useFrequencyCountStore()
-const { countStep } = storeToRefs(frequencyCountStore)
+const { codeStep, addButtonDisable, reduceButtonDisable } =
+  storeToRefs(frequencyCountStore)
 
-function addFrequencyStep() {
-  frequencyCountStore.addCodeStep()
+const rawDataArray = inject('rawDataArray')
+
+function addCodeStep() {
+  frequencyCountStore.addCodeStep(rawDataArray.value)
 }
-function reduceFrequencyStep() {
+function reduceCodeStep() {
   frequencyCountStore.reduceCodeStep()
 }
 </script>
@@ -18,11 +22,15 @@ function reduceFrequencyStep() {
   <div>
     <h4>统计步长：</h4>
     <div class="flex justify-between items-center">
-      <button class="btn" @click="reduceFrequencyStep">
+      <button
+        class="btn"
+        :disabled="reduceButtonDisable"
+        @click="reduceCodeStep"
+      >
         <span class="icon-[octicon--dash-16]"></span>
       </button>
-      <p>{{ countStep }}</p>
-      <button class="btn" @click="addFrequencyStep">
+      <p>{{ codeStep }}</p>
+      <button class="btn" :disabled="addButtonDisable" @click="addCodeStep">
         <span class="icon-[octicon--plus-16]"></span>
       </button>
     </div>
