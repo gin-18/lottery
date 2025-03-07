@@ -84,8 +84,7 @@ function renderFrequencyGroupData() {
 </script>
 
 <template>
-  <span v-if="!rawDataArray.length" class="loading loading-dots"></span>
-  <div v-else>
+  <div>
     <p>{{ description }}</p>
 
     <div class="flex items-center gap-6">

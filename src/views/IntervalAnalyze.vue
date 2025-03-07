@@ -3,12 +3,13 @@ import { ref, watch, provide, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useIntervalCountStore } from '@/stores/interval_count'
 import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
+import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
 import { getDataByNum } from '@/assets/js/request'
 
 import Header from '@/components/header/Header.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import RangeCount from '@/components/analyze/range/RangeCount.vue'
-import IntervalTendencyCount from '@/components/analyze/range/IntervalTendencyCount.vue'
+import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
 import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
 import IntervalSetting from '@/components/analyze/range/IntervalSetting.vue'
 
@@ -29,6 +30,13 @@ const {
   description: intervalTimesCountDescription,
 } = storeToRefs(intervalTimesCountStore)
 
+const intervalTendencyCountStore = useIntervalTendencyCountStore()
+const {
+  codeStep: intervalTendencyCountCodeStep,
+  result: intervalTendencyCountResult,
+  description: intervalTendencyCountDescription,
+} = storeToRefs(intervalTendencyCountStore)
+
 const rawDataArray = ref([])
 provide('rawDataArray', rawDataArray)
 
@@ -38,6 +46,7 @@ onMounted(async () => {
 
   loadIntervalCount()
   loadIntervalTimesCount()
+  loadIntervalTendencyCount()
 })
 
 watch(
@@ -54,14 +63,26 @@ watch(
   },
 )
 
+watch(
+  () => intervalTendencyCountCodeStep.value,
+  () => {
+    loadIntervalTendencyCount()
+  },
+)
+
 function loadIntervalCount() {
   intervalCountStore.initData(rawDataArray.value)
-  intervalCountStore.getIntervalCountValue()
+  intervalCountStore.countRangeInOneCode()
 }
 
 function loadIntervalTimesCount() {
   intervalTimesCountStore.initData(rawDataArray.value)
   intervalTimesCountStore.countInRange(rawDataArray.value)
+}
+
+function loadIntervalTendencyCount() {
+  intervalTendencyCountStore.initData(rawDataArray.value)
+  intervalTendencyCountStore.countRangeInGroupCode(rawDataArray.value)
 }
 </script>
 
@@ -71,7 +92,7 @@ function loadIntervalTimesCount() {
   <main>
     <section>
       <h2>重号统计</h2>
-      <RepeatCount :data="rawDataArray" />
+      <RepeatCount />
     </section>
 
     <section>
@@ -98,7 +119,13 @@ function loadIntervalTimesCount() {
 
     <section>
       <h2>区间走势</h2>
-      <!-- <IntervalTendencyCount :data="rawDataArray" type="interval" /> -->
+      <RangeTendencyCount
+        :result="intervalTendencyCountResult"
+        :codeStep="intervalTendencyCountCodeStep"
+        :description="intervalTendencyCountDescription"
+        canvas-id="interval"
+        suffix="区间"
+      />
     </section>
 
     <IntervalSetting />

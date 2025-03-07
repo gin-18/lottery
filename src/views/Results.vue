@@ -42,8 +42,7 @@ function changeCode(num) {
     </div>
 
     <ul class="list-none p-0">
-      <span v-if="!dataList.length" class="loading loading-dots"></span>
-      <li class="p-0" v-else v-for="data in dataList" :key="data.code">
+      <li class="p-0" v-for="data in dataList" :key="data.code">
         <ResultContainer :data="data" />
       </li>
     </ul>

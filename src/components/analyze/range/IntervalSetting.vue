@@ -3,6 +3,7 @@ import SettingBox from '@/components/content/SettingBox.vue'
 import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
 import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
+import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSe
     <RepeatCountSetting />
     <IntervalCountSetting />
     <IntervalTimesCountSetting />
+    <IntervalTendencyCountSetting />
   </SettingBox>
 </template>

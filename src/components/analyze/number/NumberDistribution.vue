@@ -41,8 +41,7 @@ function renderDataInTable(data) {
 </script>
 
 <template>
-  <span v-if="!rawDataArray.length" class="loading loading-dots"></span>
-  <div v-else>
+  <div>
     <p>{{ description }}</p>
 
     <div>
