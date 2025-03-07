@@ -1,15 +1,20 @@
 <script setup>
 import { ref, watch, provide, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useIntervalCountStore } from '@/stores/interval_count'
 import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
 import { getDataByNum } from '@/assets/js/request'
 
 import Header from '@/components/header/Header.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
-import IntervalCount from '@/components/analyze/interval/IntervalCount.vue'
-import IntervalTendencyCount from '@/components/analyze/interval/IntervalTendencyCount.vue'
-import RangeTimesCount from '@/components/analyze/interval/RangeTimesCount.vue'
-import IntervalSetting from '@/components/analyze/interval/IntervalSetting.vue'
+import RangeCount from '@/components/analyze/range/RangeCount.vue'
+import IntervalTendencyCount from '@/components/analyze/range/IntervalTendencyCount.vue'
+import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
+import IntervalSetting from '@/components/analyze/range/IntervalSetting.vue'
+
+const intervalCountStore = useIntervalCountStore()
+const { intervals, currentData, currentDataIndex, category } =
+  storeToRefs(intervalCountStore)
 
 const intervalTimesCountStore = useIntervalTimesCountStore()
 const {
@@ -27,8 +32,16 @@ onMounted(async () => {
   const res = await getDataByNum(100)
   rawDataArray.value = res.data.list
 
+  loadIntervalCount()
   loadIntervalTimesCount()
 })
+
+watch(
+  () => currentDataIndex.value,
+  () => {
+    loadIntervalCount()
+  },
+)
 
 watch(
   () => intervalTimesCountCodeStep.value,
@@ -36,6 +49,10 @@ watch(
     loadIntervalTimesCount()
   },
 )
+
+function loadIntervalCount() {
+  intervalCountStore.initData(rawDataArray.value)
+}
 
 function loadIntervalTimesCount() {
   intervalTimesCountStore.initData(rawDataArray.value)
@@ -54,7 +71,12 @@ function loadIntervalTimesCount() {
 
     <section>
       <h2>区间统计</h2>
-      <IntervalCount :data="rawDataArray" type="interval" />
+      <RangeCount
+        :currentCode="currentData"
+        :range="intervals"
+        :category="category"
+        thead="区间"
+      />
     </section>
 
     <section>
@@ -71,7 +93,7 @@ function loadIntervalTimesCount() {
 
     <section>
       <h2>区间走势</h2>
-      <IntervalTendencyCount :data="rawDataArray" type="interval" />
+      <!-- <IntervalTendencyCount :data="rawDataArray" type="interval" /> -->
     </section>
 
     <IntervalSetting />
