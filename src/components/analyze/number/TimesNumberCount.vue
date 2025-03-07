@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useTimesNumberCountStore } from '@/stores/times_number_count'
-import { formatData, setBallColor } from '@/assets/js/utils'
+import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -35,7 +35,7 @@ watch([rawDataArray, startCodeIndex, endCodeIndex], () => {
 function setNumberColor(num) {
   const currentCodeNumbers = formatData(currentCode.value).balls
   const repeatNumbers = repeatResult.value
-  return setBallColor(currentCodeNumbers, repeatNumbers, num)
+  return setBallColorInNumber(currentCodeNumbers, repeatNumbers, num)
 }
 </script>
 

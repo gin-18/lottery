@@ -13,8 +13,12 @@ import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
 import IntervalSetting from '@/components/analyze/range/IntervalSetting.vue'
 
 const intervalCountStore = useIntervalCountStore()
-const { intervals, currentData, currentDataIndex, category } =
-  storeToRefs(intervalCountStore)
+const {
+  intervals,
+  currentCode,
+  currentCodeIndex,
+  result: intervalCountResult,
+} = storeToRefs(intervalCountStore)
 
 const intervalTimesCountStore = useIntervalTimesCountStore()
 const {
@@ -37,7 +41,7 @@ onMounted(async () => {
 })
 
 watch(
-  () => currentDataIndex.value,
+  () => currentCodeIndex.value,
   () => {
     loadIntervalCount()
   },
@@ -52,6 +56,7 @@ watch(
 
 function loadIntervalCount() {
   intervalCountStore.initData(rawDataArray.value)
+  intervalCountStore.getIntervalCountValue()
 }
 
 function loadIntervalTimesCount() {
@@ -72,9 +77,9 @@ function loadIntervalTimesCount() {
     <section>
       <h2>区间统计</h2>
       <RangeCount
-        :currentCode="currentData"
         :range="intervals"
-        :category="category"
+        :currentCode="currentCode"
+        :result="intervalCountResult"
         thead="区间"
       />
     </section>

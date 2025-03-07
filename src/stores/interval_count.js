@@ -4,77 +4,72 @@ import { formatData, generateAllNumbers } from '@/assets/js/utils'
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
     intervals: [],
-    currentData: {},
-    rangeData: {},
-    currentDataIndex: 0,
-    rangeStep: 7,
-    category: [
-      {
-        title: '热',
-        weight: 4,
-        backgroundColor: 'bg-error',
-        textColor: 'text-error',
-      },
-      {
-        title: '温',
-        weight: 2,
-        backgroundColor: 'bg-warning',
-        textColor: 'text-warning',
-      },
-      {
-        title: '冷',
-        weight: 0,
-        backgroundColor: 'bg-primary',
-        textColor: 'text-primary',
-      },
-    ],
+    currentCode: {},
+    result: {},
+    currentCodeIndex: 0,
+    previousButtonDisable: false,
+    nextButtonDisable: true,
   }),
   actions: {
-    addCurrentCode() {
-      if (this.currentDataIndex <= 0) return
-      this.currentDataIndex -= 1
+    goToPreviousCode(rawDataArray) {
+      if (this.currentCodeIndex >= rawDataArray.length - 1) return
+      this.currentCodeIndex += 1
     },
-    reduceCurrentCode() {
-      this.currentDataIndex += 1
-    },
-    addRangeStep() {
-      this.rangeStep += 1
-    },
-    reduceRangeStep() {
-      this.rangeStep -= 1
+    goToNextCode() {
+      if (this.currentCodeIndex <= 0) return
+      this.currentCodeIndex -= 1
     },
     initData(rawDataArray) {
-      this.intervals = this.generateNumberInterval()
-      this.currentData = rawDataArray[this.currentDataIndex]
-      this.rangeData = rawDataArray.slice(0, this.rangeStep)
+      this.intervals = this.generateRanges()
+      this.currentCode = rawDataArray[this.currentCodeIndex]
+
+      if (this.currentCodeIndex >= rawDataArray.length - 1) {
+        this.previousButtonDisable = true
+      } else {
+        this.previousButtonDisable = false
+      }
+
+      if (this.currentCodeIndex <= 0) {
+        this.nextButtonDisable = true
+      } else {
+        this.nextButtonDisable = false
+      }
     },
-    getIntervalCountValue(index) {
-      const result = this.countOneByRange(this.currentData)
-      return Object.values(result.data)[index]
+    getIntervalCountValue() {
+      this.result = this.countOneByRange(this.currentCode)
     },
     /**
      * 返回的数据格式：
      * {
      *    code: 'code1',
      *    data: {
-     *      'interval': times,
+     *      'interval': {
+     *        'times': 0,
+     *        'range': ['01', ..., '10'],
+     *      },
      *      ...
      *    }
      * }
      **/
     countOneByRange(data) {
       const ranges = this.generateRanges()
-      const intervals = this.generateNumberInterval()
-      const dataFormat = formatData(data)
+      const intervals = this.generateIntervals()
+      const formattedData = formatData(data)
       const result = {
-        code: `第${dataFormat.code}期`,
-        data: Object.fromEntries(ranges.map((item) => [item, 0])),
+        code: `第${formattedData.code}期`,
+        data: intervals.reduce((acc, interval, index) => {
+          acc[interval] = {
+            times: 0,
+            range: ranges[index],
+          }
+          return acc
+        }, {}),
       }
 
-      dataFormat.balls.forEach((num) => {
-        const index = intervals.findIndex((subBall) => subBall.includes(num))
+      formattedData.balls.forEach((num) => {
+        const index = ranges.findIndex((nums) => nums.includes(num))
         if (index !== -1) {
-          result.data[ranges[index]]++
+          result.data[intervals[index]].times++
         }
       })
 
@@ -109,21 +104,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
         return acc
       }, {})
     },
-    setIntervalColor(index, type) {
-      const countObj = this.countOneByRange(this.currentData, type)
-      const intervalValue = Object.values(countObj.data)[index]
-      if (intervalValue >= this.category[0].weight) {
-        return this.category[0].textColor
-      } else if (intervalValue >= this.category[1].weight) {
-        return this.category[1].textColor
-      } else {
-        return this.category[2].textColor
-      }
-    },
-    /**
-     * 以10为步长，返回80个球的分区
-     **/
-    generateNumberInterval(step = 10) {
+    generateRanges(step = 10) {
       const result = []
       const numbers = generateAllNumbers()
       for (let i = 0; i < numbers.length; i += step) {
@@ -131,7 +112,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
       }
       return result
     },
-    generateRanges() {
+    generateIntervals() {
       const ranges = []
       for (let start = 1; start <= 71; start += 10) {
         const end = start + 9

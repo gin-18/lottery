@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useIntervalCountStore } from '@/stores/interval_count'
 import { useRepeatCountStore } from '@/stores/repeat_count'
+import { formatData, setBallColorInRange } from '@/assets/js/utils'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
 
@@ -14,8 +14,8 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  category: {
-    type: Array,
+  result: {
+    type: Object,
     required: true,
   },
   thead: {
@@ -24,30 +24,12 @@ const props = defineProps({
 })
 
 const repeatCountStore = useRepeatCountStore()
-const { result } = storeToRefs(repeatCountStore)
-
-const intervalCountStore = useIntervalCountStore()
-
-function setIntervalColor(index) {
-  return intervalCountStore.setIntervalColor(index, props.type)
-}
-
-function getIntervalCount(index) {
-  return intervalCountStore.getIntervalCountValue(index, props.type)
-}
+const { result: repeatCountResult } = storeToRefs(repeatCountStore)
 
 function setBallColor(num) {
-  let color = 'bg-base-300'
-
-  Object.values(props.currentCode).forEach((item) => {
-    if (item === num) {
-      color = 'bg-error'
-    } else if (result.value.includes(num)) {
-      color = 'bg-info'
-    }
-  })
-
-  return color
+  const repeatNumbers = repeatCountResult.value
+  const currentNumbers = formatData(props.currentCode).balls
+  return setBallColorInRange(currentNumbers, repeatNumbers, num)
 }
 </script>
 
@@ -63,33 +45,22 @@ function setBallColor(num) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(interval, index) in range" :key="interval">
-        <td :class="setIntervalColor(index, props.type)">
-          {{
-            props.type === 'interval'
-              ? `[${interval[0]}, ${interval[interval.length - 1]}]`
-              : `${interval[0].slice(-1)}`
-          }}
+      <tr v-for="(value, key) in result.data" :key="key">
+        <td>
+          {{ key }}
         </td>
         <td class="flex gap-2">
           <Ball
-            v-for="num in interval"
+            v-for="num in value.range"
             :key="num"
             :num="num"
             :color="setBallColor(num)"
           />
         </td>
         <td>
-          {{ getIntervalCount(index) }}
+          {{ value.times }}
         </td>
       </tr>
     </tbody>
   </table>
-
-  <div class="flex justify-center items-center gap-12">
-    <div class="flex items-center gap-2" v-for="interval in category">
-      <p class="m-0">{{ interval.title }}(>={{ interval.weight }}):</p>
-      <span class="w-4 h-4 rounded" :class="interval.backgroundColor"></span>
-    </div>
-  </div>
 </template>

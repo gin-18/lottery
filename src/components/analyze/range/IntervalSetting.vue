@@ -8,7 +8,7 @@ import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSe
 <template>
   <SettingBox title="区间统计设置">
     <RepeatCountSetting />
-    <IntervalCountSetting type="区间" />
+    <IntervalCountSetting />
     <IntervalTimesCountSetting />
   </SettingBox>
 </template>

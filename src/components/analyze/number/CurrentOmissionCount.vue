@@ -5,7 +5,7 @@ import { useNumberDistributionStore } from '@/stores/number_distribution'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useOmissionCountStore } from '@/stores/omission_count'
-import { formatData, setBallColor } from '@/assets/js/utils'
+import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
 
@@ -39,7 +39,7 @@ watch([rawDataArray, currentCodeIndex], () => {
 function setNumberColor(num) {
   const currentCodeNumbers = formatData(currentResultCode.value).balls
   const repeatNumbers = repeatResult.value
-  return setBallColor(currentCodeNumbers, repeatNumbers, num)
+  return setBallColorInNumber(currentCodeNumbers, repeatNumbers, num)
 }
 </script>
 
