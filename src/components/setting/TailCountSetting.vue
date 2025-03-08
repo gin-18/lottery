@@ -1,25 +1,25 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCurrentResultStore } from '@/stores/current_result'
+import { useTailCountStore } from '@/stores/tail_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const currentResultStore = useCurrentResultStore()
+const tailCountStore = useTailCountStore()
 const { currentCode, previousButtonDisable, nextButtonDisable } =
-  storeToRefs(currentResultStore)
+  storeToRefs(tailCountStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  currentResultStore.goToPreviousCode(rawDataArray.value)
+  tailCountStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
-  currentResultStore.goToNextCode()
+  tailCountStore.goToNextCode()
 }
 </script>
 
 <template>
-  <h3>当前开奖</h3>
+  <h3>尾数统计</h3>
   <div>
     <h4>当前期次:</h4>
     <div class="flex justify-between items-center">

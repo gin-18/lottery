@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
 import { formatData } from '@/assets/js/utils'
+import {
+  generateIntervals,
+  generateIntervalRanges,
+} from '@/assets/js/range_analyze'
 
 export const useIntervalTimesCountStore = defineStore('interval_times_count', {
   state: () => ({
@@ -37,18 +41,15 @@ export const useIntervalTimesCountStore = defineStore('interval_times_count', {
       }
     },
     countInRange(rawDataArray) {
-      const rangeCodes = rawDataArray.slice(0, this.codeStep)
-      const numbers = rangeCodes.map((item) => formatData(item).balls).flat()
-      this.result = numbers.reduce((acc, numStr) => {
-        const num = parseInt(numStr, 10)
-        const index = Math.floor((num - 1) / 10)
-        const start = index * 10 + 1
-        const end = (index + 1) * 10
-        const formattedStart = start.toString().padStart(2, '0')
-        const formattedEnd = end.toString().padStart(2, '0')
-        const key = `[${formattedStart}, ${formattedEnd}]`
+      const rangeData = rawDataArray.slice(0, this.codeStep)
+      const ranges = generateIntervalRanges()
+      const intervals = generateIntervals()
+      const numbers = rangeData.map((item) => formatData(item).balls).flat()
 
-        acc[key] = (acc[key] || 0) + 1
+      this.result = ranges.reduce((acc, range, index) => {
+        const interval = intervals[index]
+        const numbersInRange = numbers.filter((num) => range.includes(num))
+        acc[interval] = numbersInRange.length
         return acc
       }, {})
     },

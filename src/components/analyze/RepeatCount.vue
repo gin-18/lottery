@@ -1,45 +1,31 @@
 <script setup>
-/**
- * 这个组件用于统计最近2期重复出现的号码及个数
- **/
-import { watch } from 'vue'
+import { inject, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
+const rawDataArray = inject('rawDataArray')
 
 const repeatCountStore = useRepeatCountStore()
-const { startData, currentData, repeatData, currentDataIndex, description } =
+const { startCode, currentCode, currentCodeIndex, result, description } =
   storeToRefs(repeatCountStore)
 
-watch([() => props.data, currentDataIndex], () => {
-  repeatCountStore.setStartData(props.data)
-  repeatCountStore.setCurrentData(props.data)
+watch([rawDataArray, currentCodeIndex], () => {
+  repeatCountStore.initData(rawDataArray.value)
   repeatCountStore.countRepeatNumber()
 })
 </script>
 
 <template>
-  <span v-if="!data.length" class="loading loading-dots"></span>
-  <div v-else>
+  <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-4">
-      <CodeDate :data="startData" />
-      <p>-</p>
-      <CodeDate :data="currentData" />
-    </div>
+    <CodeDate :data="[startCode, currentCode]" />
 
     <div class="flex items-center gap-4">
-      <p>共 {{ repeatData.length }} 个:</p>
-      <Ball v-for="num in repeatData" :key="num" :num="num" />
+      <p>共 {{ result.length }} 个:</p>
+      <Ball v-for="num in result" :key="num" :num="num" />
     </div>
   </div>
 </template>

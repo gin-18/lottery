@@ -1,44 +1,40 @@
 <script setup>
+import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-
 const timesNumberCountStore = useTimesNumberCountStore()
 const {
+  startCode,
+  endCode,
   codeStep,
-  startData,
-  endData,
-  startAddArrowStatus,
-  startReduceArrowStatus,
-  endAddArrowStatus,
-  endReduceArrowStatus,
+  startCodePreviousButtonDisable,
+  startCodeNextButtonDisable,
+  endCodePreviousButtionDisable,
+  endCodeNextButtonDisable,
 } = storeToRefs(timesNumberCountStore)
 
-function addStartCode() {
-  timesNumberCountStore.addStartCode()
+const rawDataArray = inject('rawDataArray')
+
+function goToPreviousStartCode() {
+  timesNumberCountStore.goToPreviousStartCode(rawDataArray.value)
 }
-function reduceStartCode() {
-  timesNumberCountStore.reduceStartCode(props.data)
+function goToNextStartCode() {
+  timesNumberCountStore.goToNextStartCode()
 }
 
-function addEndCode() {
-  timesNumberCountStore.addEndCode()
+function goToPreviousEndCode() {
+  timesNumberCountStore.goToPreviousEndCode()
 }
-function reduceEndCode() {
-  timesNumberCountStore.reduceEndCode()
+function goToNextEndCode() {
+  timesNumberCountStore.goToNextEndCode()
 }
 </script>
 
 <template>
   <div>
-    <h3>号码统计设置</h3>
+    <h3>号码统计</h3>
     <p>共 {{ codeStep }} 期</p>
     <div>
       <div>
@@ -46,16 +42,16 @@ function reduceEndCode() {
         <div class="flex justify-between items-center">
           <button
             class="btn"
-            :class="{ 'btn-disabled': startAddArrowStatus }"
-            @click="reduceStartCode"
+            :disabled="startCodePreviousButtonDisable"
+            @click="goToPreviousStartCode"
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="startData" />
+          <CodeDate :data="[startCode]" />
           <button
             class="btn"
-            :class="{ 'btn-disabled': startReduceArrowStatus }"
-            @click="addStartCode"
+            :disabled="startCodeNextButtonDisable"
+            @click="goToNextStartCode"
           >
             <span class="icon-[octicon--triangle-right-24]"></span>
           </button>
@@ -67,16 +63,16 @@ function reduceEndCode() {
         <div class="flex justify-between items-center">
           <button
             class="btn"
-            :class="{ 'btn-disabled': endAddArrowStatus }"
-            @click="reduceEndCode"
+            :disabled="endCodePreviousButtionDisable"
+            @click="goToPreviousEndCode"
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="endData" />
+          <CodeDate :data="[endCode]" />
           <button
             class="btn"
-            :class="{ 'btn-disabled': endReduceArrowStatus }"
-            @click="addEndCode"
+            :disabled="endCodeNextButtonDisable"
+            @click="goToNextEndCode"
           >
             <span class="icon-[octicon--triangle-right-24]"></span>
           </button>

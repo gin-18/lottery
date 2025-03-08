@@ -125,3 +125,31 @@ export function generateAllNumbers() {
     (i + 1).toString().padStart(2, '0'),
   )
 }
+
+export function setBallColorInNumber(
+  currentCodeNumbers,
+  repeatNumbers,
+  number,
+) {
+  const repeatNumbersColor = 'bg-info'
+  const currentCodeNumbersColor = 'bg-primary'
+  if (repeatNumbers.includes(number)) {
+    return repeatNumbersColor
+  } else if (currentCodeNumbers.includes(number)) {
+    return currentCodeNumbersColor
+  }
+}
+
+export function setBallColorInRange(currentCodeNumbers, repeatNumbers, num) {
+  const baseColor = 'bg-base-300'
+  const repeatColor = 'bg-info'
+  const currentColor = 'bg-error'
+
+  if (repeatNumbers.includes(num)) {
+    return repeatColor
+  } else if (currentCodeNumbers.includes(num)) {
+    return currentColor
+  } else {
+    return baseColor
+  }
+}

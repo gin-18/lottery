@@ -1,8 +1,4 @@
 <script setup>
-/**
- * 这个组件用于渲染一期的开奖结果
- * 传入一期的数据，渲染开奖期次，开奖日期，开奖号码
- */
 import { computed } from 'vue'
 import { formatDay, formatData } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'

@@ -10,27 +10,43 @@ export const useNumberDistributionStore = defineStore('number_distribution', {
     allNumbers: generateAllNumbers(),
     codeSteps: [14, 30, 50, 100],
     codeStepIndex: 0,
-    renderData: [],
-    startData: {},
-    lastData: {},
+    startCode: {},
+    lastCode: {},
+    result: [],
     numberCountData: [],
+    previousButtonDisable: true,
+    nextButtonDisable: false,
     description: '这部分用于展示近n期的所有号码的分布情况。',
   }),
   getters: {
     codeStep: (state) => state.codeSteps[state.codeStepIndex],
   },
   actions: {
-    setData(data) {
-      this.renderData = data.slice(0, this.codeStep).reverse()
-      this.startData = this.renderData[0]
-      this.lastData = this.renderData[this.renderData.length - 1]
-      this.numberCountData = countNumberInData(this.renderData)
+    goToPreviousCodeStep() {
+      if (this.codeStepIndex <= 0) return
+      this.codeStepIndex -= 1
     },
     goToNextCodeStep() {
+      if (this.codeStepIndex >= this.codeSteps.length - 1) return
       this.codeStepIndex += 1
     },
-    goToPreviousCodeStep() {
-      this.codeStepIndex -= 1
+    initData(rawDataArray) {
+      this.result = rawDataArray.slice(0, this.codeStep).reverse()
+      this.startCode = this.result[0]
+      this.lastCode = this.result[this.result.length - 1]
+      this.numberCountData = countNumberInData(this.result)
+
+      if (this.codeStepIndex <= 0) {
+        this.previousButtonDisable = true
+      } else {
+        this.previousButtonDisable = false
+      }
+
+      if (this.codeStepIndex >= this.codeSteps.length - 1) {
+        this.nextButtonDisable = true
+      } else {
+        this.nextButtonDisable = false
+      }
     },
     countNumberOmission(data) {
       const numbers = data.map((item) => formatData(item).balls)

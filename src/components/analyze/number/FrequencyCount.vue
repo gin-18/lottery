@@ -14,36 +14,24 @@
  *   }
  * ]
  */
-import { watch } from 'vue'
+import { inject, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
+const frequencyCountStore = useFrequencyCountStore()
+const { startCode, lastCode, codeStep, codes, result, description } =
+  storeToRefs(frequencyCountStore)
+
+const rawDataArray = inject('rawDataArray')
 
 let chart = null
 
-const frequencyCountStore = useFrequencyCountStore()
-const {
-  startData,
-  lastData,
-  countStep,
-  codes,
-  frequencyGroupData,
-  description,
-} = storeToRefs(frequencyCountStore)
-
-watch([() => props.data, countStep], () => {
-  frequencyCountStore.setStartData(props.data)
-  frequencyCountStore.setLastData(props.data)
-  frequencyCountStore.countByFrequency(props.data)
+watch([rawDataArray, codeStep], () => {
+  frequencyCountStore.initData(rawDataArray.value)
+  frequencyCountStore.countByFrequency(rawDataArray.value)
   chart?.destroy()
   renderFrequencyGroupData()
 })
@@ -54,8 +42,8 @@ function renderFrequencyGroupData() {
   chart = new Chart(document.getElementById('frequency-chart'), {
     type: 'line',
     data: {
-      labels: frequencyGroupData.value.map((item) => Object.keys(item.list))[0],
-      datasets: frequencyGroupData.value.map((item, index) => ({
+      labels: result.value.map((item) => Object.keys(item.list))[0],
+      datasets: result.value.map((item, index) => ({
         label: `${item.code}`,
         data: Object.values(item.list),
         borderWidth: 1,
@@ -96,19 +84,14 @@ function renderFrequencyGroupData() {
 </script>
 
 <template>
-  <span v-if="!data.length" class="loading loading-dots"></span>
-  <div v-else>
+  <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-6">
-      <CodeDate :data="startData" />
-      <p>-</p>
-      <CodeDate :data="lastData" />
-    </div>
+    <CodeDate :data="[startCode, lastCode]" />
 
     <div class="self-end flex items-center gap-6">
       <p>共 {{ codes }} 期</p>
-      <p>步长: {{ countStep }}</p>
+      <p>步长: {{ codeStep }}</p>
     </div>
   </div>
 

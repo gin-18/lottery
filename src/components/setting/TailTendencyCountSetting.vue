@@ -1,26 +1,28 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyCountStore } from '@/stores/frequency_count'
+import { useTailTendencyCountStore } from '@/stores/tail_tendency_count'
 
-const frequencyCountStore = useFrequencyCountStore()
-const { codeStep, addButtonDisable, reduceButtonDisable } =
-  storeToRefs(frequencyCountStore)
+const tailTendencyCountStore = useTailTendencyCountStore()
+const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
+  tailTendencyCountStore,
+)
 
 const rawDataArray = inject('rawDataArray')
 
 function addCodeStep() {
-  frequencyCountStore.addCodeStep(rawDataArray.value)
+  tailTendencyCountStore.addCodeStep(rawDataArray.value)
 }
 function reduceCodeStep() {
-  frequencyCountStore.reduceCodeStep()
+  tailTendencyCountStore.reduceCodeStep()
 }
 </script>
 
 <template>
-  <h3>号码频率</h3>
+  <h3>尾数走势</h3>
+
   <div>
-    <h4>统计步长：</h4>
+    <h4>统计期次:</h4>
     <div class="flex justify-between items-center">
       <button
         class="btn"

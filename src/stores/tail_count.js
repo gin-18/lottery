@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import {
   countRangeInOneCode,
-  generateIntervals,
-  generateIntervalRanges,
+  generateTailRanges,
+  generateTails,
 } from '@/assets/js/range_analyze'
 
-export const useIntervalCountStore = defineStore('interval_count', {
+export const useTailCountStore = defineStore('tail_count', {
   state: () => ({
     ranges: [],
     currentCode: {},
@@ -13,7 +13,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
     currentCodeIndex: 0,
     previousButtonDisable: false,
     nextButtonDisable: true,
-    description: '这部分用于统计某一期次各个区间号码出现的次数。',
+    description: '这部分用于统计某一期次各个尾数号码出现的次数。',
   }),
   actions: {
     goToPreviousCode(rawDataArray) {
@@ -25,7 +25,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
       this.currentCodeIndex -= 1
     },
     initData(rawDataArray) {
-      this.ranges = generateIntervalRanges()
+      this.ranges = generateTailRanges()
       this.currentCode = rawDataArray[this.currentCodeIndex]
 
       if (this.currentCodeIndex >= rawDataArray.length - 1) {
@@ -41,12 +41,8 @@ export const useIntervalCountStore = defineStore('interval_count', {
       }
     },
     countRangeInOneCode() {
-      const intervals = generateIntervals()
-      this.result = countRangeInOneCode(
-        this.currentCode,
-        this.ranges,
-        intervals,
-      )
+      const tails = generateTails()
+      this.result = countRangeInOneCode(this.currentCode, this.ranges, tails)
     },
   },
 })

@@ -1,68 +1,49 @@
 <script setup>
-import { watch } from 'vue'
+import { inject, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { formatData } from '@/assets/js/utils'
 import { useCurrentResultStore } from '@/stores/current_result'
-import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { useRepeatCountStore } from '@/stores/repeat_count'
+import { useTimesNumberCountStore } from '@/stores/times_number_count'
+import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-
 const currentResultStore = useCurrentResultStore()
-const timesNumberCountStore = useTimesNumberCountStore()
-const repeatCountStore = useRepeatCountStore()
+const { currentCode } = storeToRefs(currentResultStore)
 
+const repeatCountStore = useRepeatCountStore()
+const { result: repeatResult } = storeToRefs(repeatCountStore)
+
+const timesNumberCountStore = useTimesNumberCountStore()
 const {
-  startDataIndex,
-  endDataIndex,
+  startCode,
+  startCodeIndex,
+  endCode,
+  endCodeIndex,
   codeStep,
-  startData,
-  endData,
-  timesNumberCountData,
+  result: timesNumberCountResult,
   description,
 } = storeToRefs(timesNumberCountStore)
-const { repeatData } = storeToRefs(repeatCountStore)
-const { currentData } = storeToRefs(currentResultStore)
 
-watch([() => props.data, startDataIndex, endDataIndex], () => {
-  timesNumberCountStore.setStartData(props.data)
-  timesNumberCountStore.setEndData(props.data)
-  timesNumberCountStore.countNumberByTimes(props.data)
-  checkNumberCountArrowStatus()
+const rawDataArray = inject('rawDataArray')
+
+watch([rawDataArray, startCodeIndex, endCodeIndex], () => {
+  timesNumberCountStore.initData(rawDataArray.value)
+  timesNumberCountStore.countNumberByTimes(rawDataArray.value)
 })
 
-function checkNumberCountArrowStatus() {
-  timesNumberCountStore.checkNumberCountArrowStatus(props.data)
-}
-
 function setNumberColor(num) {
-  const currentCodeData = formatData(currentData.value).balls
-
-  if (repeatData.value.includes(num)) {
-    return 'bg-info'
-  } else if (currentCodeData.includes(num)) {
-    return 'bg-primary'
-  }
+  const currentCodeNumbers = formatData(currentCode.value).balls
+  const repeatNumbers = repeatResult.value
+  return setBallColorInNumber(currentCodeNumbers, repeatNumbers, num)
 }
 </script>
 
 <template>
-  <span v-if="!data.length" class="loading loading-dots"></span>
-  <div v-else>
+  <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-6">
-      <CodeDate :data="startData" />
-      <p>-</p>
-      <CodeDate :data="endData" />
-    </div>
+    <CodeDate :data="[startCode, endCode]" />
 
     <p>共 {{ codeStep }} 期</p>
 
@@ -75,7 +56,7 @@ function setNumberColor(num) {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in timesNumberCountData" :key="index">
+        <tr v-for="(item, index) in timesNumberCountResult" :key="index">
           <td>{{ item.times }}</td>
           <td class="flex flex-wrap gap-2">
             <Ball
@@ -97,7 +78,7 @@ function setNumberColor(num) {
       </div>
 
       <div class="flex items-center gap-2">
-        <p class="m-0">当前期次号码:</p>
+        <p class="m-0">当前开奖号码:</p>
         <div class="w-4 h-4 rounded bg-primary"></div>
       </div>
     </div>

@@ -3,7 +3,9 @@ import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 
 const numberDistributionStore = useNumberDistributionStore()
-const { codeStep } = storeToRefs(numberDistributionStore)
+const { codeStep, previousButtonDisable, nextButtonDisable } = storeToRefs(
+  numberDistributionStore,
+)
 
 function goToNextStep() {
   numberDistributionStore.goToNextCodeStep()
@@ -19,11 +21,15 @@ function goToPreviousStep() {
   <div>
     <h4>统计期次</h4>
     <div class="flex justify-between items-center">
-      <button class="btn" @click="goToPreviousStep">
+      <button
+        class="btn"
+        :disabled="previousButtonDisable"
+        @click="goToPreviousStep"
+      >
         <span class="icon-[octicon--triangle-left-24]"></span>
       </button>
       <p>{{ codeStep }}</p>
-      <button class="btn" @click="goToNextStep">
+      <button class="btn" :disabled="nextButtonDisable" @click="goToNextStep">
         <span class="icon-[octicon--triangle-right-24]"></span>
       </button>
     </div>

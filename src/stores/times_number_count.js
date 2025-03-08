@@ -3,71 +3,70 @@ import { countNumberInData } from '@/assets/js/utils'
 
 export const useTimesNumberCountStore = defineStore('times_number_count', {
   state: () => ({
-    startDataIndex: 6,
-    endDataIndex: 0,
-    startData: {},
-    endData: {},
-    timesNumberCountData: {},
-    startAddArrowStatus: false,
-    startReduceArrowStatus: false,
-    endAddArrowStatus: false,
-    endReduceArrowStatus: false,
+    startCode: {},
+    startCodeIndex: 6,
+    endCode: {},
+    endCodeIndex: 0,
+    result: {},
+    startCodePreviousButtonDisable: false,
+    startCodeNextButtonDisable: false,
+    endCodePreviousButtionDisable: false,
+    endCodeNextButtonDisable: true,
     description:
       '这部分用于统计给定区间的期次内，每个号码出现的次数。例如：给定的期次区间为7期，则统计这7期内，每个号码出现的次数，对应的表格就是7期中，出现0次的号码有哪些，总共有多少个；出现1次的号码有哪些，总共有多少个，以此类推。',
   }),
   getters: {
-    codeStep: (state) => state.startDataIndex - state.endDataIndex + 1,
+    codeStep: (state) => state.startCodeIndex - state.endCodeIndex + 1,
   },
   actions: {
-    setStartData(data) {
-      this.startData = data[this.startDataIndex]
+    goToPreviousStartCode(rawDataArray) {
+      if (this.startCodeIndex >= rawDataArray.length - 1) return
+      this.startCodeIndex += 1
     },
-    setEndData(data) {
-      this.endData = data[this.endDataIndex]
+    goToNextStartCode() {
+      if (this.startCodeIndex - 1 <= this.endCodeIndex) return
+      this.startCodeIndex -= 1
     },
+    goToPreviousEndCode() {
+      if (this.endCodeIndex >= this.startCodeIndex - 1) return
+      this.endCodeIndex += 1
+    },
+    goToNextEndCode() {
+      if (this.endCodeIndex <= 0) return
+      this.endCodeIndex -= 1
+    },
+    initData(rawDataArray) {
+      this.startCode = rawDataArray[this.startCodeIndex]
+      this.endCode = rawDataArray[this.endCodeIndex]
 
-    addStartCode() {
-      if (this.startDataIndex <= this.endDataIndex) return
-      this.startDataIndex -= 1
-    },
-    reduceStartCode(data) {
-      if (this.startDataIndex >= data.length - 1) return
-      this.startDataIndex += 1
-    },
-    addEndCode() {
-      if (this.endDataIndex <= 0) return
-      this.endDataIndex -= 1
-    },
-    reduceEndCode() {
-      if (this.endDataIndex >= this.startDataIndex) return
-      this.endDataIndex += 1
-    },
+      if (this.startCodeIndex >= rawDataArray.length - 1) {
+        this.startCodePreviousButtonDisable = true
+      } else {
+        this.startCodePreviousButtonDisable = false
+      }
 
-    checkNumberCountArrowStatus(data) {
-      this.startAddArrowStatus = false
-      this.startReduceArrowStatus = false
-      this.endAddArrowStatus = false
-      this.endReduceArrowStatus = false
+      if (this.endCodeIndex >= this.startCodeIndex - 1) {
+        this.startCodeNextButtonDisable = true
+        this.endCodePreviousButtionDisable = true
+      } else {
+        this.startCodeNextButtonDisable = false
+        this.endCodePreviousButtionDisable = false
+      }
 
-      if (this.startDataIndex >= data.length - 1) {
-        this.startAddArrowStatus = true
-      } else if (this.startDataIndex <= this.endDataIndex) {
-        this.startReduceArrowStatus = true
-        this.endAddArrowStatus = true
-      } else if (this.endDataIndex <= 0) {
-        this.endReduceArrowStatus = true
+      if (this.endCodeIndex <= 0) {
+        this.endCodeNextButtonDisable = true
+      } else {
+        this.endCodeNextButtonDisable = false
       }
     },
-
-    countNumberByTimes(data) {
-      const dataNeedToBeCount = data.slice(
-        this.endDataIndex,
-        this.startDataIndex + 1,
+    countNumberByTimes(rawDataArray) {
+      const rangeData = rawDataArray.slice(
+        this.endCodeIndex,
+        this.startCodeIndex + 1,
       )
-      const numberCountData = countNumberInData(dataNeedToBeCount)
-      this.timesNumberCountData = this.timesByCount(numberCountData)
+      const numberCountData = countNumberInData(rangeData)
+      this.result = this.timesByCount(numberCountData)
     },
-
     /**
      * 传入:
      * [

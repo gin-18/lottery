@@ -22,14 +22,12 @@ onMounted(() => {
 
   <main>
     <section>
-      <span v-if="!data.code" class="loading loading-dots"></span>
-      <NextCode v-else :data="data" />
+      <NextCode :data="data" />
     </section>
 
     <section>
       <h2>最新开奖</h2>
-      <span v-if="!data.code" class="loading loading-dots"></span>
-      <ResultContainer v-else :data="data" />
+      <ResultContainer :data="data" />
     </section>
 
     <section>

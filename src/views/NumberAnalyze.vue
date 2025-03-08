@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, provide, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
@@ -8,13 +8,20 @@ import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
 import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
-import Setting from '@/components/analyze/number/Setting.vue'
+import SettingBox from '@/components/content/SettingBox.vue'
+import CurrentResultSetting from '@/components/setting/CurrentResultSetting.vue'
+import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
+import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSetting.vue'
+import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
+import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
+import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
 
-const data = ref([])
+const rawDataArray = ref([])
+provide('rawDataArray', rawDataArray)
 
 onMounted(async () => {
   const res = await getDataByNum(150)
-  data.value = res.data.list
+  rawDataArray.value = res.data.list
 })
 </script>
 
@@ -23,35 +30,42 @@ onMounted(async () => {
 
   <main>
     <section>
-      <h2>当前期次开奖</h2>
-      <CurrentResult :data="data" />
+      <h2>当前开奖</h2>
+      <CurrentResult />
     </section>
 
     <section>
       <h2>重号统计</h2>
-      <RepeatCount :data="data" />
+      <RepeatCount />
     </section>
 
     <section>
       <h2>号码统计</h2>
-      <TimesNumberCount :data="data" />
+      <TimesNumberCount />
     </section>
 
     <section>
       <h2>号码频率</h2>
-      <FrequencyCount :data="data" />
+      <FrequencyCount />
     </section>
 
     <section>
       <h2>号码遗漏</h2>
-      <CurrentOmissionCount :data="data" />
+      <CurrentOmissionCount />
     </section>
 
     <section>
       <h2>号码分布</h2>
-      <NumberDistribution :data="data" />
+      <NumberDistribution />
     </section>
 
-    <Setting :data="data" />
+    <SettingBox title="号码分析设置">
+      <CurrentResultSetting />
+      <RepeatCountSetting />
+      <TimesNumberCountSetting />
+      <FrequencyCountSetting />
+      <OmissionCountSetting />
+      <NumberDistributionSetting />
+    </SettingBox>
   </main>
 </template>
