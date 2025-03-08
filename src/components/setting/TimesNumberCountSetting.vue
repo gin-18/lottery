@@ -47,7 +47,7 @@ function goToNextEndCode() {
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="startCode" />
+          <CodeDate :data="[startCode]" />
           <button
             class="btn"
             :disabled="startCodeNextButtonDisable"
@@ -68,7 +68,7 @@ function goToNextEndCode() {
           >
             <span class="icon-[octicon--triangle-left-24]"></span>
           </button>
-          <CodeDate :data="endCode" />
+          <CodeDate :data="[endCode]" />
           <button
             class="btn"
             :disabled="endCodeNextButtonDisable"

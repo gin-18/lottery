@@ -45,11 +45,7 @@ function renderDataInTable(data) {
     <p>{{ description }}</p>
 
     <div>
-      <div class="flex items-center gap-6">
-        <CodeDate :data="startCode" />
-        <p>-</p>
-        <CodeDate :data="lastCode" />
-      </div>
+      <CodeDate :data="[startCode, lastCode]" />
       <p>近 {{ codeStep }} 期</p>
     </div>
 

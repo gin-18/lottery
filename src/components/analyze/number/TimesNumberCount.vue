@@ -43,11 +43,7 @@ function setNumberColor(num) {
   <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-6">
-      <CodeDate :data="startCode" />
-      <p>-</p>
-      <CodeDate :data="endCode" />
-    </div>
+    <CodeDate :data="[startCode, endCode]" />
 
     <p>共 {{ codeStep }} 期</p>
 

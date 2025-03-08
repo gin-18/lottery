@@ -13,6 +13,7 @@ export const useTailCountStore = defineStore('tail_count', {
     currentCodeIndex: 0,
     previousButtonDisable: false,
     nextButtonDisable: true,
+    description: '这部分用于统计某一期次各个尾数号码出现的次数。',
   }),
   actions: {
     goToPreviousCode(rawDataArray) {

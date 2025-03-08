@@ -23,6 +23,7 @@ const {
   currentCode: intervalCountCurrentCode,
   currentCodeIndex: intervalCountCurrentCodeIndex,
   result: intervalCountResult,
+  description: intervalCountDescription,
 } = storeToRefs(intervalCountStore)
 
 const intervalTimesCountStore = useIntervalTimesCountStore()
@@ -105,6 +106,7 @@ function loadIntervalTendencyCount() {
         :range="intervalCountRanges"
         :current-code="intervalCountCurrentCode"
         :result="intervalCountResult"
+        :description="intervalCountDescription"
         thead="区间"
       />
     </section>

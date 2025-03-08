@@ -21,11 +21,7 @@ watch([rawDataArray, currentCodeIndex], () => {
   <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-4">
-      <CodeDate :data="startCode" />
-      <p>-</p>
-      <CodeDate :data="currentCode" />
-    </div>
+    <CodeDate :data="[startCode, currentCode]" />
 
     <div class="flex items-center gap-4">
       <p>共 {{ result.length }} 个:</p>

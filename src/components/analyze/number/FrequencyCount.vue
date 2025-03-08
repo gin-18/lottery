@@ -87,11 +87,7 @@ function renderFrequencyGroupData() {
   <div>
     <p>{{ description }}</p>
 
-    <div class="flex items-center gap-6">
-      <CodeDate :data="startCode" />
-      <p>-</p>
-      <CodeDate :data="lastCode" />
-    </div>
+    <CodeDate :data="[startCode, lastCode]" />
 
     <div class="self-end flex items-center gap-6">
       <p>共 {{ codes }} 期</p>

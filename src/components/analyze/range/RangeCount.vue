@@ -21,6 +21,9 @@ const props = defineProps({
   thead: {
     type: String,
   },
+  description: {
+    type: String,
+  },
 })
 
 const repeatCountStore = useRepeatCountStore()
@@ -34,7 +37,9 @@ function setBallColor(num) {
 </script>
 
 <template>
-  <CodeDate :data="currentCode" />
+  <p>{{ description }}</p>
+
+  <CodeDate :data="[currentCode]" />
 
   <table class="table">
     <thead>

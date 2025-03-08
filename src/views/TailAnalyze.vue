@@ -23,6 +23,7 @@ const {
   currentCode: tailCountCurrentCode,
   result: tailCountResult,
   currentCodeIndex: tailCountCurrentCodeIndex,
+  description: tailCountDescription,
 } = storeToRefs(tailCountStore)
 
 const tailTimesCountStore = useTailTimesCountStore()
@@ -105,6 +106,7 @@ function loadTailTendencyCount() {
         :range="tailCountRanges"
         :current-code="tailCountCurrentCode"
         :result="tailCountResult"
+        :description="tailCountDescription"
         thead="尾数"
       />
     </section>
