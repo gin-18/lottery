@@ -11,13 +11,17 @@ import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import RangeCount from '@/components/analyze/range/RangeCount.vue'
 import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
 import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
-import IntervalSetting from '@/components/analyze/range/IntervalSetting.vue'
+import SettingBox from '@/components/content/SettingBox.vue'
+import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
+import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
+import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
+import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
 
 const intervalCountStore = useIntervalCountStore()
 const {
-  intervals,
-  currentCode,
-  currentCodeIndex,
+  ranges: intervalCountRanges,
+  currentCode: intervalCountCurrentCode,
+  currentCodeIndex: intervalCountCurrentCodeIndex,
   result: intervalCountResult,
 } = storeToRefs(intervalCountStore)
 
@@ -50,7 +54,7 @@ onMounted(async () => {
 })
 
 watch(
-  () => currentCodeIndex.value,
+  () => intervalCountCurrentCodeIndex.value,
   () => {
     loadIntervalCount()
   },
@@ -98,8 +102,8 @@ function loadIntervalTendencyCount() {
     <section>
       <h2>区间统计</h2>
       <RangeCount
-        :range="intervals"
-        :currentCode="currentCode"
+        :range="intervalCountRanges"
+        :current-code="intervalCountCurrentCode"
         :result="intervalCountResult"
         thead="区间"
       />
@@ -108,9 +112,9 @@ function loadIntervalTendencyCount() {
     <section>
       <h2>区间总数</h2>
       <RangeTimesCount
-        :codeStep="intervalTimesCountCodeStep"
-        :startCode="intervalTimesCountStartCode"
-        :endCode="intervalTimesCountEndCode"
+        :code-step="intervalTimesCountCodeStep"
+        :start-code="intervalTimesCountStartCode"
+        :end-code="intervalTimesCountEndCode"
         :result="intervalTimesCountResult"
         :description="intervalTimesCountDescription"
         thead="区间"
@@ -121,13 +125,18 @@ function loadIntervalTendencyCount() {
       <h2>区间走势</h2>
       <RangeTendencyCount
         :result="intervalTendencyCountResult"
-        :codeStep="intervalTendencyCountCodeStep"
+        :code-step="intervalTendencyCountCodeStep"
         :description="intervalTendencyCountDescription"
         canvas-id="interval"
         suffix="区间"
       />
     </section>
 
-    <IntervalSetting />
+    <SettingBox title="区间统计设置">
+      <RepeatCountSetting />
+      <IntervalCountSetting />
+      <IntervalTimesCountSetting />
+      <IntervalTendencyCountSetting />
+    </SettingBox>
   </main>
 </template>

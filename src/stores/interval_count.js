@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
-import { countRangeInOneCode, generateRanges } from '@/assets/js/interval'
+import {
+  countRangeInOneCode,
+  generateIntervals,
+  generateIntervalRanges,
+} from '@/assets/js/range_analyze'
 
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
-    intervals: [],
+    ranges: [],
     currentCode: {},
     result: {},
     currentCodeIndex: 0,
@@ -20,7 +24,7 @@ export const useIntervalCountStore = defineStore('interval_count', {
       this.currentCodeIndex -= 1
     },
     initData(rawDataArray) {
-      this.intervals = generateRanges()
+      this.ranges = generateIntervalRanges()
       this.currentCode = rawDataArray[this.currentCodeIndex]
 
       if (this.currentCodeIndex >= rawDataArray.length - 1) {
@@ -36,7 +40,12 @@ export const useIntervalCountStore = defineStore('interval_count', {
       }
     },
     countRangeInOneCode() {
-      this.result = countRangeInOneCode(this.currentCode)
+      const intervals = generateIntervals()
+      this.result = countRangeInOneCode(
+        this.currentCode,
+        this.ranges,
+        intervals,
+      )
     },
   },
 })

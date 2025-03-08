@@ -1,7 +1,9 @@
 import { formatData, generateAllNumbers } from './utils'
 
-export function countRangeInGroupCode(groupDataArray) {
-  const datas = groupDataArray.map((item) => countRangeInOneCode(item))
+export function countRangeInGroupCode(groupDataArray, ranges, categories) {
+  const datas = groupDataArray.map((item) =>
+    countRangeInOneCode(item, ranges, categories),
+  )
 
   return datas.reduce((acc, curr) => {
     Object.keys(curr.data).forEach((item) => {
@@ -30,14 +32,12 @@ export function countRangeInGroupCode(groupDataArray) {
  *    }
  * }
  **/
-export function countRangeInOneCode(data) {
-  const ranges = generateRanges()
-  const intervals = generateIntervals()
+export function countRangeInOneCode(data, ranges, categories) {
   const formattedData = formatData(data)
   const result = {
     code: `第${formattedData.code}期`,
-    data: intervals.reduce((acc, interval, index) => {
-      acc[interval] = {
+    data: categories.reduce((acc, category, index) => {
+      acc[category] = {
         times: 0,
         range: ranges[index],
       }
@@ -48,7 +48,7 @@ export function countRangeInOneCode(data) {
   formattedData.balls.forEach((num) => {
     const index = ranges.findIndex((nums) => nums.includes(num))
     if (index !== -1) {
-      result.data[intervals[index]].times++
+      result.data[categories[index]].times++
     }
   })
 
@@ -66,11 +66,28 @@ export function generateIntervals() {
   return intervals
 }
 
-export function generateRanges(step = 10) {
-  const result = []
+export function generateIntervalRanges(step = 10) {
+  const ranges = []
   const numbers = generateAllNumbers()
   for (let i = 0; i < numbers.length; i += step) {
-    result.push(numbers.slice(i, i + step))
+    ranges.push(numbers.slice(i, i + step))
   }
-  return result
+  return ranges
+}
+
+export function generateTails() {
+  return Array.from({ length: 10 }, (_, i) => i.toString())
+}
+
+export function generateTailRanges() {
+  const numbers = generateAllNumbers()
+  const grouped = numbers.reduce((acc, num) => {
+    const tail = num.slice(-1)
+    if (!acc[tail]) acc[tail] = []
+    acc[tail].push(num)
+    return acc
+  }, {})
+  return Object.keys(grouped)
+    .sort((a, b) => a - b)
+    .map((tail) => grouped[tail])
 }

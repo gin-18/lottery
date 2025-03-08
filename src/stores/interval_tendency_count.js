@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
-import { countRangeInGroupCode } from '@/assets/js/interval'
+import {
+  countRangeInGroupCode,
+  generateIntervals,
+  generateIntervalRanges,
+} from '@/assets/js/range_analyze'
 
 export const useIntervalTendencyCountStore = defineStore(
   'interval_tendency_count',
@@ -34,8 +38,10 @@ export const useIntervalTendencyCountStore = defineStore(
         }
       },
       countRangeInGroupCode(rawDataArray) {
+        const intervals = generateIntervals()
+        const ranges = generateIntervalRanges()
         const rangeData = rawDataArray.slice(0, this.codeStep)
-        this.result = countRangeInGroupCode(rangeData)
+        this.result = countRangeInGroupCode(rangeData, ranges, intervals)
       },
     },
   },
