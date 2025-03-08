@@ -3,6 +3,7 @@ import { ref, provide, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTailCountStore } from '@/stores/tail_count'
 import { useTailTimesCountStore } from '@/stores/tail_times_count'
+import { useTailTendencyCountStore } from '@/stores/tail_tendency_count'
 import { getDataByNum } from '@/assets/js/request'
 
 import Header from '@/components/header/Header.vue'
@@ -12,14 +13,16 @@ import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
 import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
 import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
-import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
+import TailCountSetting from '@/components/setting/TailCountSetting.vue'
 import TailTimesCountSetting from '@/components/setting/TailTimesCountSetting.vue'
+import TailTendencyCountSetting from '@/components/setting/TailTendencyCountSetting.vue'
 
 const tailCountStore = useTailCountStore()
 const {
   ranges: tailCountRanges,
   currentCode: tailCountCurrentCode,
   result: tailCountResult,
+  currentCodeIndex: tailCountCurrentCodeIndex,
 } = storeToRefs(tailCountStore)
 
 const tailTimesCountStore = useTailTimesCountStore()
@@ -31,6 +34,13 @@ const {
   description: tailTimesCountDescription,
 } = storeToRefs(tailTimesCountStore)
 
+const tailTendencyCountStore = useTailTendencyCountStore()
+const {
+  result: tailTendencyCountResult,
+  codeStep: tailTendencyCountCodeStep,
+  description: tailTendencyCountDescription,
+} = storeToRefs(tailTendencyCountStore)
+
 const rawDataArray = ref([])
 provide('rawDataArray', rawDataArray)
 
@@ -40,12 +50,27 @@ onMounted(async () => {
 
   loadTailCount()
   loadTailTimesCount()
+  loadTailTendencyCount()
 })
+
+watch(
+  () => tailCountCurrentCodeIndex.value,
+  () => {
+    loadTailCount()
+  },
+)
 
 watch(
   () => tailTimesCountCodeStep.value,
   () => {
     loadTailTimesCount()
+  },
+)
+
+watch(
+  () => tailTendencyCountCodeStep.value,
+  () => {
+    loadTailTendencyCount()
   },
 )
 
@@ -57,6 +82,11 @@ function loadTailCount() {
 function loadTailTimesCount() {
   tailTimesCountStore.initData(rawDataArray.value)
   tailTimesCountStore.countInDigit(rawDataArray.value)
+}
+
+function loadTailTendencyCount() {
+  tailTendencyCountStore.initData(rawDataArray.value)
+  tailTendencyCountStore.countRangeInGroupCode(rawDataArray.value)
 }
 </script>
 
@@ -93,13 +123,20 @@ function loadTailTimesCount() {
 
     <section>
       <h2>尾数走势</h2>
-      <!-- <RangeTendencyCount /> -->
+      <RangeTendencyCount
+        :result="tailTendencyCountResult"
+        :code-step="tailTendencyCountCodeStep"
+        :description="tailTendencyCountDescription"
+        canvas-id="tail"
+        suffix="尾数"
+      />
     </section>
 
     <SettingBox title="尾数统计设置">
       <RepeatCountSetting />
-      <IntervalCountSetting />
+      <TailCountSetting />
       <TailTimesCountSetting />
+      <TailTendencyCountSetting />
     </SettingBox>
   </main>
 </template>

@@ -8,7 +8,13 @@ import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
 import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
-import Setting from '@/components/analyze/number/Setting.vue'
+import SettingBox from '@/components/content/SettingBox.vue'
+import CurrentResultSetting from '@/components/setting/CurrentResultSetting.vue'
+import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
+import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSetting.vue'
+import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
+import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
+import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
 
 const rawDataArray = ref([])
 provide('rawDataArray', rawDataArray)
@@ -53,6 +59,13 @@ onMounted(async () => {
       <NumberDistribution />
     </section>
 
-    <Setting />
+    <SettingBox title="号码分析设置">
+      <CurrentResultSetting />
+      <RepeatCountSetting />
+      <TimesNumberCountSetting />
+      <FrequencyCountSetting />
+      <OmissionCountSetting />
+      <NumberDistributionSetting />
+    </SettingBox>
   </main>
 </template>
