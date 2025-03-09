@@ -14,18 +14,21 @@
  *   }
  * ]
  */
-import { inject, watch } from 'vue'
+import { inject, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const frequencyCountStore = useFrequencyCountStore()
 const { startCode, lastCode, codeStep, codes, result, description } =
   storeToRefs(frequencyCountStore)
 
 const rawDataArray = inject('rawDataArray')
+
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 let chart = null
 
@@ -84,7 +87,7 @@ function renderFrequencyGroupData() {
 </script>
 
 <template>
-  <div>
+  <LoadingWrapper :is-loading="isLoading">
     <p>{{ description }}</p>
 
     <CodeDate :data="[startCode, lastCode]" />
@@ -93,7 +96,7 @@ function renderFrequencyGroupData() {
       <p>共 {{ codes }} 期</p>
       <p>步长: {{ codeStep }}</p>
     </div>
-  </div>
+  </LoadingWrapper>
 
   <canvas id="frequency-chart"></canvas>
 </template>

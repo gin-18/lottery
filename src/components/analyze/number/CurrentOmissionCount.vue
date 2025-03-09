@@ -1,13 +1,14 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useOmissionCountStore } from '@/stores/omission_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
-import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const omissionCountStore = useOmissionCountStore()
 const {
@@ -29,6 +30,8 @@ const { numberCountData } = storeToRefs(numberDistributionStore)
 
 const rawDataArray = inject('rawDataArray')
 
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+
 watch([rawDataArray, currentCodeIndex], () => {
   omissionCountStore.initData(rawDataArray.value)
   numberDistributionStore.initData(rangeCode.value)
@@ -44,31 +47,33 @@ function setNumberColor(num) {
 </script>
 
 <template>
-  <p>{{ description }}</p>
+  <LoadingWrapper :is-loading="isLoading">
+    <p>{{ description }}</p>
 
-  <CodeDate :data="[currentCode]" />
+    <CodeDate :data="[currentCode]" />
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>当前遗漏值</th>
-        <th>号码</th>
-        <th>个数</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(value, key, index) in currentOmissionResult" :key="index">
-        <td>{{ key }}</td>
-        <td class="flex flex-wrap gap-2">
-          <Ball
-            v-for="num in value"
-            :key="num"
-            :num="num"
-            :color="setNumberColor(num)"
-          />
-        </td>
-        <td>{{ value.length }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>当前遗漏值</th>
+          <th>号码</th>
+          <th>个数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(value, key, index) in currentOmissionResult" :key="index">
+          <td>{{ key }}</td>
+          <td class="flex flex-wrap gap-2">
+            <Ball
+              v-for="num in value"
+              :key="num"
+              :num="num"
+              :color="setNumberColor(num)"
+            />
+          </td>
+          <td>{{ value.length }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </LoadingWrapper>
 </template>

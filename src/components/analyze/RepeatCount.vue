@@ -1,15 +1,18 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const rawDataArray = inject('rawDataArray')
 
 const repeatCountStore = useRepeatCountStore()
 const { startCode, currentCode, currentCodeIndex, result, description } =
   storeToRefs(repeatCountStore)
+
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 watch([rawDataArray, currentCodeIndex], () => {
   repeatCountStore.initData(rawDataArray.value)
@@ -18,7 +21,7 @@ watch([rawDataArray, currentCodeIndex], () => {
 </script>
 
 <template>
-  <div>
+  <LoadingWrapper :is-loading="isLoading">
     <p>{{ description }}</p>
 
     <CodeDate :data="[startCode, currentCode]" />
@@ -27,5 +30,5 @@ watch([rawDataArray, currentCodeIndex], () => {
       <p>共 {{ result.length }} 个:</p>
       <Ball v-for="num in result" :key="num" :num="num" />
     </div>
-  </div>
+  </LoadingWrapper>
 </template>

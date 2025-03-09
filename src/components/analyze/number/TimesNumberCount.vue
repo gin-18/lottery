@@ -1,5 +1,5 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
@@ -7,6 +7,7 @@ import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const currentResultStore = useCurrentResultStore()
 const { currentCode } = storeToRefs(currentResultStore)
@@ -27,6 +28,8 @@ const {
 
 const rawDataArray = inject('rawDataArray')
 
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+
 watch([rawDataArray, startCodeIndex, endCodeIndex], () => {
   timesNumberCountStore.initData(rawDataArray.value)
   timesNumberCountStore.countNumberByTimes(rawDataArray.value)
@@ -40,7 +43,7 @@ function setNumberColor(num) {
 </script>
 
 <template>
-  <div>
+  <LoadingWrapper :is-loading="isLoading">
     <p>{{ description }}</p>
 
     <CodeDate :data="[startCode, endCode]" />
@@ -82,5 +85,5 @@ function setNumberColor(num) {
         <div class="w-4 h-4 rounded bg-primary"></div>
       </div>
     </div>
-  </div>
+  </LoadingWrapper>
 </template>

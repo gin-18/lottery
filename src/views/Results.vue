@@ -1,21 +1,25 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 
-let datas = []
+const rawDataArray = ref([])
+const dataList = ref([])
 const nums = [15, 30, 50, 100]
 const activeCodeButton = ref(15)
-const dataList = ref([])
+
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 onMounted(async () => {
-  datas = await getDataByNum(100)
+  const res = await getDataByNum(100)
+  rawDataArray.value = res.data.list
   setDataList(activeCodeButton.value)
 })
 
 function setDataList(num) {
-  dataList.value = datas.data.list.slice(0, num)
+  dataList.value = rawDataArray.value.slice(0, num)
 }
 
 function changeCode(num) {
@@ -41,10 +45,12 @@ function changeCode(num) {
       </button>
     </div>
 
-    <ul class="list-none p-0">
-      <li class="p-0" v-for="data in dataList" :key="data.code">
-        <ResultContainer :data="data" />
-      </li>
-    </ul>
+    <LoadingWrapper :is-loading="isLoading">
+      <ul class="list-none p-0">
+        <li class="p-0" v-for="data in dataList" :key="data.code">
+          <ResultContainer :data="data" />
+        </li>
+      </ul>
+    </LoadingWrapper>
   </main>
 </template>

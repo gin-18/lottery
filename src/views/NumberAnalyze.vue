@@ -1,5 +1,5 @@
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, computed, onMounted } from 'vue'
 import { getDataByNum } from '@/assets/js/request'
 import Header from '@/components/header/Header.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
