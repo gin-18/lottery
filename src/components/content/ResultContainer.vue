@@ -10,10 +10,7 @@ const props = defineProps({
   },
 })
 
-const numbers = computed(() => {
-  const formattedData = formatData(props?.data)
-  return formattedData.balls
-})
+const numbers = computed(() => formatData(props.data).balls)
 </script>
 
 <template>

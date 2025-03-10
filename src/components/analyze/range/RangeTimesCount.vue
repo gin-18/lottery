@@ -1,5 +1,4 @@
 <script setup>
-import { computed } from 'vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
@@ -26,30 +25,24 @@ const props = defineProps({
     type: String,
   },
 })
-
-const isLoading = computed(() =>
-  Object.keys(props.result).length ? false : true,
-)
 </script>
 
 <template>
-  <LoadingWrapper :is-loading="isLoading">
-    <p>{{ description }}</p>
-    <CodeDate :data="[startCode, endCode]" />
-    <p>共 {{ codeStep }} 期</p>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>{{ thead }}</th>
-          <th>次数</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(value, key) in result" :key="key">
-          <td>{{ key }}</td>
-          <td>{{ value }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </LoadingWrapper>
+  <p>{{ description }}</p>
+  <CodeDate :data="[startCode, endCode]" />
+  <p>共 {{ codeStep }} 期</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{{ thead }}</th>
+        <th>次数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(value, key) in result" :key="key">
+        <td>{{ key }}</td>
+        <td>{{ value }}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>

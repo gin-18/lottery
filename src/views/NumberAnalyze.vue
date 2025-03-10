@@ -1,7 +1,9 @@
 <script setup>
-import { ref, provide, computed, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request'
+import { computed, provide, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useNumberDataStore } from '@/stores/number_page_data'
 import Header from '@/components/header/Header.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
@@ -16,13 +18,14 @@ import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vu
 import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
 import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
 
-const rawDataArray = ref([])
-provide('rawDataArray', rawDataArray)
+const numberDataStore = useNumberDataStore()
+const { rawDataArray } = storeToRefs(numberDataStore)
 
-onMounted(async () => {
-  const res = await getDataByNum(150)
-  rawDataArray.value = res.data.list
-})
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+
+onMounted(numberDataStore.initData)
+
+provide('rawDataArray', rawDataArray)
 </script>
 
 <template>
@@ -31,32 +34,44 @@ onMounted(async () => {
   <main>
     <section>
       <h2>当前开奖</h2>
-      <CurrentResult />
+      <LoadingWrapper :is-loading="isLoading">
+        <CurrentResult />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>重号统计</h2>
-      <RepeatCount />
+      <LoadingWrapper :is-loading="isLoading">
+        <RepeatCount />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>号码统计</h2>
-      <TimesNumberCount />
+      <LoadingWrapper :is-loading="isLoading">
+        <TimesNumberCount />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>号码频率</h2>
-      <FrequencyCount />
+      <LoadingWrapper :is-loading="isLoading">
+        <FrequencyCount />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>号码遗漏</h2>
-      <CurrentOmissionCount />
+      <LoadingWrapper :is-loading="isLoading">
+        <CurrentOmissionCount />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>号码分布</h2>
-      <NumberDistribution />
+      <LoadingWrapper :is-loading="isLoading">
+        <NumberDistribution />
+      </LoadingWrapper>
     </section>
 
     <SettingBox title="号码分析设置">

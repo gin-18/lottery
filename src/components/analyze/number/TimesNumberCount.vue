@@ -1,5 +1,5 @@
 <script setup>
-import { inject, computed, watch } from 'vue'
+import { inject, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
@@ -30,10 +30,14 @@ const rawDataArray = inject('rawDataArray')
 
 const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
-watch([rawDataArray, startCodeIndex, endCodeIndex], () => {
+watch([startCodeIndex, endCodeIndex], loadTimesNumberCount)
+
+onMounted(loadTimesNumberCount)
+
+function loadTimesNumberCount() {
   timesNumberCountStore.initData(rawDataArray.value)
   timesNumberCountStore.countNumberByTimes(rawDataArray.value)
-})
+}
 
 function setNumberColor(num) {
   const currentCodeNumbers = formatData(currentCode.value).balls

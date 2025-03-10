@@ -1,30 +1,20 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getDataByNum } from '@/assets/js/request'
+import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useResultDataStore } from '@/stores/result_page_data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 
-const rawDataArray = ref([])
-const dataList = ref([])
-const nums = [15, 30, 50, 100]
-const activeCodeButton = ref(15)
+const resultDataStore = useResultDataStore()
+const { resultList, codeSteps, currentCodeStep } = storeToRefs(resultDataStore)
 
-const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+const isLoading = computed(() => (resultList.value.length ? false : true))
 
-onMounted(async () => {
-  const res = await getDataByNum(100)
-  rawDataArray.value = res.data.list
-  setDataList(activeCodeButton.value)
-})
+onMounted(resultDataStore.initData)
 
-function setDataList(num) {
-  dataList.value = rawDataArray.value.slice(0, num)
-}
-
-function changeCode(num) {
-  activeCodeButton.value = num
-  setDataList(num)
+function changeCodeStep(codeStep) {
+  resultDataStore.changeCodeStep(codeStep)
 }
 </script>
 
@@ -35,19 +25,19 @@ function changeCode(num) {
     <div class="flex items-center gap-6">
       <button
         class="btn"
-        v-for="code in nums"
-        :key="code"
-        :active="activeCodeButton === code"
-        :class="{ 'btn-active btn-primary': activeCodeButton === code }"
-        @click="changeCode(code)"
+        v-for="codeStep in codeSteps"
+        :key="codeStep"
+        :active="currentCodeStep === codeStep"
+        :class="{ 'btn-active btn-primary': currentCodeStep === codeStep }"
+        @click="changeCodeStep(codeStep)"
       >
-        近{{ code }}期
+        近{{ codeStep }}期
       </button>
     </div>
 
     <LoadingWrapper :is-loading="isLoading">
       <ul class="list-none p-0">
-        <li class="p-0" v-for="data in dataList" :key="data.code">
+        <li class="p-0" v-for="data in resultList" :key="data.code">
           <ResultContainer :data="data" />
         </li>
       </ul>

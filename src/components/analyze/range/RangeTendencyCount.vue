@@ -2,7 +2,6 @@
 import { watch } from 'vue'
 import { chartPalette } from '@/assets/js/palette'
 import Chart from 'chart.js/auto'
-import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const props = defineProps({
   canvasId: {
@@ -29,13 +28,7 @@ const props = defineProps({
 
 let chart = null
 
-const isLoading = computed(() =>
-  Object.keys(props.result).length ? false : true,
-)
-
-watch([() => props.result, () => props.codeStep], () => {
-  renderChart()
-})
+watch([() => props.result, () => props.codeStep], renderChart)
 
 function renderChart() {
   if (chart) {
@@ -96,8 +89,6 @@ function renderChart() {
 </script>
 
 <template>
-  <LoadingWrapper :is-loading="isLoading">
-    <p>{{ description }}</p>
-  </LoadingWrapper>
+  <p>{{ description }}</p>
   <canvas :id="canvasId"></canvas>
 </template>

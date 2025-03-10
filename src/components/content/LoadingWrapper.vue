@@ -8,6 +8,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <span v-if="isLoading" class="loading loading-bars loading-xl my-6"></span>
-  <slot v-else></slot>
+  <template v-if="isLoading">
+    <span class="loading loading-bars loading-xl my-6"></span>
+  </template>
+  <template v-else>
+    <slot></slot>
+  </template>
 </template>
