@@ -1,9 +1,10 @@
 <script setup>
-import { inject, h, watch } from 'vue'
+import { inject, h, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const numberDistributionStore = useNumberDistributionStore()
 const {
@@ -17,6 +18,8 @@ const {
 } = storeToRefs(numberDistributionStore)
 
 const rawDataArray = inject('rawDataArray')
+
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 watch([rawDataArray, codeStep], () => {
   numberDistributionStore.initData(rawDataArray.value)
@@ -41,7 +44,7 @@ function renderDataInTable(data) {
 </script>
 
 <template>
-  <div>
+  <LoadingWrapper :is-loading="isLoading">
     <p>{{ description }}</p>
 
     <div>
@@ -99,5 +102,5 @@ function renderDataInTable(data) {
         </tbody>
       </table>
     </div>
-  </div>
+  </LoadingWrapper>
 </template>

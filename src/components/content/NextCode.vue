@@ -3,14 +3,14 @@ import { computed } from 'vue'
 import { formatDay } from '@/assets/js/utils'
 
 const props = defineProps({
-  data: {
+  latestData: {
     type: Object,
     required: true,
   },
 })
 
-const nextCode = computed(() => props.data.next_code)
-const nextOpenTime = computed(() => formatDay(props.data.next_open_time))
+const nextCode = computed(() => props.latestData.next_code)
+const nextOpenTime = computed(() => formatDay(props.latestData.next_open_time))
 </script>
 
 <template>
