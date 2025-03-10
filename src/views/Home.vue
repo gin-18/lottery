@@ -1,20 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { getLatestData } from '@/assets/js/request'
+import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useHomeData } from '@/stores/home_page_data'
 import Header from '@/components/header/Header.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import NextCode from '@/components/content/NextCode.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 import RewardTable from '@/components/content/RewardTable.vue'
 
-const data = ref([])
+const homeDataStore = useHomeData()
+const { cachedData } = storeToRefs(homeDataStore)
 
-async function setLatestData() {
-  data.value = await getLatestData()
-}
+const isLoading = computed(() => (cachedData.value ? false : true))
 
-onMounted(() => {
-  setLatestData()
-})
+onMounted(homeDataStore.fetchLatestData)
 </script>
 
 <template>
@@ -22,12 +21,16 @@ onMounted(() => {
 
   <main>
     <section>
-      <NextCode :data="data" />
+      <LoadingWrapper :is-loading="isLoading">
+        <NextCode :latest-data="cachedData" />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>最新开奖</h2>
-      <ResultContainer :data="data" />
+      <LoadingWrapper :is-loading="isLoading">
+        <ResultContainer :data="cachedData" />
+      </LoadingWrapper>
     </section>
 
     <section>

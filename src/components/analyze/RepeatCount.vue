@@ -1,5 +1,5 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import Ball from '@/components/content/Ball.vue'
@@ -11,21 +11,21 @@ const repeatCountStore = useRepeatCountStore()
 const { startCode, currentCode, currentCodeIndex, result, description } =
   storeToRefs(repeatCountStore)
 
-watch([rawDataArray, currentCodeIndex], () => {
+watch(currentCodeIndex, loadRepeatCount)
+
+onMounted(loadRepeatCount)
+
+function loadRepeatCount() {
   repeatCountStore.initData(rawDataArray.value)
   repeatCountStore.countRepeatNumber()
-})
+}
 </script>
 
 <template>
-  <div>
-    <p>{{ description }}</p>
-
-    <CodeDate :data="[startCode, currentCode]" />
-
-    <div class="flex items-center gap-4">
-      <p>共 {{ result.length }} 个:</p>
-      <Ball v-for="num in result" :key="num" :num="num" />
-    </div>
+  <p>{{ description }}</p>
+  <CodeDate :data="[startCode, currentCode]" />
+  <div class="flex items-center gap-4">
+    <p>共 {{ result.length }} 个:</p>
+    <Ball v-for="num in result" :key="num" :num="num" />
   </div>
 </template>

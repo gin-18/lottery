@@ -1,13 +1,13 @@
 <script setup>
-import { inject, watch } from 'vue'
+import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useOmissionCountStore } from '@/stores/omission_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
-import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const omissionCountStore = useOmissionCountStore()
 const {
@@ -29,12 +29,16 @@ const { numberCountData } = storeToRefs(numberDistributionStore)
 
 const rawDataArray = inject('rawDataArray')
 
-watch([rawDataArray, currentCodeIndex], () => {
+watch(currentCodeIndex, loadCurrentOmissionCount)
+
+onMounted(loadCurrentOmissionCount)
+
+function loadCurrentOmissionCount() {
   omissionCountStore.initData(rawDataArray.value)
   numberDistributionStore.initData(rangeCode.value)
   numberDistributionStore.countNumberOmission(rangeCode.value)
   omissionCountStore.countNumberByOmission(numberCountData.value)
-})
+}
 
 function setNumberColor(num) {
   const currentCodeNumbers = formatData(currentResultCode.value).balls
@@ -45,9 +49,7 @@ function setNumberColor(num) {
 
 <template>
   <p>{{ description }}</p>
-
   <CodeDate :data="[currentCode]" />
-
   <table class="table">
     <thead>
       <tr>

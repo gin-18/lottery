@@ -2,8 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { formatData, setBallColorInRange } from '@/assets/js/utils'
-import CodeDate from '@/components/content/CodeDate.vue'
 import Ball from '@/components/content/Ball.vue'
+import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   currentCode: {
@@ -38,9 +38,7 @@ function setBallColor(num) {
 
 <template>
   <p>{{ description }}</p>
-
   <CodeDate :data="[currentCode]" />
-
   <table class="table">
     <thead>
       <tr>

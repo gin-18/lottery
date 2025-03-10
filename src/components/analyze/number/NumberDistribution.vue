@@ -1,5 +1,5 @@
 <script setup>
-import { inject, h, watch } from 'vue'
+import { inject, h, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
 import Ball from '@/components/content/Ball.vue'
@@ -18,10 +18,14 @@ const {
 
 const rawDataArray = inject('rawDataArray')
 
-watch([rawDataArray, codeStep], () => {
+watch(codeStep, loadNumberDistribution)
+
+onMounted(loadNumberDistribution)
+
+function loadNumberDistribution() {
   numberDistributionStore.initData(rawDataArray.value)
   numberDistributionStore.countNumberOmission(rawDataArray.value)
-})
+}
 
 function handelNumberOmission(omissions) {
   return omissions.slice(0, codeStep.value).reverse()
@@ -41,63 +45,59 @@ function renderDataInTable(data) {
 </script>
 
 <template>
+  <p>{{ description }}</p>
   <div>
-    <p>{{ description }}</p>
-
-    <div>
-      <CodeDate :data="[startCode, lastCode]" />
-      <p>近 {{ codeStep }} 期</p>
-    </div>
-
-    <div class="overflow-x-auto">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope>期次</th>
-            <th scope="col" v-for="num in allNumbers" :key="num">
-              {{ num }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            class="hover:bg-base-200"
-            v-for="(item, index) in result"
-            :key="item.code"
-          >
-            <td>{{ item.code }}</td>
-            <td v-for="item in numberCountData" :key="item">
-              <render-data-in-table
-                :num="handelNumberOmission(item.omission)[index]"
-              />
-            </td>
-          </tr>
-          <tr>
-            <th class="text-xs">数据统计</th>
-            <th class="text-xs" v-for="num in allNumbers" :key="num">
-              {{ num }}
-            </th>
-          </tr>
-          <tr>
-            <td>出现次数</td>
-            <td v-for="item in numberCountData" :key="item.num">
-              {{ item.count }}
-            </td>
-          </tr>
-          <tr>
-            <td>当前遗漏期数</td>
-            <td v-for="item in numberCountData" :key="item.num">
-              {{ item.currentOmission }}
-            </td>
-          </tr>
-          <tr>
-            <td>最大遗漏期数</td>
-            <td v-for="item in numberCountData" :key="item.num">
-              {{ getMaxOmission(item.omission) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <CodeDate :data="[startCode, lastCode]" />
+    <p>近 {{ codeStep }} 期</p>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope>期次</th>
+          <th scope="col" v-for="num in allNumbers" :key="num">
+            {{ num }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="hover:bg-base-200"
+          v-for="(item, index) in result"
+          :key="item.code"
+        >
+          <td>{{ item.code }}</td>
+          <td v-for="item in numberCountData" :key="item">
+            <render-data-in-table
+              :num="handelNumberOmission(item.omission)[index]"
+            />
+          </td>
+        </tr>
+        <tr>
+          <th class="text-xs">数据统计</th>
+          <th class="text-xs" v-for="num in allNumbers" :key="num">
+            {{ num }}
+          </th>
+        </tr>
+        <tr>
+          <td>出现次数</td>
+          <td v-for="item in numberCountData" :key="item.num">
+            {{ item.count }}
+          </td>
+        </tr>
+        <tr>
+          <td>当前遗漏期数</td>
+          <td v-for="item in numberCountData" :key="item.num">
+            {{ item.currentOmission }}
+          </td>
+        </tr>
+        <tr>
+          <td>最大遗漏期数</td>
+          <td v-for="item in numberCountData" :key="item.num">
+            {{ getMaxOmission(item.omission) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>

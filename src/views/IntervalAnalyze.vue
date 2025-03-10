@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch, provide, onMounted } from 'vue'
+import { provide, watch, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useIntervalDataStore } from '@/stores/interval_page_data'
 import { useIntervalCountStore } from '@/stores/interval_count'
 import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
 import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
-import { getDataByNum } from '@/assets/js/request'
-
 import Header from '@/components/header/Header.vue'
+import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import RangeCount from '@/components/analyze/range/RangeCount.vue'
 import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
@@ -16,6 +16,9 @@ import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
 import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
 import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
+
+const intervalDataStore = useIntervalDataStore()
+const { rawDataArray } = storeToRefs(intervalDataStore)
 
 const intervalCountStore = useIntervalCountStore()
 const {
@@ -42,17 +45,7 @@ const {
   description: intervalTendencyCountDescription,
 } = storeToRefs(intervalTendencyCountStore)
 
-const rawDataArray = ref([])
-provide('rawDataArray', rawDataArray)
-
-onMounted(async () => {
-  const res = await getDataByNum(100)
-  rawDataArray.value = res.data.list
-
-  loadIntervalCount()
-  loadIntervalTimesCount()
-  loadIntervalTendencyCount()
-})
+const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 watch(
   () => intervalCountCurrentCodeIndex.value,
@@ -74,6 +67,15 @@ watch(
     loadIntervalTendencyCount()
   },
 )
+
+onMounted(async () => {
+  await intervalDataStore.initData()
+  loadIntervalCount()
+  loadIntervalTimesCount()
+  loadIntervalTendencyCount()
+})
+
+provide('rawDataArray', rawDataArray)
 
 function loadIntervalCount() {
   intervalCountStore.initData(rawDataArray.value)
@@ -97,41 +99,49 @@ function loadIntervalTendencyCount() {
   <main>
     <section>
       <h2>重号统计</h2>
-      <RepeatCount />
+      <LoadingWrapper :is-loading="isLoading">
+        <RepeatCount />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>区间统计</h2>
-      <RangeCount
-        :range="intervalCountRanges"
-        :current-code="intervalCountCurrentCode"
-        :result="intervalCountResult"
-        :description="intervalCountDescription"
-        thead="区间"
-      />
+      <LoadingWrapper :is-loading="isLoading">
+        <RangeCount
+          :range="intervalCountRanges"
+          :current-code="intervalCountCurrentCode"
+          :result="intervalCountResult"
+          :description="intervalCountDescription"
+          thead="区间"
+        />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>区间总数</h2>
-      <RangeTimesCount
-        :code-step="intervalTimesCountCodeStep"
-        :start-code="intervalTimesCountStartCode"
-        :end-code="intervalTimesCountEndCode"
-        :result="intervalTimesCountResult"
-        :description="intervalTimesCountDescription"
-        thead="区间"
-      />
+      <LoadingWrapper :is-loading="isLoading">
+        <RangeTimesCount
+          :code-step="intervalTimesCountCodeStep"
+          :start-code="intervalTimesCountStartCode"
+          :end-code="intervalTimesCountEndCode"
+          :result="intervalTimesCountResult"
+          :description="intervalTimesCountDescription"
+          thead="区间"
+        />
+      </LoadingWrapper>
     </section>
 
     <section>
       <h2>区间走势</h2>
-      <RangeTendencyCount
-        :result="intervalTendencyCountResult"
-        :code-step="intervalTendencyCountCodeStep"
-        :description="intervalTendencyCountDescription"
-        canvas-id="interval"
-        suffix="区间"
-      />
+      <LoadingWrapper :is-loading="isLoading">
+        <RangeTendencyCount
+          :result="intervalTendencyCountResult"
+          :code-step="intervalTendencyCountCodeStep"
+          :description="intervalTendencyCountDescription"
+          canvas-id="interval"
+          suffix="区间"
+        />
+      </LoadingWrapper>
     </section>
 
     <SettingBox title="区间统计设置">

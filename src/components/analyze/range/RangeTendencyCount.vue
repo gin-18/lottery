@@ -26,11 +26,9 @@ const props = defineProps({
   },
 })
 
-watch([() => props.result, () => props.codeStep], () => {
-  renderChart()
-})
-
 let chart = null
+
+watch([() => props.result, () => props.codeStep], renderChart)
 
 function renderChart() {
   if (chart) {
@@ -91,8 +89,6 @@ function renderChart() {
 </script>
 
 <template>
-  <div>
-    <p>{{ description }}</p>
-    <canvas :id="canvasId"></canvas>
-  </div>
+  <p>{{ description }}</p>
+  <canvas :id="canvasId"></canvas>
 </template>

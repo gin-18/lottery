@@ -14,7 +14,7 @@
  *   }
  * ]
  */
-import { inject, watch } from 'vue'
+import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
 import { chartPalette } from '@/assets/js/palette'
@@ -29,12 +29,16 @@ const rawDataArray = inject('rawDataArray')
 
 let chart = null
 
-watch([rawDataArray, codeStep], () => {
+watch(codeStep, loadFrequencyCount)
+
+onMounted(loadFrequencyCount)
+
+function loadFrequencyCount() {
   frequencyCountStore.initData(rawDataArray.value)
   frequencyCountStore.countByFrequency(rawDataArray.value)
   chart?.destroy()
   renderFrequencyGroupData()
-})
+}
 
 function renderFrequencyGroupData() {
   const { tickColor, gridColor, labelColor, chartLine } = chartPalette
@@ -84,16 +88,11 @@ function renderFrequencyGroupData() {
 </script>
 
 <template>
-  <div>
-    <p>{{ description }}</p>
-
-    <CodeDate :data="[startCode, lastCode]" />
-
-    <div class="self-end flex items-center gap-6">
-      <p>共 {{ codes }} 期</p>
-      <p>步长: {{ codeStep }}</p>
-    </div>
+  <p>{{ description }}</p>
+  <CodeDate :data="[startCode, lastCode]" />
+  <div class="self-end flex items-center gap-6">
+    <p>共 {{ codes }} 期</p>
+    <p>步长: {{ codeStep }}</p>
   </div>
-
   <canvas id="frequency-chart"></canvas>
 </template>

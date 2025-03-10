@@ -29,11 +29,8 @@ const props = defineProps({
 
 <template>
   <p>{{ description }}</p>
-
   <CodeDate :data="[startCode, endCode]" />
-
   <p>共 {{ codeStep }} 期</p>
-
   <table class="table">
     <thead>
       <tr>
