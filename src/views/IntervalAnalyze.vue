@@ -126,7 +126,7 @@ function loadIntervalTendencyCount() {
           :end-code="intervalTimesCountEndCode"
           :result="intervalTimesCountResult"
           :description="intervalTimesCountDescription"
-          thead="区间"
+          chart-id="interval-times-chart"
         />
       </LoadingWrapper>
     </section>
@@ -138,7 +138,7 @@ function loadIntervalTendencyCount() {
           :result="intervalTendencyCountResult"
           :code-step="intervalTendencyCountCodeStep"
           :description="intervalTendencyCountDescription"
-          canvas-id="interval"
+          chart-id="interval-tendency-chart"
           suffix="区间"
         />
       </LoadingWrapper>

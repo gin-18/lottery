@@ -13,7 +13,7 @@ const items = [
     path: '/interval',
   },
   {
-    name: '尾部分析',
+    name: '尾数分析',
     path: '/tail',
   },
 ]

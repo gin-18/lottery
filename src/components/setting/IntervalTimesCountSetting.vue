@@ -22,7 +22,7 @@ function reduceCodeStep() {
 <template>
   <h3>区间总数</h3>
 
-  <h4>统计期次:</h4>
+  <h4>统计期次</h4>
   <div class="flex justify-between items-center">
     <button class="btn" :disabled="reduceButtonDisable" @click="reduceCodeStep">
       <span class="icon-[octicon--dash-16]"></span>

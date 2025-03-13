@@ -21,7 +21,7 @@ function goToNextCode() {
 <template>
   <h3>尾数统计</h3>
   <div>
-    <h4>当前期次:</h4>
+    <h4>当前期次</h4>
     <div class="flex justify-between items-center">
       <button
         class="btn"

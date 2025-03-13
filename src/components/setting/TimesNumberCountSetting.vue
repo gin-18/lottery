@@ -38,7 +38,7 @@ function goToNextEndCode() {
     <p>共 {{ codeStep }} 期</p>
     <div>
       <div>
-        <h4>起始期次：</h4>
+        <h4>起始期次</h4>
         <div class="flex justify-between items-center">
           <button
             class="btn"
@@ -59,7 +59,7 @@ function goToNextEndCode() {
       </div>
 
       <div>
-        <h4>结束期次：</h4>
+        <h4>结束期次</h4>
         <div class="flex justify-between items-center">
           <button
             class="btn"

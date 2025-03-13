@@ -127,7 +127,7 @@ function loadTailTendencyCount() {
           :end-code="tailTimesCountEndCode"
           :result="tailTimesCountResult"
           :description="tailTimesCountDescription"
-          thead="尾数"
+          chart-id="tail-times-chart"
         />
       </LoadingWrapper>
     </section>
@@ -139,7 +139,7 @@ function loadTailTendencyCount() {
           :result="tailTendencyCountResult"
           :code-step="tailTendencyCountCodeStep"
           :description="tailTendencyCountDescription"
-          canvas-id="tail"
+          chart-id="tail-tendency-chart"
           suffix="尾数"
         />
       </LoadingWrapper>
