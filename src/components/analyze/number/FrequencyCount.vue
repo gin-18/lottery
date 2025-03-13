@@ -14,11 +14,11 @@
  *   }
  * ]
  */
-import { inject, watch, onMounted } from 'vue'
+import { inject, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useFrequencyCountStore } from '@/stores/frequency_count'
+import echarts from '@/assets/js/echarts'
 import { chartPalette } from '@/assets/js/palette'
-import Chart from 'chart.js/auto'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const frequencyCountStore = useFrequencyCountStore()
@@ -33,57 +33,57 @@ watch(codeStep, loadFrequencyCount)
 
 onMounted(loadFrequencyCount)
 
+onUnmounted(() => {
+  chart?.dispose?.()
+  chart = null
+})
+
 function loadFrequencyCount() {
   frequencyCountStore.initData(rawDataArray.value)
   frequencyCountStore.countByFrequency(rawDataArray.value)
-  chart?.destroy()
   renderFrequencyGroupData()
 }
 
 function renderFrequencyGroupData() {
-  const { tickColor, gridColor, labelColor, chartLine } = chartPalette
+  chart?.dispose?.()
+  chart = null
 
-  chart = new Chart(document.getElementById('frequency-chart'), {
+  const legendData = result.value.map((item) => item.code)
+  const xAxisData = Object.keys(result.value[0].list)
+  const seriesData = result.value.map((item) => ({
+    name: item.code,
     type: 'line',
-    data: {
-      labels: result.value.map((item) => Object.keys(item.list))[0],
-      datasets: result.value.map((item, index) => ({
-        label: `${item.code}`,
-        data: Object.values(item.list),
-        borderWidth: 1,
-        borderColor: chartLine[index],
-        backgroundColor: chartLine[index],
-      })),
+    data: Object.values(item.list),
+  }))
+
+  const options = {
+    color: chartPalette.chartLine,
+    grid: {
+      left: '0%',
+      right: '0%',
+      bottom: '0%',
+      containLabel: true,
     },
-    options: {
-      indexAxis: 'x',
-      scales: {
-        x: {
-          ticks: {
-            color: tickColor,
-          },
-          grid: {
-            color: gridColor,
-          },
-        },
-        y: {
-          ticks: {
-            color: tickColor,
-          },
-          grid: {
-            color: gridColor,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: labelColor,
-          },
-        },
-      },
+    tooltip: {
+      trigger: 'axis',
     },
-  })
+    legend: {
+      type: 'scroll',
+      data: legendData,
+    },
+    xAxis: {
+      type: 'category',
+      data: xAxisData,
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: seriesData,
+  }
+
+  chart = echarts.init(document.getElementById('frequency-chart'))
+
+  chart.setOption(options)
 }
 </script>
 
@@ -94,5 +94,5 @@ function renderFrequencyGroupData() {
     <p>共 {{ codes }} 期</p>
     <p>步长: {{ codeStep }}</p>
   </div>
-  <canvas id="frequency-chart"></canvas>
+  <div id="frequency-chart" class="w-full h-[400px]"></div>
 </template>

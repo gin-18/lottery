@@ -1,10 +1,10 @@
 <script setup>
-import { watch } from 'vue'
+import { watch, onUnmounted } from 'vue'
+import echarts from '@/assets/js/echarts'
 import { chartPalette } from '@/assets/js/palette'
-import Chart from 'chart.js/auto'
 
 const props = defineProps({
-  canvasId: {
+  chartId: {
     type: String,
     required: true,
   },
@@ -30,65 +30,83 @@ let chart = null
 
 watch([() => props.result, () => props.codeStep], renderChart)
 
+onUnmounted(() => {
+  chart?.dispose?.()
+  chart = null
+})
+
 function renderChart() {
-  if (chart) {
-    chart.destroy()
-    chart = null
+  chart?.dispose?.()
+  chart = null
+
+  const { result = {}, suffix = '' } = props
+
+  const resultEntries = Object.entries(result)
+  if (resultEntries.length === 0) return
+
+  const [legendData, seriesData, xAxisData] = resultEntries.reduce(
+    (acc, [key, value]) => {
+      // legend数据
+      acc[0].push(`${key}${suffix}`)
+
+      // series数据
+      const timesData = Object.values(value || {})
+        .reverse()
+        .map((data) => data?.times ?? null)
+      acc[1].push({
+        name: `${key}${suffix}`,
+        type: 'line',
+        data: timesData,
+      })
+
+      // xAxis数据（只取第一个元素的keys）
+      if (acc[2].length === 0) {
+        acc[2] = Object.keys(value || {}).reverse()
+      }
+
+      return acc
+    },
+    Array.from({ length: 3 }, () => []),
+  )
+
+  const options = {
+    color: chartPalette.chartLine,
+    grid: {
+      left: '0%',
+      right: '0%',
+      bottom: '0%',
+      containLabel: true,
+    },
+    tooltip: {
+      trigger: 'axis',
+    },
+    legend: {
+      type: 'scroll',
+      data: legendData,
+    },
+    xAxis: {
+      type: 'category',
+      axisLabel: {
+        interval: 0,
+        rotate: 45,
+        fontSize: 12,
+        margin: 8,
+      },
+      data: xAxisData,
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: seriesData,
   }
 
-  const suffix = props.suffix
-  const result = props.result
-  const { gridColor, tickColor, labelColor, chartLine } = chartPalette
+  chart = echarts.init(document.getElementById(props.chartId))
 
-  chart = new Chart(document.getElementById(props.canvasId), {
-    type: 'line',
-    data: {
-      datasets: Object.entries(result).map(([key, data], index) => ({
-        label: `${key} ${suffix}`,
-        data: Object.entries(data)
-          .reverse()
-          .reduce((acc, [key, value]) => {
-            acc[key] = value.times
-            return acc
-          }, {}),
-        borderWidth: 1,
-        borderColor: chartLine[index],
-        backgroundColor: chartLine[index],
-      })),
-    },
-    options: {
-      indexAxis: 'x',
-      scales: {
-        x: {
-          ticks: {
-            color: tickColor,
-          },
-          grid: {
-            color: gridColor,
-          },
-        },
-        y: {
-          ticks: {
-            color: tickColor,
-          },
-          grid: {
-            color: gridColor,
-          },
-        },
-      },
-      plugins: {
-        legend: {
-          labels: {
-            color: labelColor,
-          },
-        },
-      },
-    },
-  })
+  chart.setOption(options)
 }
 </script>
 
 <template>
   <p>{{ description }}</p>
-  <canvas :id="canvasId"></canvas>
+  <div :id="chartId" class="w-full h-[400px]"></div>
 </template>
