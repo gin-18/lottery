@@ -3,10 +3,10 @@ import { countNumberInData } from '@/assets/js/utils'
 
 export const useFrequencyCountStore = defineStore('frequency_count', {
   state: () => ({
-    startCode: {},
-    lastCode: {},
+    startCode: null,
+    lastCode: null,
     codeStep: 7,
-    result: {},
+    result: null,
     addButtonDisable: false,
     reduceButtonDisable: false,
     description:

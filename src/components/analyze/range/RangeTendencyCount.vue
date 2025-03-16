@@ -17,7 +17,7 @@ const props = defineProps({
     required: true,
   },
   result: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   description: {

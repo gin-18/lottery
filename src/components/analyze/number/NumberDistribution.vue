@@ -47,7 +47,7 @@ function renderDataInTable(data) {
 <template>
   <p>{{ description }}</p>
   <div>
-    <CodeDate :data="[startCode, lastCode]" />
+    <CodeDate v-if="startCode && lastCode" :data="[startCode, lastCode]" />
     <p>近 {{ codeStep }} 期</p>
   </div>
   <div class="overflow-x-auto">

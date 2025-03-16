@@ -68,9 +68,7 @@ const tables = computed(() =>
     .flat(),
 )
 
-onMounted(() => {
-  getShowIndex()
-})
+onMounted(getShowIndex)
 
 function getShowIndex() {
   rewards.value.forEach((item, index) => {

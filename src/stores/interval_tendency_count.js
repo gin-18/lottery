@@ -9,7 +9,7 @@ export const useIntervalTendencyCountStore = defineStore(
   'interval_tendency_count',
   {
     state: () => ({
-      result: {},
+      result: null,
       codeStep: 7,
       addButtonDisable: false,
       reduceButtonDisable: false,

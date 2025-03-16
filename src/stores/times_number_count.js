@@ -3,11 +3,11 @@ import { countNumberInData } from '@/assets/js/utils'
 
 export const useTimesNumberCountStore = defineStore('times_number_count', {
   state: () => ({
-    startCode: {},
+    startCode: null,
     startCodeIndex: 6,
-    endCode: {},
+    endCode: null,
     endCodeIndex: 0,
-    result: {},
+    result: null,
     startCodePreviousButtonDisable: false,
     startCodeNextButtonDisable: false,
     endCodePreviousButtionDisable: false,

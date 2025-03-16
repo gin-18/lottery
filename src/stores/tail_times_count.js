@@ -4,9 +4,9 @@ import { formatData } from '@/assets/js/utils'
 export const useTailTimesCountStore = defineStore('tail_times_count', {
   state: () => ({
     codeStep: 7,
-    startCode: {},
-    endCode: {},
-    result: {},
+    startCode: null,
+    endCode: null,
+    result: null,
     addButtonDisable: false,
     reduceButtonDisable: false,
     description: '这部分用于统计最近n期内，每个尾数号码出现的总个数。',

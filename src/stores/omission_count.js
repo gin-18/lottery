@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 
 export const useOmissionCountStore = defineStore('omission_count', {
   state: () => ({
-    currentCode: {},
-    rangeCode: {},
+    currentCode: null,
+    rangeCode: null,
     codeStep: 50,
     currentCodeIndex: 0,
-    result: {},
+    result: null,
     previousButtonDisable: false,
     nextButtonDisable: true,
     description: '这部分用于统计某一期次号码的当前遗漏值情况。',

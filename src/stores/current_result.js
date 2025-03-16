@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useCurrentResultStore = defineStore('current_result', {
   state: () => ({
-    currentCode: {},
+    currentCode: null,
     currentCodeIndex: 0,
     previousButtonDisable: false,
     nextButtonDisable: true,

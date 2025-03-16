@@ -49,7 +49,7 @@ function setNumberColor(num) {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[currentCode]" />
+  <CodeDate v-if="currentCode" :data="[currentCode]" />
   <table class="table">
     <thead>
       <tr>

@@ -7,15 +7,15 @@ import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   currentCode: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   range: {
-    type: Array,
+    type: [Array, null],
     required: true,
   },
   result: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   thead: {
@@ -38,8 +38,8 @@ function setBallColor(num) {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[currentCode]" />
-  <table class="table">
+  <CodeDate v-if="currentCode" :data="[currentCode]" />
+  <table v-if="result" class="table">
     <thead>
       <tr>
         <th scope="col">{{ thead }}</th>
