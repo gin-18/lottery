@@ -5,6 +5,7 @@ import { useResultDataStore } from '@/stores/result_page_data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
+import Footer from '@/components/Footer.vue'
 
 const resultDataStore = useResultDataStore()
 const { resultList, codeSteps, currentCodeStep } = storeToRefs(resultDataStore)
@@ -43,4 +44,6 @@ function changeCodeStep(codeStep) {
       </ul>
     </LoadingWrapper>
   </main>
+
+  <Footer />
 </template>

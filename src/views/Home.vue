@@ -7,6 +7,7 @@ import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import NextCode from '@/components/content/NextCode.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 import RewardTable from '@/components/content/RewardTable.vue'
+import Footer from '@/components/Footer.vue'
 
 const homeDataStore = useHomeData()
 const { cachedData } = storeToRefs(homeDataStore)
@@ -20,6 +21,11 @@ onMounted(homeDataStore.fetchLatestData)
   <Header />
 
   <main>
+    <section class="flex items-center gap-2 text-warning">
+      <span class="icon-[octicon--unmute-16]"></span>
+      <p>本平台仅提供数据服务，不提供任何彩票投注服务!</p>
+    </section>
+
     <section>
       <LoadingWrapper :is-loading="isLoading">
         <NextCode :latest-data="cachedData" />
@@ -38,4 +44,6 @@ onMounted(homeDataStore.fetchLatestData)
       <RewardTable />
     </section>
   </main>
+
+  <Footer />
 </template>

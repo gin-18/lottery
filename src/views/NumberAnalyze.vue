@@ -17,6 +17,7 @@ import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSettin
 import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
 import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
 import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
+import Footer from '@/components/Footer.vue'
 
 const numberDataStore = useNumberDataStore()
 const { rawDataArray } = storeToRefs(numberDataStore)
@@ -83,4 +84,6 @@ provide('rawDataArray', rawDataArray)
       <NumberDistributionSetting />
     </SettingBox>
   </main>
+
+  <Footer />
 </template>

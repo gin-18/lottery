@@ -17,7 +17,7 @@ function closeSetting() {
 </script>
 
 <template>
-  <button class="btn fixed bottom-2 right-2" @click="toggleSetting">
+  <button class="btn fixed bottom-4 right-4" @click="toggleSetting">
     <span class="icon-[octicon--gear-16]"></span>
   </button>
 

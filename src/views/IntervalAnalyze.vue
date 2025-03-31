@@ -16,6 +16,7 @@ import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
 import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
 import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
+import Footer from '@/components/Footer.vue'
 
 const intervalDataStore = useIntervalDataStore()
 const { rawDataArray } = storeToRefs(intervalDataStore)
@@ -151,4 +152,6 @@ function loadIntervalTendencyCount() {
       <IntervalTendencyCountSetting />
     </SettingBox>
   </main>
+
+  <Footer />
 </template>
