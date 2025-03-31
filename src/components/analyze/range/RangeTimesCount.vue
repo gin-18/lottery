@@ -64,6 +64,10 @@ function renderChart() {
     },
     xAxis: {
       type: 'category',
+      axisLabel: {
+        interval: 0,
+        fontSize: 10,
+      },
       data: xAxisData,
     },
     yAxis: {

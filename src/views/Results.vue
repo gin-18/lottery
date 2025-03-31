@@ -22,7 +22,7 @@ function changeCodeStep(codeStep) {
   <Header />
 
   <main>
-    <div class="flex items-center gap-6">
+    <div class="flex justify-between items-center md:justify-start md:gap-8">
       <button
         class="btn"
         v-for="codeStep in codeSteps"
@@ -36,7 +36,7 @@ function changeCodeStep(codeStep) {
     </div>
 
     <LoadingWrapper :is-loading="isLoading">
-      <ul class="list-none p-0">
+      <ul class="list-none flex flex-col gap-4 p-0">
         <li class="p-0" v-for="data in resultList" :key="data.code">
           <ResultContainer :data="data" />
         </li>

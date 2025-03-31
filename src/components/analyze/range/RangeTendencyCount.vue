@@ -89,8 +89,7 @@ function renderChart() {
       axisLabel: {
         interval: 0,
         rotate: 45,
-        fontSize: 12,
-        margin: 8,
+        fontSize: 10,
       },
       data: xAxisData,
     },

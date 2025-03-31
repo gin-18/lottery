@@ -20,9 +20,13 @@ const items = [
 </script>
 
 <template>
-  <nav class="flex-none">
-    <ul class="menu menu-horizontal">
-      <li v-for="(item, index) in items" :key="index">
+  <nav>
+    <ul class="flex gap-4 text-sm md:text-base">
+      <li
+        class="md:px-4 md:py-2 md:rounded-btn md:hover:bg-base-200 md:cursor-pointer md:transition-colors"
+        v-for="(item, index) in items"
+        :key="index"
+      >
         <RouterLink :to="item.path" active-class="text-primary">{{
           item.name
         }}</RouterLink>

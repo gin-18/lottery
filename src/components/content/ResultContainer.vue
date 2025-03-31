@@ -15,12 +15,14 @@ const numbers = computed(() => formatData(props.data).balls)
 
 <template>
   <div>
-    <div class="flex items-center gap-6">
+    <div class="flex items-center gap-3">
       <p>第{{ data.code }}期</p>
       <p>{{ formatDay(data.day) }}</p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-4">
+    <div
+      class="grid grid-cols-10 gap-4 md:flex md:flex-wrap md:items-center md:gap-4"
+    >
       <Ball v-for="num in numbers" :key="num" :num="num" />
     </div>
   </div>

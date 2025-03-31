@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 main {
-  @apply container mx-auto prose prose-base;
+  @apply prose prose-sm mt-4 px-2 md:prose md:prose-base md:container md:mx-auto;
 }
