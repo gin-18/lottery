@@ -14,15 +14,15 @@ const props = defineProps({
     required: true,
   },
   startCode: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   endCode: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   result: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   description: {
@@ -64,6 +64,10 @@ function renderChart() {
     },
     xAxis: {
       type: 'category',
+      axisLabel: {
+        interval: 0,
+        fontSize: 11,
+      },
       data: xAxisData,
     },
     yAxis: {
@@ -80,7 +84,7 @@ function renderChart() {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[startCode, endCode]" />
+  <CodeDate v-if="startCode && endCode" :data="[startCode, endCode]" />
   <p>共 {{ codeStep }} 期</p>
   <div :id="chartId" class="w-full h-[400px]"></div>
 </template>

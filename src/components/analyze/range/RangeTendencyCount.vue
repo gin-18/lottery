@@ -17,7 +17,7 @@ const props = defineProps({
     required: true,
   },
   result: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   description: {
@@ -88,9 +88,8 @@ function renderChart() {
       type: 'category',
       axisLabel: {
         interval: 0,
-        rotate: 45,
-        fontSize: 12,
-        margin: 8,
+        rotate: 55,
+        fontSize: 11,
       },
       data: xAxisData,
     },

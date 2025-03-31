@@ -30,7 +30,7 @@ function goToNextCode() {
       >
         <span class="icon-[octicon--triangle-left-24]"></span>
       </button>
-      <CodeDate :data="[currentCode]" />
+      <CodeDate v-if="currentCode" :data="[currentCode]" />
       <button class="btn" :disabled="nextButtonDisable" @click="goToNextCode">
         <span class="icon-[octicon--triangle-right-24]"></span>
       </button>

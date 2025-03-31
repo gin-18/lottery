@@ -7,7 +7,7 @@ import {
 
 export const useTailTendencyCountStore = defineStore('tail_tendency_count', {
   state: () => ({
-    result: {},
+    result: null,
     codeStep: 7,
     addButtonDisable: false,
     reduceButtonDisable: false,

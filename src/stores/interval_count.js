@@ -7,9 +7,9 @@ import {
 
 export const useIntervalCountStore = defineStore('interval_count', {
   state: () => ({
-    ranges: [],
-    currentCode: {},
-    result: {},
+    ranges: null,
+    currentCode: null,
+    result: null,
     currentCodeIndex: 0,
     previousButtonDisable: false,
     nextButtonDisable: true,

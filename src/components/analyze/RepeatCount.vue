@@ -23,8 +23,8 @@ function loadRepeatCount() {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[startCode, currentCode]" />
-  <div class="flex items-center gap-4">
+  <CodeDate v-if="startCode && currentCode" :data="[startCode, currentCode]" />
+  <div class="flex items-center gap-4" v-if="result">
     <p>共 {{ result.length }} 个:</p>
     <Ball v-for="num in result" :key="num" :num="num" />
   </div>

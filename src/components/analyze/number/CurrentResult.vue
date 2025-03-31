@@ -21,5 +21,5 @@ onMounted(() => {
 
 <template>
   <p>{{ description }}</p>
-  <ResultContainer :data="currentCode" />
+  <ResultContainer v-if="currentCode" :data="currentCode" />
 </template>

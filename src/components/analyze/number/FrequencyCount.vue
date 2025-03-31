@@ -89,7 +89,7 @@ function renderFrequencyGroupData() {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[startCode, lastCode]" />
+  <CodeDate v-if="startCode && lastCode" :data="[startCode, lastCode]" />
   <div class="self-end flex items-center gap-6">
     <p>共 {{ codes }} 期</p>
     <p>步长: {{ codeStep }}</p>

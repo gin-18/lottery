@@ -17,6 +17,7 @@ import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import TailCountSetting from '@/components/setting/TailCountSetting.vue'
 import TailTimesCountSetting from '@/components/setting/TailTimesCountSetting.vue'
 import TailTendencyCountSetting from '@/components/setting/TailTendencyCountSetting.vue'
+import Footer from '@/components/Footer.vue'
 
 const tailDataStore = useTailDataStore()
 const { rawDataArray } = storeToRefs(tailDataStore)
@@ -152,4 +153,6 @@ function loadTailTendencyCount() {
       <TailTendencyCountSetting />
     </SettingBox>
   </main>
+
+  <Footer />
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { inject, computed, watch, onMounted } from 'vue'
+import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/current_result'
 import { useRepeatCountStore } from '@/stores/repeat_count'
@@ -7,7 +7,6 @@ import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
-import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 
 const currentResultStore = useCurrentResultStore()
 const { currentCode } = storeToRefs(currentResultStore)
@@ -28,8 +27,6 @@ const {
 
 const rawDataArray = inject('rawDataArray')
 
-const isLoading = computed(() => (rawDataArray.value.length ? false : true))
-
 watch([startCodeIndex, endCodeIndex], loadTimesNumberCount)
 
 onMounted(loadTimesNumberCount)
@@ -47,47 +44,40 @@ function setNumberColor(num) {
 </script>
 
 <template>
-  <LoadingWrapper :is-loading="isLoading">
-    <p>{{ description }}</p>
-
-    <CodeDate :data="[startCode, endCode]" />
-
-    <p>共 {{ codeStep }} 期</p>
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th>次数</th>
-          <th>号码</th>
-          <th>个数</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in timesNumberCountResult" :key="index">
-          <td>{{ item.times }}</td>
-          <td class="flex flex-wrap gap-2">
-            <Ball
-              v-for="num in item.nums"
-              :key="num"
-              :num="num"
-              :color="setNumberColor(num)"
-            />
-          </td>
-          <td>{{ item.total }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="flex justify-center gap-12">
-      <div class="flex items-center gap-2">
-        <p class="m-0">重复号码:</p>
-        <div class="w-4 h-4 rounded bg-info"></div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <p class="m-0">当前开奖号码:</p>
-        <div class="w-4 h-4 rounded bg-primary"></div>
-      </div>
+  <p>{{ description }}</p>
+  <CodeDate v-if="startCode && endCode" :data="[startCode, endCode]" />
+  <p>共 {{ codeStep }} 期</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>次数</th>
+        <th>号码</th>
+        <th>个数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(item, index) in timesNumberCountResult" :key="index">
+        <td>{{ item.times }}</td>
+        <td class="flex flex-wrap gap-2">
+          <Ball
+            v-for="num in item.nums"
+            :key="num"
+            :num="num"
+            :color="setNumberColor(num)"
+          />
+        </td>
+        <td>{{ item.total }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="flex justify-center gap-12">
+    <div class="flex items-center gap-2">
+      <p class="m-0">重复号码:</p>
+      <div class="w-4 h-4 rounded bg-info"></div>
     </div>
-  </LoadingWrapper>
+    <div class="flex items-center gap-2">
+      <p class="m-0">当前开奖号码:</p>
+      <div class="w-4 h-4 rounded bg-primary"></div>
+    </div>
+  </div>
 </template>

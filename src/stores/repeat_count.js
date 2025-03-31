@@ -3,10 +3,10 @@ import { formatData } from '@/assets/js/utils'
 
 export const useRepeatCountStore = defineStore('repeat_count', {
   state: () => ({
-    startCode: {},
-    currentCode: {},
+    startCode: null,
+    currentCode: null,
     currentCodeIndex: 0,
-    result: [],
+    result: null,
     previousButtonDisable: false,
     nextButtonDisable: true,
     description:

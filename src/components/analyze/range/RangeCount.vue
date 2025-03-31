@@ -7,15 +7,15 @@ import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({
   currentCode: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   range: {
-    type: Array,
+    type: [Array, null],
     required: true,
   },
   result: {
-    type: Object,
+    type: [Object, null],
     required: true,
   },
   thead: {
@@ -38,32 +38,34 @@ function setBallColor(num) {
 
 <template>
   <p>{{ description }}</p>
-  <CodeDate :data="[currentCode]" />
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">{{ thead }}</th>
-        <th scope="col">号码</th>
-        <th scope="col">次数</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(value, key) in result.data" :key="key">
-        <td>
-          {{ key }}
-        </td>
-        <td class="flex gap-2">
-          <Ball
-            v-for="num in value.range"
-            :key="num"
-            :num="num"
-            :color="setBallColor(num)"
-          />
-        </td>
-        <td>
-          {{ value.times }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <CodeDate v-if="currentCode" :data="[currentCode]" />
+  <div class="overflow-x-auto">
+    <table v-if="result" class="table">
+      <thead>
+        <tr>
+          <th scope="col">{{ thead }}</th>
+          <th scope="col">号码</th>
+          <th scope="col">次数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(value, key) in result.data" :key="key">
+          <td class="whitespace-nowrap">
+            {{ key }}
+          </td>
+          <td class="flex gap-2">
+            <Ball
+              v-for="num in value.range"
+              :key="num"
+              :num="num"
+              :color="setBallColor(num)"
+            />
+          </td>
+          <td>
+            {{ value.times }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>

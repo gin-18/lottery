@@ -7,9 +7,9 @@ import {
 
 export const useTailCountStore = defineStore('tail_count', {
   state: () => ({
-    ranges: [],
-    currentCode: {},
-    result: {},
+    ranges: null,
+    currentCode: null,
+    result: null,
     currentCodeIndex: 0,
     previousButtonDisable: false,
     nextButtonDisable: true,

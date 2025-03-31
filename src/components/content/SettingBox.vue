@@ -17,7 +17,7 @@ function closeSetting() {
 </script>
 
 <template>
-  <button class="btn fixed bottom-8 right-8" @click="toggleSetting">
+  <button class="btn fixed bottom-4 right-4" @click="toggleSetting">
     <span class="icon-[octicon--gear-16]"></span>
   </button>
 
@@ -40,7 +40,7 @@ function closeSetting() {
   >
     <div
       v-show="show"
-      class="fixed top-0 right-0 overflow-y-auto w-1/3 h-full max-h-full bg-base-100"
+      class="fixed top-0 right-0 overflow-y-auto w-full h-full max-h-full bg-base-100 md:w-1/2 lg:w-1/3"
     >
       <div class="flex justify-between items-center pt-6 px-6">
         <h2 class="m-0">{{ title }}</h2>
