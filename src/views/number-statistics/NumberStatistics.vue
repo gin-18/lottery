@@ -6,13 +6,13 @@ import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import CurrentNumberStatistics from './components/current-number-statistics/CurrentNumberStatistics.vue'
 import CurrentNumberStatisticsSetting from './components/current-number-statistics/CurrentNumberStatisticsSetting.vue'
-import RepeatNumberStatistics from './components/RepeatNumberStatistics.vue'
+import RepeatNumberStatistics from './components/repeat-number-statistics/RepeatNumberStatistics.vue'
+import RepeatNumberStatisticsSetting from './components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
 import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
 import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
-import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
 import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSetting.vue'
 import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
 import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
@@ -77,7 +77,7 @@ provide('rawDataArray', rawDataArray)
 
     <SettingBox title="号码分析设置">
       <CurrentNumberStatisticsSetting />
-      <RepeatCountSetting />
+      <RepeatNumberStatisticsSetting />
       <TimesNumberCountSetting />
       <FrequencyCountSetting />
       <OmissionCountSetting />
