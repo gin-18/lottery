@@ -8,12 +8,14 @@ import CurrentNumberStatistics from './components/current-number-statistics/Curr
 import CurrentNumberStatisticsSetting from './components/current-number-statistics/CurrentNumberStatisticsSetting.vue'
 import RepeatNumberStatistics from './components/repeat-number-statistics/RepeatNumberStatistics.vue'
 import RepeatNumberStatisticsSetting from './components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
-import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
+import NumberTimesStatistics from './components/number-times-statistics/NumberTimesStatistics.vue'
+import NumberTimesStatisticsSetting from './components/number-times-statistics/NumberTimesStatisticsSetting.vue'
+import NumberFrequencyStatistics from './components/number-frequency-statistics/NumberFrequencyStatistics.vue'
+import NumberFrequencyStatisticsSetting from './components/number-frequency-statistics/NumberFrequencyStatisticsSetting.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
 import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
-import TimesNumberCountSetting from '@/components/setting/TimesNumberCountSetting.vue'
 import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
 import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
 import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
@@ -50,14 +52,14 @@ provide('rawDataArray', rawDataArray)
     <section>
       <h2>号码统计</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <TimesNumberCount />
+        <NumberTimesStatistics />
       </LoadingWrapper>
     </section>
 
     <section>
       <h2>号码频率</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <FrequencyCount />
+        <NumberFrequencyStatistics />
       </LoadingWrapper>
     </section>
 
@@ -78,8 +80,8 @@ provide('rawDataArray', rawDataArray)
     <SettingBox title="号码分析设置">
       <CurrentNumberStatisticsSetting />
       <RepeatNumberStatisticsSetting />
-      <TimesNumberCountSetting />
-      <FrequencyCountSetting />
+      <NumberTimesStatisticsSetting />
+      <NumberFrequencyStatisticsSetting />
       <OmissionCountSetting />
       <NumberDistributionSetting />
     </SettingBox>
