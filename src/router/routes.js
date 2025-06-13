@@ -28,7 +28,7 @@ export const routes = [
     path: '/tail',
     name: 'tail',
     meta: { title: '尾数分析' },
-    component: () => import('@/views/TailAnalyze.vue'),
+    component: () => import('@/views/tail-statistics/TailStatistics.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
