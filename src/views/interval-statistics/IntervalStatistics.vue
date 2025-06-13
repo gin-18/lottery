@@ -9,11 +9,11 @@ import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import RepeatNumberStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
 import RepeatNumberStatisticsSetting from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
-import RangeCount from '@/components/analyze/range/RangeCount.vue'
-import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
-import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
+import RangeCount from '@/components/range/RangeCount.vue'
+import RangeTendencyCount from '@/components/range/RangeTendencyCount.vue'
+import RangeTimesCount from '@/components/range/RangeTimesCount.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
-import IntervalCountSetting from '@/components/setting/IntervalCountSetting.vue'
+import IntervalNumberStatisticsSetting from './components/interval-number-statistics/IntervalNumberStatisticsSetting.vue'
 import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
 import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
 import Footer from '@/components/Footer.vue'
@@ -147,7 +147,7 @@ function loadIntervalTendencyCount() {
 
     <SettingBox title="区间统计设置">
       <RepeatNumberStatisticsSetting />
-      <IntervalCountSetting />
+      <IntervalNumberStatisticsSetting />
       <IntervalTimesCountSetting />
       <IntervalTendencyCountSetting />
     </SettingBox>
