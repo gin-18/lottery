@@ -14,7 +14,7 @@ import RangeTendencyCount from '@/components/range/RangeTendencyCount.vue'
 import RangeTimesCount from '@/components/range/RangeTimesCount.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
 import IntervalNumberStatisticsSetting from './components/interval-number-statistics/IntervalNumberStatisticsSetting.vue'
-import IntervalTimesCountSetting from '@/components/setting/IntervalTimesCountSetting.vue'
+import IntervalTimesStatisticsSetting from './components/interval-times-statistics/IntervalTimesStatisticsSetting.vue'
 import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -148,7 +148,7 @@ function loadIntervalTendencyCount() {
     <SettingBox title="区间统计设置">
       <RepeatNumberStatisticsSetting />
       <IntervalNumberStatisticsSetting />
-      <IntervalTimesCountSetting />
+      <IntervalTimesStatisticsSetting />
       <IntervalTendencyCountSetting />
     </SettingBox>
   </main>
