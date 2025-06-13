@@ -12,12 +12,10 @@ import NumberTimesStatistics from './components/number-times-statistics/NumberTi
 import NumberTimesStatisticsSetting from './components/number-times-statistics/NumberTimesStatisticsSetting.vue'
 import NumberFrequencyStatistics from './components/number-frequency-statistics/NumberFrequencyStatistics.vue'
 import NumberFrequencyStatisticsSetting from './components/number-frequency-statistics/NumberFrequencyStatisticsSetting.vue'
-import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
-import CurrentOmissionCount from '@/components/analyze/number/CurrentOmissionCount.vue'
+import CurrentOmissionStatistics from './components/current-omission-statistics/CurrentOmissionStatistics.vue'
+import CurrentOmissionStatisticsSetting from './components/current-omission-statistics/CurrentOmissionStatisticsSetting.vue'
 import NumberDistribution from '@/components/analyze/number/NumberDistribution.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
-import FrequencyCountSetting from '@/components/setting/FrequencyCountSetting.vue'
-import OmissionCountSetting from '@/components/setting/OmissionCountSetting.vue'
 import NumberDistributionSetting from '@/components/setting/NumberDistributionSetting.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -66,7 +64,7 @@ provide('rawDataArray', rawDataArray)
     <section>
       <h2>号码遗漏</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <CurrentOmissionCount />
+        <CurrentOmissionStatistics />
       </LoadingWrapper>
     </section>
 
@@ -82,7 +80,7 @@ provide('rawDataArray', rawDataArray)
       <RepeatNumberStatisticsSetting />
       <NumberTimesStatisticsSetting />
       <NumberFrequencyStatisticsSetting />
-      <OmissionCountSetting />
+      <CurrentOmissionStatisticsSetting />
       <NumberDistributionSetting />
     </SettingBox>
   </main>
