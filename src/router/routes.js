@@ -3,7 +3,7 @@ export const routes = [
     path: '/',
     name: 'Home',
     meta: { title: '快乐8研究所' },
-    component: () => import('@/views/Home.vue'),
+    component: () => import('@/views/home/Home.vue'),
   },
   {
     path: '/results',
