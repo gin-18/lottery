@@ -5,18 +5,17 @@ import { useTailDataStore } from '@/stores/tail_page_data'
 import { useTailCountStore } from '@/stores/tail_count'
 import { useTailTimesCountStore } from '@/stores/tail_times_count'
 import { useTailTendencyCountStore } from '@/stores/tail_tendency_count'
-
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
-import RepeatCount from '@/components/analyze/RepeatCount.vue'
-import RangeCount from '@/components/analyze/range/RangeCount.vue'
-import RangeTimesCount from '@/components/analyze/range/RangeTimesCount.vue'
-import RangeTendencyCount from '@/components/analyze/range/RangeTendencyCount.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
-import RepeatCountSetting from '@/components/setting/RepeatCountSetting.vue'
-import TailCountSetting from '@/components/setting/TailCountSetting.vue'
-import TailTimesCountSetting from '@/components/setting/TailTimesCountSetting.vue'
-import TailTendencyCountSetting from '@/components/setting/TailTendencyCountSetting.vue'
+import RepeatStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
+import RepeatStatisticsSetting from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
+import RangeNumberStatistics from '@/components/range/RangeNumberStatistics.vue'
+import TailNumberStatisticsSetting from './components/tail-number-statistics/TailNumberStatisticsSetting.vue'
+import RangeTimesStatistics from '@/components/range/RangeTimesStatistics.vue'
+import TailTimesStatisticsSetting from './components/tail-times-statistics/TailTimesStatisticsSetting.vue'
+import RangeTendencyStatistics from '@/components/range/RangeTendencyStatistics.vue'
+import TailTendencyStatisticsSetting from './components/tail-tendency-statistics/TailTendencyStatisticsSetting.vue'
 import Footer from '@/components/Footer.vue'
 
 const tailDataStore = useTailDataStore()
@@ -102,14 +101,14 @@ function loadTailTendencyCount() {
     <section>
       <h2>重号统计</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RepeatCount />
+        <RepeatStatistics />
       </LoadingWrapper>
     </section>
 
     <section>
       <h2>尾数统计</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeCount
+        <RangeNumberStatistics
           :range="tailCountRanges"
           :current-code="tailCountCurrentCode"
           :result="tailCountResult"
@@ -122,7 +121,7 @@ function loadTailTendencyCount() {
     <section>
       <h2>尾数总数</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeTimesCount
+        <RangeTimesStatistics
           :code-step="tailTimesCountCodeStep"
           :start-code="tailTimesCountStartCode"
           :end-code="tailTimesCountEndCode"
@@ -136,7 +135,7 @@ function loadTailTendencyCount() {
     <section>
       <h2>尾数走势</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeTendencyCount
+        <RangeTendencyStatistics
           :result="tailTendencyCountResult"
           :code-step="tailTendencyCountCodeStep"
           :description="tailTendencyCountDescription"
@@ -147,10 +146,10 @@ function loadTailTendencyCount() {
     </section>
 
     <SettingBox title="尾数统计设置">
-      <RepeatCountSetting />
-      <TailCountSetting />
-      <TailTimesCountSetting />
-      <TailTendencyCountSetting />
+      <RepeatStatisticsSetting />
+      <TailNumberStatisticsSetting />
+      <TailTimesStatisticsSetting />
+      <TailTendencyStatisticsSetting />
     </SettingBox>
   </main>
 

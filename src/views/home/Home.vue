@@ -6,7 +6,7 @@ import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import NextCode from '@/components/content/NextCode.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
-import RewardTable from '@/components/content/RewardTable.vue'
+import RewardTable from './components/RewardTable.vue'
 import Footer from '@/components/Footer.vue'
 
 const homeDataStore = useHomeData()
