@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useNumberDataStore } from '@/stores/number_page_data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
-import CurrentResult from '@/components/analyze/number/CurrentResult.vue'
+import CurrentNumberStatistics from './components/CurrentNumberStatistics.vue'
 import RepeatCount from '@/components/analyze/RepeatCount.vue'
 import TimesNumberCount from '@/components/analyze/number/TimesNumberCount.vue'
 import FrequencyCount from '@/components/analyze/number/FrequencyCount.vue'
@@ -36,7 +36,7 @@ provide('rawDataArray', rawDataArray)
     <section>
       <h2>当前开奖</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <CurrentResult />
+        <CurrentNumberStatistics />
       </LoadingWrapper>
     </section>
 

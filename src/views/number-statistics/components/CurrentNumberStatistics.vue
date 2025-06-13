@@ -5,7 +5,6 @@ import { useCurrentResultStore } from '@/stores/current_result'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 
 const rawDataArray = inject('rawDataArray')
-
 const currentResultStore = useCurrentResultStore()
 const { currentCode, currentCodeIndex, description } =
   storeToRefs(currentResultStore)

@@ -9,13 +9,13 @@ export const routes = [
     path: '/results',
     name: 'Results',
     meta: { title: '开奖结果' },
-    component: () => import('@/views/Results.vue'),
+    component: () => import('@/views/result/Results.vue'),
   },
   {
     path: '/number',
     name: 'Number',
     meta: { title: '号码分析' },
-    component: () => import('@/views/NumberAnalyze.vue'),
+    component: () => import('@/views/number-statistics/NumberStatistics.vue'),
   },
   {
     path: '/interval',
