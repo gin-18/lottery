@@ -21,7 +21,8 @@ export const routes = [
     path: '/interval',
     name: 'Interval',
     meta: { title: '区间分析' },
-    component: () => import('@/views/IntervalAnalyze.vue'),
+    component: () =>
+      import('@/views/interval-statistics/IntervalStatistics.vue'),
   },
   {
     path: '/tail',
