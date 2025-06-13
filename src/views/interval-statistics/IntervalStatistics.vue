@@ -7,15 +7,15 @@ import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
 import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
+import SettingBox from '@/components/content/SettingBox.vue'
 import RepeatNumberStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
 import RepeatNumberStatisticsSetting from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
-import RangeCount from '@/components/range/RangeCount.vue'
-import RangeTendencyCount from '@/components/range/RangeTendencyCount.vue'
-import RangeTimesCount from '@/components/range/RangeTimesCount.vue'
-import SettingBox from '@/components/content/SettingBox.vue'
+import RangeNumberStatistics from '@/components/range/RangeNumberStatistics.vue'
 import IntervalNumberStatisticsSetting from './components/interval-number-statistics/IntervalNumberStatisticsSetting.vue'
+import RangeTimesStatistics from '@/components/range/RangeTimesStatistics.vue'
 import IntervalTimesStatisticsSetting from './components/interval-times-statistics/IntervalTimesStatisticsSetting.vue'
-import IntervalTendencyCountSetting from '@/components/setting/IntervalTendencyCountSetting.vue'
+import RangeTendencyStatistics from '@/components/range/RangeTendencyStatistics.vue'
+import IntervalTendencyStatisticsSetting from './components/interval-tendency-statistics/IntervalTendencyStatisticsSetting.vue'
 import Footer from '@/components/Footer.vue'
 
 const intervalDataStore = useIntervalDataStore()
@@ -108,7 +108,7 @@ function loadIntervalTendencyCount() {
     <section>
       <h2>区间统计</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeCount
+        <RangeNumberStatistics
           :range="intervalCountRanges"
           :current-code="intervalCountCurrentCode"
           :result="intervalCountResult"
@@ -121,7 +121,7 @@ function loadIntervalTendencyCount() {
     <section>
       <h2>区间总数</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeTimesCount
+        <RangeTimesStatistics
           :code-step="intervalTimesCountCodeStep"
           :start-code="intervalTimesCountStartCode"
           :end-code="intervalTimesCountEndCode"
@@ -135,7 +135,7 @@ function loadIntervalTendencyCount() {
     <section>
       <h2>区间走势</h2>
       <LoadingWrapper :is-loading="isLoading">
-        <RangeTendencyCount
+        <RangeTendencyStatistics
           :result="intervalTendencyCountResult"
           :code-step="intervalTendencyCountCodeStep"
           :description="intervalTendencyCountDescription"
@@ -149,7 +149,7 @@ function loadIntervalTendencyCount() {
       <RepeatNumberStatisticsSetting />
       <IntervalNumberStatisticsSetting />
       <IntervalTimesStatisticsSetting />
-      <IntervalTendencyCountSetting />
+      <IntervalTendencyStatisticsSetting />
     </SettingBox>
   </main>
 
