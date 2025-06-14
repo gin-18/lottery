@@ -1,20 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
+import { useIntervalTendencyStatisticsStore } from '@/stores/interval-statistics/interval-tendency-statistics'
 
-const intervalTendencyCountStore = useIntervalTendencyCountStore()
+const intervalTendencyStatisticsStore = useIntervalTendencyStatisticsStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
-  intervalTendencyCountStore,
+  intervalTendencyStatisticsStore,
 )
 
 const rawDataArray = inject('rawDataArray')
 
 function addCodeStep() {
-  intervalTendencyCountStore.addCodeStep(rawDataArray.value)
+  intervalTendencyStatisticsStore.addCodeStep(rawDataArray.value)
 }
 function reduceCodeStep() {
-  intervalTendencyCountStore.reduceCodeStep()
+  intervalTendencyStatisticsStore.reduceCodeStep()
 }
 </script>
 

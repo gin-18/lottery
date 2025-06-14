@@ -1,20 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTailCountStore } from '@/stores/tail_count'
+import { useTailNumberStatisticsStore } from '@/stores/tail-statistics/tail-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const tailCountStore = useTailCountStore()
+const tailNumberStatisticsStore = useTailNumberStatisticsStore()
 const { currentCode, previousButtonDisable, nextButtonDisable } =
-  storeToRefs(tailCountStore)
+  storeToRefs(tailNumberStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  tailCountStore.goToPreviousCode(rawDataArray.value)
+  tailNumberStatisticsStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
-  tailCountStore.goToNextCode()
+  tailNumberStatisticsStore.goToNextCode()
 }
 </script>
 

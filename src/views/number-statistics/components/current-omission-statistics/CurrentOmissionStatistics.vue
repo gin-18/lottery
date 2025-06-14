@@ -1,43 +1,43 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNumberDistributionStore } from '@/stores/number_distribution'
-import { useCurrentResultStore } from '@/stores/current_result'
-import { useRepeatCountStore } from '@/stores/repeat_count'
-import { useOmissionCountStore } from '@/stores/omission_count'
+import { useNumberDistributionStore } from '@/stores/number-statistics/number-distribution'
+import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
+import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
+import { useCurrentOmissionStatisticsStore } from '@/stores/number-statistics/current-omission-statistics'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const omissionCountStore = useOmissionCountStore()
+const currentOmissionStatisticsStore = useCurrentOmissionStatisticsStore()
 const {
   currentCode,
   rangeCode,
   currentCodeIndex,
-  result: currentOmissionResult,
+  result: currentOmissionStatisticsResult,
   description,
-} = storeToRefs(omissionCountStore)
+} = storeToRefs(currentOmissionStatisticsStore)
 
-const currentResultStore = useCurrentResultStore()
-const { currentCode: currentResultCode } = storeToRefs(currentResultStore)
+const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
+const { currentCode: currentResultCode } = storeToRefs(currentNumberStatisticsStore)
 
-const repeatCountStore = useRepeatCountStore()
-const { result: repeatResult } = storeToRefs(repeatCountStore)
+const repeatNumberStatisticsStore = useRepeatNumberStatisticsStore()
+const { result: repeatResult } = storeToRefs(repeatNumberStatisticsStore)
 
 const numberDistributionStore = useNumberDistributionStore()
 const { numberCountData } = storeToRefs(numberDistributionStore)
 
 const rawDataArray = inject('rawDataArray')
 
-watch(currentCodeIndex, loadCurrentOmissionCount)
+watch(currentCodeIndex, loadCurrentOmissionStatistics)
 
-onMounted(loadCurrentOmissionCount)
+onMounted(loadCurrentOmissionStatistics)
 
-function loadCurrentOmissionCount() {
-  omissionCountStore.initData(rawDataArray.value)
+function loadCurrentOmissionStatistics() {
+  currentOmissionStatisticsStore.initData(rawDataArray.value)
   numberDistributionStore.initData(rangeCode.value)
   numberDistributionStore.countNumberOmission(rangeCode.value)
-  omissionCountStore.countNumberByOmission(numberCountData.value)
+  currentOmissionStatisticsStore.countNumberByOmission(numberCountData.value)
 }
 
 function setNumberColor(num) {
@@ -59,7 +59,7 @@ function setNumberColor(num) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(value, key, index) in currentOmissionResult" :key="index">
+      <tr v-for="(value, key, index) in currentOmissionStatisticsResult" :key="index">
         <td>{{ key }}</td>
         <td class="flex flex-wrap gap-2">
           <Ball

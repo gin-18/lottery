@@ -1,20 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalCountStore } from '@/stores/interval_count'
+import { useIntervalNumberStatisticsStore } from '@/stores/interval-statistics/interval-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const intervalCountStore = useIntervalCountStore()
+const intervalNumberStatisticsStore = useIntervalNumberStatisticsStore()
 const { currentCode, previousButtonDisable, nextButtonDisable } =
-  storeToRefs(intervalCountStore)
+  storeToRefs(intervalNumberStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  intervalCountStore.goToPreviousCode(rawDataArray.value)
+  intervalNumberStatisticsStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
-  intervalCountStore.goToNextCode()
+  intervalNumberStatisticsStore.goToNextCode()
 }
 </script>
 

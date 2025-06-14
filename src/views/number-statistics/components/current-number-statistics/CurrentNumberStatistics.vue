@@ -1,20 +1,21 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCurrentResultStore } from '@/stores/current_result'
+import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
 import ResultContainer from '@/components/content/ResultContainer.vue'
 
 const rawDataArray = inject('rawDataArray')
-const currentResultStore = useCurrentResultStore()
-const { currentCode, currentCodeIndex, description } =
-  storeToRefs(currentResultStore)
+const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
+const { currentCode, currentCodeIndex, description } = storeToRefs(
+  currentNumberStatisticsStore,
+)
 
 watch(currentCodeIndex, () => {
-  currentResultStore.initData(rawDataArray.value)
+  currentNumberStatisticsStore.initData(rawDataArray.value)
 })
 
 onMounted(() => {
-  currentResultStore.initData(rawDataArray.value)
+  currentNumberStatisticsStore.initData(rawDataArray.value)
 })
 </script>
 

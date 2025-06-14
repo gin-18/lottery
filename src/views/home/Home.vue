@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useHomeData } from '@/stores/home_page_data'
+import { useHomeData } from '@/stores/home/home-data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import NextCode from '@/components/content/NextCode.vue'

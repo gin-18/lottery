@@ -1,29 +1,29 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCurrentResultStore } from '@/stores/current_result'
-import { useRepeatCountStore } from '@/stores/repeat_count'
-import { useTimesNumberCountStore } from '@/stores/times_number_count'
+import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
+import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
+import { useNumberTimesStatisticsStore } from '@/stores/number-statistics/number-times-statistics'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const currentResultStore = useCurrentResultStore()
-const { currentCode } = storeToRefs(currentResultStore)
+const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
+const { currentCode } = storeToRefs(currentNumberStatisticsStore)
 
-const repeatCountStore = useRepeatCountStore()
-const { result: repeatResult } = storeToRefs(repeatCountStore)
+const repeatNumerStatisticsStore = useRepeatNumberStatisticsStore()
+const { result: repeatResult } = storeToRefs(repeatNumerStatisticsStore)
 
-const timesNumberCountStore = useTimesNumberCountStore()
+const numberTimesStatisticsStore = useNumberTimesStatisticsStore()
 const {
   startCode,
   startCodeIndex,
   endCode,
   endCodeIndex,
   codeStep,
-  result: timesNumberCountResult,
+  result: numberTimesStatisticsResult,
   description,
-} = storeToRefs(timesNumberCountStore)
+} = storeToRefs(numberTimesStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
@@ -32,8 +32,8 @@ watch([startCodeIndex, endCodeIndex], loadTimesNumberCount)
 onMounted(loadTimesNumberCount)
 
 function loadTimesNumberCount() {
-  timesNumberCountStore.initData(rawDataArray.value)
-  timesNumberCountStore.countNumberByTimes(rawDataArray.value)
+  numberTimesStatisticsStore.initData(rawDataArray.value)
+  numberTimesStatisticsStore.countNumberByTimes(rawDataArray.value)
 }
 
 function setNumberColor(num) {
@@ -56,7 +56,7 @@ function setNumberColor(num) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in timesNumberCountResult" :key="index">
+      <tr v-for="(item, index) in numberTimesStatisticsResult" :key="index">
         <td>{{ item.times }}</td>
         <td class="flex flex-wrap gap-2">
           <Ball

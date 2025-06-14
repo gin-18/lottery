@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useResultDataStore } from '@/stores/result_page_data'
+import { useResultDataStore } from '@/stores/result/result-data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import ResultContainer from '@/components/content/ResultContainer.vue'
