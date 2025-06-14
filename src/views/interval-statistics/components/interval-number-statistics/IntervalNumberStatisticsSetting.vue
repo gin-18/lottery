@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalCountStore } from '@/stores/interval_count'
+import { useIntervalCountStore } from '@/stores/interval-statistics/interval-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const intervalCountStore = useIntervalCountStore()

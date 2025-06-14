@@ -1,8 +1,8 @@
 <script setup>
 import { provide, watch, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalDataStore } from '@/stores/interval_page_data'
-import { useIntervalCountStore } from '@/stores/interval_count'
+import { useIntervalDataStore } from '@/stores/interval-statistics/interval-data'
+import { useIntervalCountStore } from '@/stores/interval-statistics/interval-number-statistics'
 import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
 import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
 import Header from '@/components/header/Header.vue'
