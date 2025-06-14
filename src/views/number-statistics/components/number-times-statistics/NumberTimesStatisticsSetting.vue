@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTimesNumberCountStore } from '@/stores/times_number_count'
+import { useTimesNumberCountStore } from '@/stores/number-statistics/number-times-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const timesNumberCountStore = useTimesNumberCountStore()
