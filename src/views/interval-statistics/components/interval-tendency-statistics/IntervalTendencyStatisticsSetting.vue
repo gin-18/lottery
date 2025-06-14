@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalTendencyCountStore } from '@/stores/interval_tendency_count'
+import { useIntervalTendencyCountStore } from '@/stores/interval-statistics/interval-tendency-statistics'
 
 const intervalTendencyCountStore = useIntervalTendencyCountStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(

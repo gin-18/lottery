@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalTimesCountStore } from '@/stores/interval_times_count'
+import { useIntervalTimesCountStore } from '@/stores/interval-statistics/interval-times-statistics'
 
 const intervalTimesCountStore = useIntervalTimesCountStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
