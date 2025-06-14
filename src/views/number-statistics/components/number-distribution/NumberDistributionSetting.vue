@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useNumberDistributionStore } from '@/stores/number_distribution'
+import { useNumberDistributionStore } from '@/stores/number-statistics/number-distribution'
 
 const numberDistributionStore = useNumberDistributionStore()
 const { codeStep, previousButtonDisable, nextButtonDisable } = storeToRefs(

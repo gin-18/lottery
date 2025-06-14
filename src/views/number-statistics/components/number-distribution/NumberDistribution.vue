@@ -1,7 +1,7 @@
 <script setup>
 import { inject, h, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNumberDistributionStore } from '@/stores/number_distribution'
+import { useNumberDistributionStore } from '@/stores/number-statistics/number-distribution'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 

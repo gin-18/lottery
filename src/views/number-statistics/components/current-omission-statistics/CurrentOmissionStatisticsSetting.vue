@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useOmissionCountStore } from '@/stores/omission_count'
+import { useOmissionCountStore } from '@/stores/number-statistics/current-omission-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const omissionCountStore = useOmissionCountStore()

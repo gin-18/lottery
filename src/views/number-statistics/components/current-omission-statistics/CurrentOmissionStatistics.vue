@@ -1,10 +1,10 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNumberDistributionStore } from '@/stores/number_distribution'
+import { useNumberDistributionStore } from '@/stores/number-statistics/number-distribution'
 import { useCurrentResultStore } from '@/stores/number-statistics/current-number-statistics'
 import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
-import { useOmissionCountStore } from '@/stores/omission_count'
+import { useOmissionCountStore } from '@/stores/number-statistics/current-omission-statistics'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
