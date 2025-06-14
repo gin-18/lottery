@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useRepeatCountStore } from '@/stores/repeat_count'
+import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
 import { formatData, setBallColorInRange } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'

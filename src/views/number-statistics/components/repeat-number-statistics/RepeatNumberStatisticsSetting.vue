@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRepeatCountStore } from '@/stores/repeat_count'
+import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const repeatCountStore = useRepeatCountStore()

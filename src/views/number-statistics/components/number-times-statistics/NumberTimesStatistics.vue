@@ -2,7 +2,7 @@
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCurrentResultStore } from '@/stores/number-statistics/current-number-statistics'
-import { useRepeatCountStore } from '@/stores/repeat_count'
+import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
 import { useTimesNumberCountStore } from '@/stores/times_number_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
