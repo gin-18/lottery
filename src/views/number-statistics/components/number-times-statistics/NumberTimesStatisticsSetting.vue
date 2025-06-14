@@ -1,10 +1,10 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTimesNumberCountStore } from '@/stores/number-statistics/number-times-statistics'
+import { useNumberTimesStatisticsStore } from '@/stores/number-statistics/number-times-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const timesNumberCountStore = useTimesNumberCountStore()
+const numberTimesStatisticsStore = useNumberTimesStatisticsStore()
 const {
   startCode,
   endCode,
@@ -13,22 +13,22 @@ const {
   startCodeNextButtonDisable,
   endCodePreviousButtionDisable,
   endCodeNextButtonDisable,
-} = storeToRefs(timesNumberCountStore)
+} = storeToRefs(numberTimesStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousStartCode() {
-  timesNumberCountStore.goToPreviousStartCode(rawDataArray.value)
+  numberTimesStatisticsStore.goToPreviousStartCode(rawDataArray.value)
 }
 function goToNextStartCode() {
-  timesNumberCountStore.goToNextStartCode()
+  numberTimesStatisticsStore.goToNextStartCode()
 }
 
 function goToPreviousEndCode() {
-  timesNumberCountStore.goToPreviousEndCode()
+  numberTimesStatisticsStore.goToPreviousEndCode()
 }
 function goToNextEndCode() {
-  timesNumberCountStore.goToNextEndCode()
+  numberTimesStatisticsStore.goToNextEndCode()
 }
 </script>
 

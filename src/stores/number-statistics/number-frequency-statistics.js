@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { countNumberInData } from '@/assets/js/utils'
 
-export const useFrequencyCountStore = defineStore('frequency_count', {
+export const useNumberFrequencyStatisticsStore = defineStore('number_frequency_statistics', {
   state: () => ({
     startCode: null,
     lastCode: null,

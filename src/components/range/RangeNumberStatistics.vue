@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
+import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
 import { formatData, setBallColorInRange } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
@@ -26,8 +26,8 @@ const props = defineProps({
   },
 })
 
-const repeatCountStore = useRepeatCountStore()
-const { result: repeatCountResult } = storeToRefs(repeatCountStore)
+const repeatNumberStatisticsStore = useRepeatNumberStatisticsStore()
+const { result: repeatCountResult } = storeToRefs(repeatNumberStatisticsStore)
 
 function setBallColor(num) {
   const repeatNumbers = repeatCountResult.value

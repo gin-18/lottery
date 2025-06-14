@@ -16,14 +16,14 @@
  */
 import { inject, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyCountStore } from '@/stores/number-statistics/number-frequency-statistics'
+import { useNumberFrequencyStatisticsStore } from '@/stores/number-statistics/number-frequency-statistics'
 import echarts from '@/assets/js/echarts'
 import { chartPalette } from '@/assets/js/palette'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const frequencyCountStore = useFrequencyCountStore()
+const numberFrequencyStatisticsStore = useNumberFrequencyStatisticsStore()
 const { startCode, lastCode, codeStep, codes, result, description } =
-  storeToRefs(frequencyCountStore)
+  storeToRefs(numberFrequencyStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
@@ -39,8 +39,8 @@ onUnmounted(() => {
 })
 
 function loadFrequencyCount() {
-  frequencyCountStore.initData(rawDataArray.value)
-  frequencyCountStore.countByFrequency(rawDataArray.value)
+  numberFrequencyStatisticsStore.initData(rawDataArray.value)
+  numberFrequencyStatisticsStore.countByFrequency(rawDataArray.value)
   renderFrequencyGroupData()
 }
 

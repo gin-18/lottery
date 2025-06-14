@@ -5,17 +5,17 @@ import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/curr
 import ResultContainer from '@/components/content/ResultContainer.vue'
 
 const rawDataArray = inject('rawDataArray')
-const currentNumberStatistics = useCurrentNumberStatisticsStore()
+const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
 const { currentCode, currentCodeIndex, description } = storeToRefs(
-  currentNumberStatistics,
+  currentNumberStatisticsStore,
 )
 
 watch(currentCodeIndex, () => {
-  currentNumberStatistics.initData(rawDataArray.value)
+  currentNumberStatisticsStore.initData(rawDataArray.value)
 })
 
 onMounted(() => {
-  currentNumberStatistics.initData(rawDataArray.value)
+  currentNumberStatisticsStore.initData(rawDataArray.value)
 })
 </script>
 

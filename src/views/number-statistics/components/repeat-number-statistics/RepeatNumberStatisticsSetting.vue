@@ -1,21 +1,22 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
+import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const repeatCountStore = useRepeatCountStore()
-const { currentCode, previousButtonDisable, nextButtonDisable } =
-  storeToRefs(repeatCountStore)
+const repeatNumberStatisticsStore = useRepeatNumberStatisticsStore()
+const { currentCode, previousButtonDisable, nextButtonDisable } = storeToRefs(
+  repeatNumberStatisticsStore,
+)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  repeatCountStore.goToPreviousCode(rawDataArray.value)
+  repeatNumberStatisticsStore.goToPreviousCode(rawDataArray.value)
 }
 
 function goToNextCode() {
-  repeatCountStore.goToNextCode()
+  repeatNumberStatisticsStore.goToNextCode()
 }
 </script>
 

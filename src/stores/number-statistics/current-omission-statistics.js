@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useOmissionCountStore = defineStore('omission_count', {
+export const useCurrentOmissionStatisticsStore = defineStore('current_omission_statistics', {
   state: () => ({
     currentCode: null,
     rangeCode: null,

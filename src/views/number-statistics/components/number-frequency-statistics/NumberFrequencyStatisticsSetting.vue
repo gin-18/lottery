@@ -1,19 +1,19 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyCountStore } from '@/stores/number-statistics/number-frequency-statistics'
+import { useNumberFrequencyStatisticsStore } from '@/stores/number-statistics/number-frequency-statistics'
 
-const frequencyCountStore = useFrequencyCountStore()
+const numberFrequencyStatisticsStore = useNumberFrequencyStatisticsStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } =
-  storeToRefs(frequencyCountStore)
+  storeToRefs(numberFrequencyStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function addCodeStep() {
-  frequencyCountStore.addCodeStep(rawDataArray.value)
+  numberFrequencyStatisticsStore.addCodeStep(rawDataArray.value)
 }
 function reduceCodeStep() {
-  frequencyCountStore.reduceCodeStep()
+  numberFrequencyStatisticsStore.reduceCodeStep()
 }
 </script>
 

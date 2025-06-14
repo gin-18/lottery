@@ -1,20 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useOmissionCountStore } from '@/stores/number-statistics/current-omission-statistics'
+import { useCurrentOmissionStatisticsStore } from '@/stores/number-statistics/current-omission-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const omissionCountStore = useOmissionCountStore()
+const currentOmissionStatisticsStore = useCurrentOmissionStatisticsStore()
 const { currentCode, previousButtonDisable, nextButtonDisable } =
-  storeToRefs(omissionCountStore)
+  storeToRefs(currentOmissionStatisticsStore)
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  omissionCountStore.goToPreviousCode(rawDataArray.value)
+  currentOmissionStatisticsStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
-  omissionCountStore.goToNextCode()
+  currentOmissionStatisticsStore.goToNextCode()
 }
 </script>
 

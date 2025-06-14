@@ -1,23 +1,23 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
+import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const rawDataArray = inject('rawDataArray')
 
-const repeatCountStore = useRepeatCountStore()
+const repeatNumberStatisticsStore = useRepeatNumberStatisticsStore()
 const { startCode, currentCode, currentCodeIndex, result, description } =
-  storeToRefs(repeatCountStore)
+  storeToRefs(repeatNumberStatisticsStore)
 
 watch(currentCodeIndex, loadRepeatCount)
 
 onMounted(loadRepeatCount)
 
 function loadRepeatCount() {
-  repeatCountStore.initData(rawDataArray.value)
-  repeatCountStore.countRepeatNumber()
+  repeatNumberStatisticsStore.initData(rawDataArray.value)
+  repeatNumberStatisticsStore.countRepeatNumber()
 }
 </script>
 

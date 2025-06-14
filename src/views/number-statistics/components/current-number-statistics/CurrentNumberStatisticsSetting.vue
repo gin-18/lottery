@@ -4,18 +4,18 @@ import { storeToRefs } from 'pinia'
 import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const currentNumberStatistics = useCurrentNumberStatisticsStore()
+const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
 const { currentCode, previousButtonDisable, nextButtonDisable } = storeToRefs(
-  currentNumberStatistics,
+  currentNumberStatisticsStore,
 )
 
 const rawDataArray = inject('rawDataArray')
 
 function goToPreviousCode() {
-  currentNumberStatistics.goToPreviousCode(rawDataArray.value)
+  currentNumberStatisticsStore.goToPreviousCode(rawDataArray.value)
 }
 function goToNextCode() {
-  currentNumberStatistics.goToNextCode()
+  currentNumberStatisticsStore.goToNextCode()
 }
 </script>
 
