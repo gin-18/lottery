@@ -5,7 +5,7 @@ import {
   generateTailRanges,
 } from '@/assets/js/range_analyze'
 
-export const useTailTendencyCountStore = defineStore('tail_tendency_count', {
+export const useTailTendencyStatisticsStore = defineStore('tail_tendency_statistics', {
   state: () => ({
     result: null,
     codeStep: 7,

@@ -2,9 +2,9 @@
 import { provide, computed, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTailDataStore } from '@/stores/tail-statistics/tail-data'
-import { useTailCountStore } from '@/stores/tail-statistics/tail-number-statistics'
-import { useTailTimesCountStore } from '@/stores/tail-statistics/tail-times-statistics'
-import { useTailTendencyCountStore } from '@/stores/tail-statistics/tail-tendency-statistics'
+import { useTailNumberStatisticsStore } from '@/stores/tail-statistics/tail-number-statistics'
+import { useTailTimesStatisticsStore } from '@/stores/tail-statistics/tail-times-statistics'
+import { useTailTendencyStatisticsStore } from '@/stores/tail-statistics/tail-tendency-statistics'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
@@ -21,76 +21,76 @@ import Footer from '@/components/Footer.vue'
 const tailDataStore = useTailDataStore()
 const { rawDataArray } = storeToRefs(tailDataStore)
 
-const tailCountStore = useTailCountStore()
+const tailNumberStatisticsStore = useTailNumberStatisticsStore()
 const {
-  ranges: tailCountRanges,
-  currentCode: tailCountCurrentCode,
-  result: tailCountResult,
-  currentCodeIndex: tailCountCurrentCodeIndex,
-  description: tailCountDescription,
-} = storeToRefs(tailCountStore)
+  ranges: tailNumberStatisticsRanges,
+  currentCode: tailNumberStatisticsCurrentCode,
+  result: tailNumberStatisticsResult,
+  currentCodeIndex: tailNumberStatisticsCurrentCodeIndex,
+  description: tailNumberStatisticsDescription,
+} = storeToRefs(tailNumberStatisticsStore)
 
-const tailTimesCountStore = useTailTimesCountStore()
+const tailTimesStatisticsStore = useTailTimesStatisticsStore()
 const {
-  codeStep: tailTimesCountCodeStep,
-  startCode: tailTimesCountStartCode,
-  endCode: tailTimesCountEndCode,
-  result: tailTimesCountResult,
-  description: tailTimesCountDescription,
-} = storeToRefs(tailTimesCountStore)
+  codeStep: tailTimesStatisticsCodeStep,
+  startCode: tailTimesStatisticsStartCode,
+  endCode: tailTimesStatisticsEndCode,
+  result: tailTimesStatisticsResult,
+  description: tailTimesStatisticsDescription,
+} = storeToRefs(tailTimesStatisticsStore)
 
-const tailTendencyCountStore = useTailTendencyCountStore()
+const tailTendencyStatisticsStore = useTailTendencyStatisticsStore()
 const {
-  result: tailTendencyCountResult,
-  codeStep: tailTendencyCountCodeStep,
-  description: tailTendencyCountDescription,
-} = storeToRefs(tailTendencyCountStore)
+  result: tailTendencyStatisticsResult,
+  codeStep: tailTendencyStatisticsCodeStep,
+  description: tailTendencyStatisticsDescription,
+} = storeToRefs(tailTendencyStatisticsStore)
 
 const isLoading = computed(() => (rawDataArray.value.length ? false : true))
 
 provide('rawDataArray', rawDataArray)
 
 watch(
-  () => tailCountCurrentCodeIndex.value,
+  () => tailNumberStatisticsCurrentCodeIndex.value,
   () => {
-    loadTailCount()
+    loadTailNumberStatistics()
   },
 )
 
 watch(
-  () => tailTimesCountCodeStep.value,
+  () => tailTimesStatisticsCodeStep.value,
   () => {
-    loadTailTimesCount()
+    loadTailTimesStatistics()
   },
 )
 
 watch(
-  () => tailTendencyCountCodeStep.value,
+  () => tailTendencyStatisticsCodeStep.value,
   () => {
-    loadTailTendencyCount()
+    loadTailTendencyStatistics()
   },
 )
 
 onMounted(async () => {
   await tailDataStore.initData()
-  loadTailCount()
-  loadTailTimesCount()
-  loadTailTendencyCount()
+  loadTailNumberStatistics()
+  loadTailTimesStatistics()
+  loadTailTendencyStatistics()
 })
 
-function loadTailCount() {
-  tailCountStore.initData(rawDataArray.value)
-  tailCountStore.countRangeInOneCode()
+function loadTailNumberStatistics() {
+  tailNumberStatisticsStore.initData(rawDataArray.value)
+  tailNumberStatisticsStore.countRangeInOneCode()
 }
 
-function loadTailTimesCount() {
-  tailTimesCountStore.initData(rawDataArray.value)
-  tailTimesCountStore.countInDigit(rawDataArray.value)
+function loadTailTimesStatistics() {
+  tailTimesStatisticsStore.initData(rawDataArray.value)
+  tailTimesStatisticsStore.countInDigit(rawDataArray.value)
 }
 
-function loadTailTendencyCount() {
-  tailTendencyCountStore.initData(rawDataArray.value)
-  tailTendencyCountStore.countRangeInGroupCode(rawDataArray.value)
+function loadTailTendencyStatistics() {
+  tailTendencyStatisticsStore.initData(rawDataArray.value)
+  tailTendencyStatisticsStore.countRangeInGroupCode(rawDataArray.value)
 }
 </script>
 
@@ -109,10 +109,10 @@ function loadTailTendencyCount() {
       <h2>尾数统计</h2>
       <LoadingWrapper :is-loading="isLoading">
         <RangeNumberStatistics
-          :range="tailCountRanges"
-          :current-code="tailCountCurrentCode"
-          :result="tailCountResult"
-          :description="tailCountDescription"
+          :range="tailNumberStatisticsRanges"
+          :current-code="tailNumberStatisticsCurrentCode"
+          :result="tailNumberStatisticsResult"
+          :description="tailNumberStatisticsDescription"
           thead="尾数"
         />
       </LoadingWrapper>
@@ -122,11 +122,11 @@ function loadTailTendencyCount() {
       <h2>尾数总数</h2>
       <LoadingWrapper :is-loading="isLoading">
         <RangeTimesStatistics
-          :code-step="tailTimesCountCodeStep"
-          :start-code="tailTimesCountStartCode"
-          :end-code="tailTimesCountEndCode"
-          :result="tailTimesCountResult"
-          :description="tailTimesCountDescription"
+          :code-step="tailTimesStatisticsCodeStep"
+          :start-code="tailTimesStatisticsStartCode"
+          :end-code="tailTimesStatisticsEndCode"
+          :result="tailTimesStatisticsResult"
+          :description="tailTimesStatisticsDescription"
           chart-id="tail-times-chart"
         />
       </LoadingWrapper>
@@ -136,9 +136,9 @@ function loadTailTendencyCount() {
       <h2>尾数走势</h2>
       <LoadingWrapper :is-loading="isLoading">
         <RangeTendencyStatistics
-          :result="tailTendencyCountResult"
-          :code-step="tailTendencyCountCodeStep"
-          :description="tailTendencyCountDescription"
+          :result="tailTendencyStatisticsResult"
+          :code-step="tailTendencyStatisticsCodeStep"
+          :description="tailTendencyStatisticsDescription"
           chart-id="tail-tendency-chart"
           suffix="尾数"
         />

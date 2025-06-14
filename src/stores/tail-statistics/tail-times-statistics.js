@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { formatData } from '@/assets/js/utils'
 
-export const useTailTimesCountStore = defineStore('tail_times_count', {
+export const useTailTimesStatisticsStore = defineStore('tail_times_statistics', {
   state: () => ({
     codeStep: 7,
     startCode: null,

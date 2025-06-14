@@ -1,20 +1,20 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTailTendencyCountStore } from '@/stores/tail-statistics/tail-tendency-statistics'
+import { useTailTendencyStatisticsStore } from '@/stores/tail-statistics/tail-tendency-statistics'
 
-const tailTendencyCountStore = useTailTendencyCountStore()
+const tailTendencyStatisticsStore = useTailTendencyStatisticsStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
-  tailTendencyCountStore,
+  tailTendencyStatisticsStore,
 )
 
 const rawDataArray = inject('rawDataArray')
 
 function addCodeStep() {
-  tailTendencyCountStore.addCodeStep(rawDataArray.value)
+  tailTendencyStatisticsStore.addCodeStep(rawDataArray.value)
 }
 function reduceCodeStep() {
-  tailTendencyCountStore.reduceCodeStep()
+  tailTendencyStatisticsStore.reduceCodeStep()
 }
 </script>
 
