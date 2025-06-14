@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTailTimesCountStore } from '@/stores/tail_times_count'
+import { useTailTimesCountStore } from '@/stores/tail-statistics/tail-times-statistics'
 
 const tailTimesCountStore = useTailTimesCountStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } =

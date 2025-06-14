@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTailCountStore } from '@/stores/tail_count'
+import { useTailCountStore } from '@/stores/tail-statistics/tail-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const tailCountStore = useTailCountStore()

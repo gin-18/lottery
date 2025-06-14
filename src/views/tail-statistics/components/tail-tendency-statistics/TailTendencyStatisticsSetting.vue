@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useTailTendencyCountStore } from '@/stores/tail_tendency_count'
+import { useTailTendencyCountStore } from '@/stores/tail-statistics/tail-tendency-statistics'
 
 const tailTendencyCountStore = useTailTendencyCountStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
