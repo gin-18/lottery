@@ -5,8 +5,8 @@ import {
   generateIntervalRanges,
 } from '@/assets/js/range_analyze'
 
-export const useIntervalTendencyCountStore = defineStore(
-  'interval_tendency_count',
+export const useIntervalTendencyStatisticsStore = defineStore(
+  'interval-tendency-statistics',
   {
     state: () => ({
       result: null,

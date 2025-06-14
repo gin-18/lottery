@@ -5,7 +5,7 @@ import {
   generateIntervalRanges,
 } from '@/assets/js/range_analyze'
 
-export const useIntervalTimesCountStore = defineStore('interval_times_count', {
+export const useIntervalTimesStatisticsStore = defineStore('interval_times_statistics', {
   state: () => ({
     codeStep: 7,
     startCode: null,

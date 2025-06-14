@@ -1,21 +1,21 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useIntervalTimesCountStore } from '@/stores/interval-statistics/interval-times-statistics'
+import { useIntervalTimesStatisticsStore } from '@/stores/interval-statistics/interval-times-statistics'
 
-const intervalTimesCountStore = useIntervalTimesCountStore()
+const intervalTimesStatisticsStore = useIntervalTimesStatisticsStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } = storeToRefs(
-  intervalTimesCountStore,
+  intervalTimesStatisticsStore,
 )
 
 const rawDataArray = inject('rawDataArray')
 
 function addCodeStep() {
-  intervalTimesCountStore.addCodeStep(rawDataArray)
+  intervalTimesStatisticsStore.addCodeStep(rawDataArray)
 }
 
 function reduceCodeStep() {
-  intervalTimesCountStore.reduceCodeStep()
+  intervalTimesStatisticsStore.reduceCodeStep()
 }
 </script>
 
