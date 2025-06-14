@@ -1,15 +1,15 @@
 <script setup>
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCurrentResultStore } from '@/stores/number-statistics/current-number-statistics'
+import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
 import { useRepeatCountStore } from '@/stores/number-statistics/repeat-number-statistics'
 import { useTimesNumberCountStore } from '@/stores/number-statistics/number-times-statistics'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
-const currentResultStore = useCurrentResultStore()
-const { currentCode } = storeToRefs(currentResultStore)
+const currentNumberStatistics = useCurrentNumberStatisticsStore()
+const { currentCode } = storeToRefs(currentNumberStatistics)
 
 const repeatCountStore = useRepeatCountStore()
 const { result: repeatResult } = storeToRefs(repeatCountStore)
