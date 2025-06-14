@@ -1,7 +1,7 @@
 <script setup>
 import { computed, provide, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNumberDataStore } from '@/stores/number_page_data'
+import { useNumberDataStore } from '@/stores/number-statistics/number-data'
 import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import SettingBox from '@/components/content/SettingBox.vue'

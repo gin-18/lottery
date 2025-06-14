@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useCurrentResultStore } from '@/stores/current_result'
+import { useCurrentResultStore } from '@/stores/number-statistics/current-number-statistics'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const currentResultStore = useCurrentResultStore()

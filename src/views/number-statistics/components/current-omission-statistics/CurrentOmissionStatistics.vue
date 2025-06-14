@@ -2,7 +2,7 @@
 import { inject, watch, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDistributionStore } from '@/stores/number_distribution'
-import { useCurrentResultStore } from '@/stores/current_result'
+import { useCurrentResultStore } from '@/stores/number-statistics/current-number-statistics'
 import { useRepeatCountStore } from '@/stores/repeat_count'
 import { useOmissionCountStore } from '@/stores/omission_count'
 import { formatData, setBallColorInNumber } from '@/assets/js/utils'
