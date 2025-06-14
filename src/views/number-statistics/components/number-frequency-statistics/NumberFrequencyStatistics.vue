@@ -16,7 +16,7 @@
  */
 import { inject, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyCountStore } from '@/stores/frequency_count'
+import { useFrequencyCountStore } from '@/stores/number-statistics/number-frequency-statistics'
 import echarts from '@/assets/js/echarts'
 import { chartPalette } from '@/assets/js/palette'
 import CodeDate from '@/components/content/CodeDate.vue'

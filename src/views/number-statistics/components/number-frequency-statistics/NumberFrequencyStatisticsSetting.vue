@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useFrequencyCountStore } from '@/stores/frequency_count'
+import { useFrequencyCountStore } from '@/stores/number-statistics/number-frequency-statistics'
 
 const frequencyCountStore = useFrequencyCountStore()
 const { codeStep, addButtonDisable, reduceButtonDisable } =
