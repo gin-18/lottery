@@ -17,6 +17,10 @@ const items = [
     path: '/tail',
   },
   {
+    name: '工具箱',
+    path: '/tools',
+  },
+  {
     name: '投注记录',
     path: '/betting',
   },

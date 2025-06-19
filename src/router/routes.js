@@ -26,9 +26,15 @@ export const routes = [
   },
   {
     path: '/tail',
-    name: 'tail',
+    name: 'Tail',
     meta: { title: '尾数分析' },
     component: () => import('@/views/tail-statistics/TailStatistics.vue'),
+  },
+  {
+    path: '/tools',
+    name: 'Tools',
+    meta: { title: '工具箱' },
+    component: () => import('@/views/tool-box/ToolBox.vue'),
   },
   {
     path: '/betting',
