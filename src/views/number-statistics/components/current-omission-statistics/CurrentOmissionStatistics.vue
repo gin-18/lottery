@@ -19,7 +19,9 @@ const {
 } = storeToRefs(currentOmissionStatisticsStore)
 
 const currentNumberStatisticsStore = useCurrentNumberStatisticsStore()
-const { currentCode: currentResultCode } = storeToRefs(currentNumberStatisticsStore)
+const { currentCode: currentResultCode } = storeToRefs(
+  currentNumberStatisticsStore,
+)
 
 const repeatNumberStatisticsStore = useRepeatNumberStatisticsStore()
 const { result: repeatResult } = storeToRefs(repeatNumberStatisticsStore)
@@ -50,7 +52,7 @@ function setNumberColor(num) {
 <template>
   <p>{{ description }}</p>
   <CodeDate v-if="currentCode" :data="[currentCode]" />
-  <table class="table">
+  <table class="!table">
     <thead>
       <tr>
         <th>当前遗漏值</th>
@@ -59,7 +61,10 @@ function setNumberColor(num) {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(value, key, index) in currentOmissionStatisticsResult" :key="index">
+      <tr
+        v-for="(value, key, index) in currentOmissionStatisticsResult"
+        :key="index"
+      >
         <td>{{ key }}</td>
         <td class="flex flex-wrap gap-2">
           <Ball

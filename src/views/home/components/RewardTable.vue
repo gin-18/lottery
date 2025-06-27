@@ -24,10 +24,20 @@ function getRewardRows(playType) {
     }
   })
 }
+
+function getShowIndex() {
+  rewards.value.forEach((_item, index) => {
+    if (index > 0) {
+      showIndex.value.push(
+        showIndex.value[index - 1] + rewards.value[index - 1].conditions.length,
+      )
+    }
+  })
+}
 </script>
 
 <template>
-  <table class="table">
+  <table class="!table">
     <thead>
       <tr>
         <th scope="col">玩法</th>

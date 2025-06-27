@@ -31,7 +31,7 @@ const items = [
   <nav>
     <ul class="flex gap-4 text-sm md:text-base">
       <li
-        class="md:px-4 md:py-2 md:rounded-btn md:hover:bg-base-200 md:cursor-pointer md:transition-colors"
+        class="md:px-4 md:py-2 md:rounded-md md:hover:bg-base-200 md:cursor-pointer md:transition-colors"
         v-for="(item, index) in items"
         :key="index"
       >

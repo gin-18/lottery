@@ -47,7 +47,7 @@ function setNumberColor(num) {
   <p>{{ description }}</p>
   <CodeDate v-if="startCode && endCode" :data="[startCode, endCode]" />
   <p>共 {{ codeStep }} 期</p>
-  <table class="table">
+  <table class="!table">
     <thead>
       <tr>
         <th>次数</th>

@@ -40,7 +40,7 @@ function setBallColor(num) {
   <p>{{ description }}</p>
   <CodeDate v-if="currentCode" :data="[currentCode]" />
   <div class="overflow-x-auto">
-    <table v-if="result" class="table">
+    <table v-if="result" class="!table">
       <thead>
         <tr>
           <th scope="col">{{ thead }}</th>

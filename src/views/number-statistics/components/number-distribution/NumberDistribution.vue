@@ -51,7 +51,7 @@ function renderDataInTable(data) {
     <p>近 {{ codeStep }} 期</p>
   </div>
   <div class="overflow-x-auto">
-    <table class="table">
+    <table class="!table">
       <thead>
         <tr>
           <th scope>期次</th>
