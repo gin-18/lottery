@@ -1,18 +1,19 @@
 <template>
   <div class="tabs tabs-lift">
-    <input type="radio" name="my_tabs_3" class="tab" aria-label="Tab 1" />
-    <div class="tab-content bg-base-100 border-base-300 p-6">Tab content 1</div>
-
     <input
+      checked
       type="radio"
       name="my_tabs_3"
       class="tab"
-      aria-label="Tab 2"
-      checked="checked"
+      aria-label="复式"
     />
-    <div class="tab-content bg-base-100 border-base-300 p-6">Tab content 2</div>
+    <div class="tab-content bg-base-100 border-base-300 p-6">
+      <p>复式</p>
+    </div>
 
-    <input type="radio" name="my_tabs_3" class="tab" aria-label="Tab 3" />
-    <div class="tab-content bg-base-100 border-base-300 p-6">Tab content 3</div>
+    <input type="radio" name="my_tabs_3" class="tab" aria-label="胆拖" />
+    <div class="tab-content bg-base-100 border-base-300 p-6">
+      <p>胆拖</p>
+    </div>
   </div>
 </template>
