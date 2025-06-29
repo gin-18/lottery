@@ -50,8 +50,8 @@ function closeSetting() {
 
   <Transition
     appear
-    enter-active-class="animate-[fade-in_0.5s_ease-in-out_both]"
-    leave-active-class="animate-[fade-out_0.5s_ease-in-out_both]"
+    enter-active-class="animate-fade-in"
+    leave-active-class="animate-fade-out"
   >
     <div
       v-show="isShown"
@@ -62,8 +62,8 @@ function closeSetting() {
 
   <Transition
     appear
-    enter-active-class="animate-[slide-in-right_0.5s_ease-in-out_both]"
-    leave-active-class="animate-[slide-out-right_0.5s_ease-in-out_both]"
+    enter-active-class="animate-slide-in-right"
+    leave-active-class="animate-slide-out-right"
   >
     <div
       v-show="isShown"
