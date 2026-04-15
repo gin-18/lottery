@@ -17,7 +17,7 @@ const items = [
     path: '/tail',
   },
   {
-    name: '工具箱',
+    name: '计算器',
     path: '/tools',
   },
   {

@@ -33,7 +33,7 @@ export const routes = [
   {
     path: '/tools',
     name: 'Tools',
-    meta: { title: '工具箱' },
+    meta: { title: '计算器' },
     component: () => import('@/views/tool-box/ToolBox.vue'),
   },
   {
