@@ -3,7 +3,7 @@ import {
   countRangeInOneCode,
   generateTailRanges,
   generateTails,
-} from '@/assets/js/range_analyze'
+} from '@/utils/lottery-range'
 
 export const useTailNumberStatisticsStore = defineStore(
   'tail_number_statistics',

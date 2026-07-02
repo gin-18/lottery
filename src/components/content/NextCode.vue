@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { formatDay } from '@/assets/js/utils'
+import { formatDay } from '@/utils/lottery-data'
 
 const props = defineProps({
   latestData: {

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getLatestData } from '@/assets/js/request'
+import { getLatestData } from '@/api/lottery'
 
 export const useHomeData = defineStore('home_data', {
   state: () => ({

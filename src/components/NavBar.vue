@@ -16,6 +16,10 @@ const items = [
     name: '尾数分析',
     path: '/tail',
   },
+  {
+    name: '投注记录',
+    path: '/betting',
+  },
 ]
 </script>
 

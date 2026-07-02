@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/utils'
+import { formatData } from '@/utils/lottery-data'
 
 export const useTailTimesStatisticsStore = defineStore(
   'tail_times_statistics',

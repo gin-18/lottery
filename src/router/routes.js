@@ -31,6 +31,12 @@ export const routes = [
     component: () => import('@/views/tail-statistics/TailStatistics.vue'),
   },
   {
+    path: '/betting',
+    name: 'BettingLedger',
+    meta: { title: '投注记录' },
+    component: () => import('@/views/betting-ledger/BettingLedger.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     meta: { title: '快乐8研究所' },

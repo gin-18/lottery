@@ -1,7 +1,7 @@
 <script setup>
-import { watch, onUnmounted } from 'vue'
-import echarts from '@/assets/js/echarts'
-import { chartPalette } from '@/assets/js/palette'
+import { nextTick, onUnmounted, watch } from 'vue'
+import echarts from '@/charts/echarts'
+import { chartPalette } from '@/charts/palette'
 
 const props = defineProps({
   chartId: {
@@ -28,14 +28,19 @@ const props = defineProps({
 
 let chart = null
 
-watch([() => props.result, () => props.codeStep], renderChart)
+watch([() => props.result, () => props.codeStep], renderChart, { immediate: true, deep: true })
 
 onUnmounted(() => {
   chart?.dispose?.()
   chart = null
 })
 
-function renderChart() {
+async function renderChart() {
+  await nextTick()
+
+  const chartElement = document.getElementById(props.chartId)
+  if (!chartElement) return
+
   chart?.dispose?.()
   chart = null
 
@@ -99,7 +104,7 @@ function renderChart() {
     series: seriesData,
   }
 
-  chart = echarts.init(document.getElementById(props.chartId))
+  chart = echarts.init(chartElement)
 
   chart.setOption(options)
 }

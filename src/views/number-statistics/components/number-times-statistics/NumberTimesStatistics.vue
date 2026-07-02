@@ -4,7 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useCurrentNumberStatisticsStore } from '@/stores/number-statistics/current-number-statistics'
 import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
 import { useNumberTimesStatisticsStore } from '@/stores/number-statistics/number-times-statistics'
-import { formatData, setBallColorInNumber } from '@/assets/js/utils'
+import { formatData, setBallColorInNumber } from '@/utils/lottery-data'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 

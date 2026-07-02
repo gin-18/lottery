@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { countNumberInData } from '@/assets/js/utils'
+import { countNumberInData } from '@/utils/lottery-data'
 
 export const useNumberTimesStatisticsStore = defineStore(
   'number_times_statistics',

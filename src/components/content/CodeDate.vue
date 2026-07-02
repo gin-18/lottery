@@ -1,5 +1,5 @@
 <script setup>
-import { formatDay } from '@/assets/js/utils'
+import { formatDay } from '@/utils/lottery-data'
 
 const props = defineProps({
   data: Array,

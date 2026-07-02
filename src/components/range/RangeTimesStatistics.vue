@@ -1,7 +1,7 @@
 <script setup>
 import { watch, onUnmounted } from 'vue'
-import echarts from '@/assets/js/echarts'
-import { chartPalette } from '@/assets/js/palette'
+import echarts from '@/charts/echarts'
+import { chartPalette } from '@/charts/palette'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const props = defineProps({

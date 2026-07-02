@@ -2,7 +2,6 @@
 import { computed, provide, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDataStore } from '@/stores/number-statistics/number-data'
-import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
 import CurrentNumberStatistics from './components/current-number-statistics/CurrentNumberStatistics.vue'
@@ -17,7 +16,6 @@ import CurrentOmissionStatistics from './components/current-omission-statistics/
 import CurrentOmissionStatisticsSetting from './components/current-omission-statistics/CurrentOmissionStatisticsSetting.vue'
 import NumberDistribution from './components/number-distribution/NumberDistribution.vue'
 import NumberDistributionSetting from './components/number-distribution/NumberDistributionSetting.vue'
-import Footer from '@/components/Footer.vue'
 
 const numberDataStore = useNumberDataStore()
 const { rawDataArray } = storeToRefs(numberDataStore)
@@ -30,60 +28,54 @@ provide('rawDataArray', rawDataArray)
 </script>
 
 <template>
-  <Header />
+  <section>
+    <h2>当前开奖</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <CurrentNumberStatistics />
+    </LoadingWrapper>
+  </section>
 
-  <main>
-    <section>
-      <h2>当前开奖</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <CurrentNumberStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>重号统计</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <RepeatNumberStatistics />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>重号统计</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <RepeatNumberStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>号码统计</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <NumberTimesStatistics />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>号码统计</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <NumberTimesStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>号码频率</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <NumberFrequencyStatistics />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>号码频率</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <NumberFrequencyStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>号码遗漏</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <CurrentOmissionStatistics />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>号码遗漏</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <CurrentOmissionStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>号码分布</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <NumberDistribution />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>号码分布</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <NumberDistribution />
-      </LoadingWrapper>
-    </section>
-
-    <SettingBox title="号码分析设置">
-      <CurrentNumberStatisticsSetting />
-      <RepeatNumberStatisticsSetting />
-      <NumberTimesStatisticsSetting />
-      <NumberFrequencyStatisticsSetting />
-      <CurrentOmissionStatisticsSetting />
-      <NumberDistributionSetting />
-    </SettingBox>
-  </main>
-
-  <Footer />
+  <SettingBox title="号码分析设置">
+    <CurrentNumberStatisticsSetting />
+    <RepeatNumberStatisticsSetting />
+    <NumberTimesStatisticsSetting />
+    <NumberFrequencyStatisticsSetting />
+    <CurrentOmissionStatisticsSetting />
+    <NumberDistributionSetting />
+  </SettingBox>
 </template>

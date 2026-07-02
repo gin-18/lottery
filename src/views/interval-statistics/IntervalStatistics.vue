@@ -5,7 +5,6 @@ import { useIntervalDataStore } from '@/stores/interval-statistics/interval-data
 import { useIntervalNumberStatisticsStore } from '@/stores/interval-statistics/interval-number-statistics'
 import { useIntervalTimesStatisticsStore } from '@/stores/interval-statistics/interval-times-statistics'
 import { useIntervalTendencyStatisticsStore } from '@/stores/interval-statistics/interval-tendency-statistics'
-import Header from '@/components/header/Header.vue'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
 import SettingBox from '@/components/content/SettingBox.vue'
 import RepeatNumberStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
@@ -16,7 +15,6 @@ import RangeTimesStatistics from '@/components/range/RangeTimesStatistics.vue'
 import IntervalTimesStatisticsSetting from './components/interval-times-statistics/IntervalTimesStatisticsSetting.vue'
 import RangeTendencyStatistics from '@/components/range/RangeTendencyStatistics.vue'
 import IntervalTendencyStatisticsSetting from './components/interval-tendency-statistics/IntervalTendencyStatisticsSetting.vue'
-import Footer from '@/components/Footer.vue'
 
 const intervalDataStore = useIntervalDataStore()
 const { rawDataArray } = storeToRefs(intervalDataStore)
@@ -95,63 +93,57 @@ function loadIntervalTendencyStatistics() {
 </script>
 
 <template>
-  <Header />
+  <section>
+    <h2>重号统计</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <RepeatNumberStatistics />
+    </LoadingWrapper>
+  </section>
 
-  <main>
-    <section>
-      <h2>重号统计</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <RepeatNumberStatistics />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>区间统计</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <RangeNumberStatistics
+        :range="intervalNumberStatisticsRanges"
+        :current-code="intervalNumberStatisticsCurrentCode"
+        :result="intervalNumberStatisticsResult"
+        :description="intervalNumberStatisticsDescription"
+        thead="区间"
+      />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>区间统计</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <RangeNumberStatistics
-          :range="intervalNumberStatisticsRanges"
-          :current-code="intervalNumberStatisticsCurrentCode"
-          :result="intervalNumberStatisticsResult"
-          :description="intervalNumberStatisticsDescription"
-          thead="区间"
-        />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>区间总数</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <RangeTimesStatistics
+        :code-step="intervalTimesStatisticsCodeStep"
+        :start-code="intervalTimesStatisticsStartCode"
+        :end-code="intervalTimesStatisticsEndCode"
+        :result="intervalTimesStatisticsResult"
+        :description="intervalTimesStatisticsDescription"
+        chart-id="interval-times-chart"
+      />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>区间总数</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <RangeTimesStatistics
-          :code-step="intervalTimesStatisticsCodeStep"
-          :start-code="intervalTimesStatisticsStartCode"
-          :end-code="intervalTimesStatisticsEndCode"
-          :result="intervalTimesStatisticsResult"
-          :description="intervalTimesStatisticsDescription"
-          chart-id="interval-times-chart"
-        />
-      </LoadingWrapper>
-    </section>
+  <section>
+    <h2>区间走势</h2>
+    <LoadingWrapper :is-loading="isLoading">
+      <RangeTendencyStatistics
+        :result="intervalTendencyStatisticsResult"
+        :code-step="intervalTendencyStatisticsCodeStep"
+        :description="intervalTendencyStatisticsDescription"
+        chart-id="interval-tendency-chart"
+        suffix="区间"
+      />
+    </LoadingWrapper>
+  </section>
 
-    <section>
-      <h2>区间走势</h2>
-      <LoadingWrapper :is-loading="isLoading">
-        <RangeTendencyStatistics
-          :result="intervalTendencyStatisticsResult"
-          :code-step="intervalTendencyStatisticsCodeStep"
-          :description="intervalTendencyStatisticsDescription"
-          chart-id="interval-tendency-chart"
-          suffix="区间"
-        />
-      </LoadingWrapper>
-    </section>
-
-    <SettingBox title="区间统计设置">
-      <RepeatNumberStatisticsSetting />
-      <IntervalNumberStatisticsSetting />
-      <IntervalTimesStatisticsSetting />
-      <IntervalTendencyStatisticsSetting />
-    </SettingBox>
-  </main>
-
-  <Footer />
+  <SettingBox title="区间统计设置">
+    <RepeatNumberStatisticsSetting />
+    <IntervalNumberStatisticsSetting />
+    <IntervalTimesStatisticsSetting />
+    <IntervalTendencyStatisticsSetting />
+  </SettingBox>
 </template>

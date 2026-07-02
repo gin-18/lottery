@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/utils'
+import { formatData } from '@/utils/lottery-data'
 import {
   generateIntervals,
   generateIntervalRanges,
-} from '@/assets/js/range_analyze'
+} from '@/utils/lottery-range'
 
 export const useIntervalTimesStatisticsStore = defineStore(
   'interval_times_statistics',
