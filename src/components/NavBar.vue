@@ -1,10 +1,6 @@
 <script setup>
 const items = [
   {
-    name: '开奖结果',
-    path: '/results',
-  },
-  {
     name: '号码分析',
     path: '/number',
   },
@@ -17,12 +13,16 @@ const items = [
     path: '/tail',
   },
   {
+    name: '投注记录',
+    path: '/betting',
+  },
+  {
     name: '计算器',
     path: '/tools',
   },
   {
-    name: '投注记录',
-    path: '/betting',
+    name: '开奖结果',
+    path: '/results',
   },
 ]
 </script>

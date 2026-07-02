@@ -159,10 +159,10 @@ function clearToastTimer() {
     <div class="grid gap-4">
       <div class="flex flex-wrap justify-end gap-2">
         <button class="btn btn-sm btn-primary" type="button" aria-label="导出" @click="exportRecords">
-          <span class="icon-[octicon--download-16]"></span>
+          <span class="icon-[octicon--upload-16]"></span>
         </button>
         <button class="btn btn-sm btn-primary" type="button" aria-label="导入" @click="triggerImport">
-          <span class="icon-[octicon--upload-16]"></span>
+          <span class="icon-[octicon--download-16]"></span>
         </button>
         <button
           class="btn btn-sm btn-primary"
