@@ -73,6 +73,24 @@ test('add item button lives in the drawer footer', () => {
   assert.match(footerMatch[0], /<div class="flex items-center gap-2">[\s\S]*重置[\s\S]*保存/)
 })
 
+test('number selection uses tabs inside each number group', () => {
+  assert.match(componentSource, /function getNumberTabName\(group\) \{\s+return `number-tabs-\$\{group\.id\}`\s+\}/)
+  assert.match(
+    componentSource,
+    /<div v-if="item\.selectionMode !== DANTUO_MODE" role="tablist" class="tabs tabs-lifted">[\s\S]*class="tab whitespace-nowrap"[\s\S]*aria-label="号码"/,
+  )
+  assert.match(
+    componentSource,
+    /<div v-else role="tablist" class="tabs tabs-lifted">[\s\S]*class="tab whitespace-nowrap"[\s\S]*aria-label="胆码"[\s\S]*class="tab whitespace-nowrap"[\s\S]*aria-label="拖码"/,
+  )
+  assert.doesNotMatch(componentSource, /class="tab"[\s\S]*aria-label="号码"/)
+  assert.doesNotMatch(componentSource, /class="tab"[\s\S]*aria-label="胆码"/)
+  assert.doesNotMatch(componentSource, /class="tab"[\s\S]*aria-label="拖码"/)
+  assert.match(componentSource, /class="tab-content bg-base-100 border-base-300 rounded-box p-4"/)
+  assert.doesNotMatch(componentSource, /<div class="text-sm font-medium">胆码<\/div>/)
+  assert.doesNotMatch(componentSource, /<div class="text-sm font-medium">拖码<\/div>/)
+})
+
 test('adding an item wires scroll, focus, and reduced-motion handling', () => {
   assert.match(componentSource, /import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'/)
   assert.match(componentSource, /form\.items = \[\.\.\.form\.items, newItem\]\s+revealAddedItem\(newItem\.id\)/)

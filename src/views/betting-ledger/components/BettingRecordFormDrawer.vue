@@ -212,6 +212,10 @@ function isGroupNumberSelected(group, fieldName, number) {
   return group[fieldName].includes(number)
 }
 
+function getNumberTabName(group) {
+  return `number-tabs-${group.id}`
+}
+
 function getItemTotals(item) {
   return calculateItemDraftTotals({
     playType: item.playType,
@@ -446,28 +450,43 @@ onBeforeUnmount(() => {
                 </button>
               </div>
 
-              <div v-if="item.selectionMode !== DANTUO_MODE" class="grid gap-4">
-                <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(10,minmax(0,1fr))]">
-                  <button
-                    v-for="number in allNumbers"
-                    :key="`${group.id}-${number}`"
-                    type="button"
-                    @click="toggleGroupNumber(group, 'numbers', number)"
-                  >
-                    <Ball
-                      :num="String(number).padStart(2, '0')"
-                      :color="{
-                        'bg-base-300': true,
-                        'bg-error': isGroupNumberSelected(group, 'numbers', number),
-                      }"
-                    />
-                  </button>
+              <div v-if="item.selectionMode !== DANTUO_MODE" role="tablist" class="tabs tabs-lifted">
+                <input
+                  checked
+                  type="radio"
+                  :name="getNumberTabName(group)"
+                  class="tab whitespace-nowrap"
+                  aria-label="号码"
+                />
+                <div class="tab-content bg-base-100 border-base-300 rounded-box p-4">
+                  <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(10,minmax(0,1fr))]">
+                    <button
+                      v-for="number in allNumbers"
+                      :key="`${group.id}-${number}`"
+                      type="button"
+                      @click="toggleGroupNumber(group, 'numbers', number)"
+                    >
+                      <Ball
+                        :num="String(number).padStart(2, '0')"
+                        :color="{
+                          'bg-base-300': true,
+                          'bg-error': isGroupNumberSelected(group, 'numbers', number),
+                        }"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div v-else class="grid gap-4">
-                <div class="grid gap-4">
-                  <div class="text-sm font-medium">胆码</div>
+              <div v-else role="tablist" class="tabs tabs-lifted">
+                <input
+                  checked
+                  type="radio"
+                  :name="getNumberTabName(group)"
+                  class="tab whitespace-nowrap"
+                  aria-label="胆码"
+                />
+                <div class="tab-content bg-base-100 border-base-300 rounded-box p-4">
                   <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(20,minmax(0,1fr))]">
                     <button
                       v-for="number in allNumbers"
@@ -486,8 +505,13 @@ onBeforeUnmount(() => {
                   </div>
                 </div>
 
-                <div class="grid gap-4">
-                  <div class="text-sm font-medium">拖码</div>
+                <input
+                  type="radio"
+                  :name="getNumberTabName(group)"
+                  class="tab whitespace-nowrap"
+                  aria-label="拖码"
+                />
+                <div class="tab-content bg-base-100 border-base-300 rounded-box p-4">
                   <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(20,minmax(0,1fr))]">
                     <button
                       v-for="number in allNumbers"
