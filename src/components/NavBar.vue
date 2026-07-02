@@ -28,16 +28,20 @@ const items = [
 </script>
 
 <template>
-  <nav>
-    <ul class="flex gap-4 text-sm md:text-base">
+  <nav class="w-full max-w-full overflow-x-auto md:w-auto md:overflow-visible">
+    <ul class="flex flex-nowrap gap-4 text-sm md:text-base">
       <li
-        class="md:px-4 md:py-2 md:rounded-md md:hover:bg-base-200 md:cursor-pointer md:transition-colors"
+        class="shrink-0 rounded-box md:px-4 md:py-2 md:hover:bg-base-200 md:cursor-pointer md:transition-colors"
         v-for="(item, index) in items"
         :key="index"
       >
-        <RouterLink :to="item.path" active-class="text-primary">{{
-          item.name
-        }}</RouterLink>
+        <RouterLink
+          class="whitespace-nowrap"
+          :to="item.path"
+          active-class="text-primary"
+        >
+          {{ item.name }}
+        </RouterLink>
       </li>
     </ul>
   </nav>
