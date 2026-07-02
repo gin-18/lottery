@@ -7,8 +7,14 @@ import {
 import {
   FLOATING_PRIZE_NOTICE,
   PRIZE_RULES,
+  calculateDantuoPrizeCounts,
+  calculateRegularPrizeCounts,
   getPrizeDisplayValue,
 } from '../src/utils/lottery-rules.js'
+import {
+  getAwardDetails,
+  getAwardTotal,
+} from '../src/views/tool-box/components/award-detail/utils.js'
 
 test('PRIZE_RULES matches current kl8 prize table', () => {
   assert.deepEqual(PRIZE_RULES, {
@@ -29,6 +35,49 @@ test('getPrizeDisplayValue labels floating prize caps', () => {
   assert.equal(getPrizeDisplayValue('pick9', 9), '浮动奖金，单注最高 25 万')
   assert.equal(getPrizeDisplayValue('pick10', 10), '浮动奖金，单注最高 500 万')
   assert.equal(getPrizeDisplayValue('pick7', 7), 8500)
+})
+
+test('calculateRegularPrizeCounts counts compound winning stakes by hit size', () => {
+  const prizeCounts = calculateRegularPrizeCounts({
+    playType: 'pick5',
+    selectedCount: 8,
+    hitCount: 4,
+  })
+
+  assert.equal(prizeCounts.find((item) => item.hitSize === 5).count, 0)
+  assert.equal(prizeCounts.find((item) => item.hitSize === 4).count, 4)
+  assert.equal(prizeCounts.find((item) => item.hitSize === 3).count, 24)
+})
+
+test('calculateDantuoPrizeCounts counts banker and drag combinations', () => {
+  const prizeCounts = calculateDantuoPrizeCounts({
+    playType: 'pick5',
+    bankerCount: 2,
+    dragCount: 5,
+    bankerHitCount: 1,
+    dragHitCount: 3,
+  })
+
+  assert.equal(prizeCounts.find((item) => item.hitSize === 2).count, 3)
+  assert.equal(prizeCounts.find((item) => item.hitSize === 3).count, 6)
+  assert.equal(prizeCounts.find((item) => item.hitSize === 4).count, 1)
+})
+
+test('getAwardDetails uses shared prize rules for confirmed prizes', () => {
+  const awardDetails = getAwardDetails('pick4', [{ hitSize: 4, count: 2 }])
+
+  assert.equal(awardDetails[0].prizePerBet, PRIZE_RULES.pick4[4])
+  assert.equal(awardDetails[0].total, 186)
+  assert.equal(getAwardTotal(awardDetails), 186)
+})
+
+test('getAwardDetails marks floating prizes as unconfirmed totals', () => {
+  const awardDetails = getAwardDetails('pick10', [{ hitSize: 10, count: 1 }])
+
+  assert.equal(awardDetails[0].isFloating, true)
+  assert.equal(awardDetails[0].prizeDisplayValue, '浮动奖金，单注最高 500 万')
+  assert.equal(awardDetails[0].total, 0)
+  assert.equal(getAwardTotal(awardDetails), 0)
 })
 
 test('settleBetRecord pays pick8 miss-all prize', () => {

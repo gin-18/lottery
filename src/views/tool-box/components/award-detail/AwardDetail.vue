@@ -15,6 +15,14 @@ const props = defineProps({
     type: Array
   }
 })
+
+function getPrizePerBetText(item) {
+  return item.isFloating ? item.prizeDisplayValue : formatPrice(item.prizePerBet)
+}
+
+function getPrizeTotalText(item) {
+  return item.isFloating ? '待确认' : formatPrice(item.total)
+}
 </script>
 
 <template>
@@ -24,7 +32,7 @@ const props = defineProps({
       投注金额：共 <span class="text-error">{{ formatPrice(props.betCount) }}</span> 注; 共 <span class="text-error">{{ formatPrice(props.betAmount) }}</span> 元
     </p>
     <p>
-      中奖金额: <span class="text-error">{{ formatPrice(props.totalBonus) }}</span> 元; 盈利: <span class="text-error">{{ formatPrice((props.totalBonus - props.betAmount)) }}</span> 元
+      已确认中奖金额: <span class="text-error">{{ formatPrice(props.totalBonus) }}</span> 元; 盈利: <span class="text-error">{{ formatPrice((props.totalBonus - props.betAmount)) }}</span> 元
     </p>
     <table class="!table">
       <thead>
@@ -38,9 +46,9 @@ const props = defineProps({
       <tbody>
         <tr v-for="(item, index) in props.prizeDetails" :key="index">
           <td>{{ item.level }}</td>
-          <td>{{ formatPrice(item.prizePerBet) }}</td>
+          <td>{{ getPrizePerBetText(item) }}</td>
           <td>{{ formatPrice(item.bets) }}</td>
-          <td>{{ formatPrice(item.total) }}</td>
+          <td>{{ getPrizeTotalText(item) }}</td>
         </tr>
       </tbody>
     </table>

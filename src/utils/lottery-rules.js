@@ -1,4 +1,6 @@
 export const UNIT_STAKE_AMOUNT = 2
+export const LOTTERY_NUMBER_COUNT = 80
+export const DRAWN_NUMBER_COUNT = 20
 
 export const PLAY_TYPES = [
   { value: 'pick1', label: '选一', size: 1 },
@@ -82,4 +84,43 @@ export function getPrizeDisplayValue(playType, hitCount) {
 
 export function calculateStakeAmount(stakeCount, multiplier) {
   return stakeCount * UNIT_STAKE_AMOUNT * Number(multiplier || 0)
+}
+
+export function calculateRegularPrizeCounts(options) {
+  const playSize = getPlaySize(options.playType)
+  const missedCount = options.selectedCount - options.hitCount
+
+  return Array.from({ length: playSize + 1 }, (_, hitSize) => ({
+    hitSize,
+    count: combine(options.hitCount, hitSize) * combine(missedCount, playSize - hitSize),
+  }))
+}
+
+export function calculateDantuoPrizeCounts(options) {
+  const playSize = getPlaySize(options.playType)
+  const dragPickSize = playSize - options.bankerCount
+  const dragMissedCount = options.dragCount - options.dragHitCount
+
+  if (dragPickSize < 0) return []
+
+  return Array.from({ length: dragPickSize + 1 }, (_, dragHitSize) => ({
+    hitSize: options.bankerHitCount + dragHitSize,
+    count:
+      combine(options.dragHitCount, dragHitSize) *
+      combine(dragMissedCount, dragPickSize - dragHitSize),
+  }))
+}
+
+export function combine(total, pick) {
+  if (pick < 0 || total < pick) return 0
+  if (pick === 0 || total === pick) return 1
+
+  const smallerPick = Math.min(pick, total - pick)
+  let result = 1
+
+  for (let index = 1; index <= smallerPick; index += 1) {
+    result = (result * (total - smallerPick + index)) / index
+  }
+
+  return result
 }

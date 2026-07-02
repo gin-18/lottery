@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { PLAY_TYPES } from '@/utils/lottery-rules'
 
 const props = defineProps({
   startBetIndex: {
@@ -10,30 +11,16 @@ const props = defineProps({
 
 const emit = defineEmits(['select'])
 
-// 所有玩法
-const bets = [
-  '选一',
-  '选二',
-  '选三',
-  '选四',
-  '选五',
-  '选六',
-  '选七',
-  '选八',
-  '选九',
-  '选十',
-]
-
 // 选中的玩法下标
 const selectedBetIndex = ref(0)
 
 // 渲染的玩法
-const renderBets = computed(() => bets.slice(props.startBetIndex - 1, bets.length))
+const renderBets = computed(() => PLAY_TYPES.slice(props.startBetIndex - 1))
 
 // 选择玩法
 function onSelectOptional(betIndex) {
   selectedBetIndex.value = betIndex
-  emit('select', selectedBetIndex.value)
+  emit('select', renderBets.value[betIndex])
 }
 
 // 检查玩法是否被选中
@@ -42,7 +29,7 @@ function checkBetIsSelected(betIndex) {
 }
 
 onMounted(() => {
-  emit('select', selectedBetIndex.value)
+  emit('select', renderBets.value[selectedBetIndex.value])
 })
 </script>
 
@@ -52,14 +39,14 @@ onMounted(() => {
     <div class="grid grid-cols-5 gap-2">
       <button
         v-for="(bet, index) in renderBets"
-        :key="bet"
+        :key="bet.value"
         :class="{
           'btn btn-sm': true,
           'btn-primary': checkBetIsSelected(index),
         }"
         @click="onSelectOptional(index)"
       >
-        {{ bet }}
+        {{ bet.label }}
       </button>
     </div>
   </div>

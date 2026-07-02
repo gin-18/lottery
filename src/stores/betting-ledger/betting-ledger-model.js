@@ -1,5 +1,8 @@
 import {
+  calculateDantuoPrizeCounts,
+  calculateRegularPrizeCounts,
   calculateStakeAmount,
+  combine,
   getConfirmedPrizeAmount,
   getFloatingPrizeNotice,
   getPlaySize,
@@ -566,29 +569,26 @@ function getPrizeCounts(item, group, drawNumbers) {
 }
 
 function getRegularPrizeCounts(item, group, drawNumbers) {
-  const playSize = getPlaySize(item.playType)
   const hitCount = getIntersectionCount(group.numbers, drawNumbers)
-  const missedCount = group.numbers.length - hitCount
 
-  return Array.from({ length: playSize + 1 }, (_, hitSize) => ({
-    hitSize,
-    count: combine(hitCount, hitSize) * combine(missedCount, playSize - hitSize),
-  }))
+  return calculateRegularPrizeCounts({
+    playType: item.playType,
+    selectedCount: group.numbers.length,
+    hitCount,
+  })
 }
 
 function getDantuoPrizeCounts(item, group, drawNumbers) {
-  const playSize = getPlaySize(item.playType)
   const bankerHitCount = getIntersectionCount(group.bankerNumbers, drawNumbers)
-  const dragPickSize = playSize - group.bankerNumbers.length
   const dragHitCount = getIntersectionCount(group.dragNumbers, drawNumbers)
-  const dragMissedCount = group.dragNumbers.length - dragHitCount
 
-  return Array.from({ length: dragPickSize + 1 }, (_, dragHitSize) => ({
-    hitSize: bankerHitCount + dragHitSize,
-    count:
-      combine(dragHitCount, dragHitSize) *
-      combine(dragMissedCount, dragPickSize - dragHitSize),
-  }))
+  return calculateDantuoPrizeCounts({
+    playType: item.playType,
+    bankerCount: group.bankerNumbers.length,
+    dragCount: group.dragNumbers.length,
+    bankerHitCount,
+    dragHitCount,
+  })
 }
 
 function getTotalPrizeAmount(prizeCounts, item) {
@@ -673,18 +673,4 @@ function getMaxHitCount(prizeCounts) {
 
 function getIntersectionCount(numbers, drawNumbers) {
   return numbers.filter((number) => drawNumbers.includes(number)).length
-}
-
-function combine(total, pick) {
-  if (pick < 0 || total < pick) return 0
-  if (pick === 0 || total === pick) return 1
-
-  const smallerPick = Math.min(pick, total - pick)
-  let result = 1
-
-  for (let index = 1; index <= smallerPick; index += 1) {
-    result = (result * (total - smallerPick + index)) / index
-  }
-
-  return result
 }
