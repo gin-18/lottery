@@ -9,9 +9,14 @@ import {
   createEmptyGroup,
   createEmptyItem,
   DANTUO_MODE,
+  getAllBettingNumbers,
+  getNextBankerSelection,
+  getNextDragNumbers,
   getIssueOptionValue,
+  hasSelectedAllDragNumbers,
   parseIssueOption,
   SINGLE_MODE,
+  trimBankerSelection,
 } from '@/views/betting-ledger/utils/betting-record-form-draft'
 import {
   calculateDraftTotals,
@@ -25,7 +30,7 @@ import {
   getSelectionModeLabel,
 } from '@/utils/lottery-rules'
 
-const allNumbers = Array.from({ length: 80 }, (_, index) => index + 1)
+const allNumbers = getAllBettingNumbers()
 const HIGHLIGHT_DURATION_MS = 1200
 const ITEM_SCROLL_MARGIN = 8
 const REDUCED_MOTION_MEDIA_QUERY = '(prefers-reduced-motion: reduce)'
@@ -93,6 +98,7 @@ function createFormFromRecord(record) {
         id: group.id,
         numbers: [...group.numbers],
         bankerNumbers: [...group.bankerNumbers],
+        bankerNumberOrder: [...group.bankerNumbers],
         dragNumbers: [...group.dragNumbers],
       })),
     })),
@@ -187,7 +193,21 @@ function handleSelectionModeChange(item) {
   item.numberGroups = [createEmptyGroup(createId)]
 }
 
-function toggleGroupNumber(group, fieldName, number) {
+function handlePlayTypeChange(item, playType) {
+  if (item.selectionMode !== DANTUO_MODE) return
+
+  item.numberGroups.forEach((group) => {
+    applyBankerSelection(group, trimBankerSelection(group, playType))
+  })
+}
+
+function toggleGroupNumber(options) {
+  const { group, fieldName, number } = options
+  if (fieldName === 'bankerNumbers') {
+    toggleBankerNumber(group, options.playType, number)
+    return
+  }
+
   const numbers = group[fieldName]
 
   if (numbers.includes(number)) {
@@ -199,13 +219,32 @@ function toggleGroupNumber(group, fieldName, number) {
   group[fieldName] = [...numbers, number].sort((first, second) => first - second)
 }
 
+function toggleBankerNumber(group, playType, number) {
+  applyBankerSelection(group, getNextBankerSelection({ group, playType, number }))
+}
+
+function applyBankerSelection(group, selection) {
+  group.bankerNumbers = selection.bankerNumbers
+  group.bankerNumberOrder = selection.bankerNumberOrder
+  group.dragNumbers = selection.dragNumbers
+}
+
 function removeDantuoConflict(group, fieldName, number) {
   if (fieldName === 'bankerNumbers') {
     group.dragNumbers = group.dragNumbers.filter((itemNumber) => itemNumber !== number)
   }
   if (fieldName === 'dragNumbers') {
     group.bankerNumbers = group.bankerNumbers.filter((itemNumber) => itemNumber !== number)
+    group.bankerNumberOrder = group.bankerNumberOrder?.filter((itemNumber) => itemNumber !== number) ?? []
   }
+}
+
+function getDragBulkButtonLabel(group) {
+  return hasSelectedAllDragNumbers(group) ? '清空拖码' : '全选拖码'
+}
+
+function toggleDragNumbers(group) {
+  group.dragNumbers = getNextDragNumbers(group)
 }
 
 function isGroupNumberSelected(group, fieldName, number) {
@@ -387,6 +426,7 @@ onBeforeUnmount(() => {
                 v-model="item.playType"
                 :ref="(element) => setItemPlayTypeRef(item.id, element)"
                 class="select select-bordered w-full"
+                @change="handlePlayTypeChange(item, $event.target.value)"
               >
                 <option v-for="playType in PLAY_TYPES" :key="playType.value" :value="playType.value">
                   {{ playType.label }}
@@ -440,14 +480,24 @@ onBeforeUnmount(() => {
             >
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div class="text-sm font-medium">号码组 {{ groupIndex + 1 }}</div>
-                <button
-                  class="btn btn-xs btn-error"
-                  type="button"
-                  :disabled="item.numberGroups.length === 1"
-                  @click="removeGroup(item.id, group.id)"
-                >
-                  删除号码组
-                </button>
+                <div class="flex items-center gap-2">
+                  <button
+                    v-if="item.selectionMode === DANTUO_MODE"
+                    class="btn btn-xs btn-primary"
+                    type="button"
+                    @click="toggleDragNumbers(group)"
+                  >
+                    {{ getDragBulkButtonLabel(group) }}
+                  </button>
+                  <button
+                    class="btn btn-xs btn-error"
+                    type="button"
+                    :disabled="item.numberGroups.length === 1"
+                    @click="removeGroup(item.id, group.id)"
+                  >
+                    删除号码组
+                  </button>
+                </div>
               </div>
 
               <div v-if="item.selectionMode !== DANTUO_MODE" role="tablist" class="tabs tabs-lifted">
@@ -464,7 +514,7 @@ onBeforeUnmount(() => {
                       v-for="number in allNumbers"
                       :key="`${group.id}-${number}`"
                       type="button"
-                      @click="toggleGroupNumber(group, 'numbers', number)"
+                      @click="toggleGroupNumber({ group, fieldName: 'numbers', number })"
                     >
                       <Ball
                         :num="String(number).padStart(2, '0')"
@@ -492,7 +542,7 @@ onBeforeUnmount(() => {
                       v-for="number in allNumbers"
                       :key="`banker-${group.id}-${number}`"
                       type="button"
-                      @click="toggleGroupNumber(group, 'bankerNumbers', number)"
+                      @click="toggleGroupNumber({ group, fieldName: 'bankerNumbers', number, playType: item.playType })"
                     >
                       <Ball
                         :num="String(number).padStart(2, '0')"
@@ -517,7 +567,7 @@ onBeforeUnmount(() => {
                       v-for="number in allNumbers"
                       :key="`drag-${group.id}-${number}`"
                       type="button"
-                      @click="toggleGroupNumber(group, 'dragNumbers', number)"
+                      @click="toggleGroupNumber({ group, fieldName: 'dragNumbers', number })"
                     >
                       <Ball
                         :num="String(number).padStart(2, '0')"

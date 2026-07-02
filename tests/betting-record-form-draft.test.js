@@ -4,6 +4,12 @@ import { readFileSync } from 'node:fs'
 import {
   buildIssueOptions,
   createEmptyForm,
+  getBankerNumberLimit,
+  getAvailableDragNumbers,
+  getNextBankerSelection,
+  getNextDragNumbers,
+  hasSelectedAllDragNumbers,
+  trimBankerSelection,
 } from '../src/views/betting-ledger/utils/betting-record-form-draft.js'
 
 const ledgerSource = readFileSync(
@@ -48,6 +54,86 @@ test('buildIssueOptions prepends the next draw issue', () => {
   )
 })
 
+test('drag bulk selection selects all non-banker numbers and then clears', () => {
+  const group = {
+    bankerNumbers: [1, 2],
+    dragNumbers: [3, 4],
+  }
+
+  const nextDragNumbers = getNextDragNumbers(group)
+
+  assert.equal(nextDragNumbers.length, 78)
+  assert.deepEqual(nextDragNumbers.slice(0, 3), [3, 4, 5])
+  assert.equal(nextDragNumbers.at(-1), 80)
+  assert.equal(nextDragNumbers.includes(1), false)
+  assert.equal(nextDragNumbers.includes(2), false)
+  assert.equal(hasSelectedAllDragNumbers({ ...group, dragNumbers: nextDragNumbers }), true)
+  assert.deepEqual(getNextDragNumbers({ ...group, dragNumbers: nextDragNumbers }), [])
+})
+
+test('drag all-selected state follows the current banker exclusions', () => {
+  const dragNumbers = getAvailableDragNumbers({ bankerNumbers: [1], dragNumbers: [] })
+  const group = {
+    bankerNumbers: [1, 2],
+    dragNumbers: dragNumbers.filter((number) => number !== 2),
+  }
+
+  assert.equal(hasSelectedAllDragNumbers(group), true)
+})
+
+test('banker selection limit follows the selected play type', () => {
+  assert.equal(getBankerNumberLimit('pick1'), 0)
+  assert.equal(getBankerNumberLimit('pick2'), 1)
+  assert.equal(getBankerNumberLimit('pick10'), 9)
+})
+
+test('banker selection replaces the latest selected banker after reaching the play limit', () => {
+  const selection = getNextBankerSelection({
+    playType: 'pick3',
+    number: 9,
+    group: {
+      bankerNumbers: [3, 7],
+      bankerNumberOrder: [7, 3],
+      dragNumbers: [9, 10],
+    },
+  })
+
+  assert.deepEqual(selection.bankerNumbers, [7, 9])
+  assert.deepEqual(selection.bankerNumberOrder, [7, 9])
+  assert.deepEqual(selection.dragNumbers, [10])
+})
+
+test('banker selection removal updates the temporary selected order', () => {
+  const selection = getNextBankerSelection({
+    playType: 'pick4',
+    number: 7,
+    group: {
+      bankerNumbers: [3, 7],
+      bankerNumberOrder: [7, 3],
+      dragNumbers: [10],
+    },
+  })
+
+  assert.deepEqual(selection.bankerNumbers, [3])
+  assert.deepEqual(selection.bankerNumberOrder, [3])
+  assert.deepEqual(selection.dragNumbers, [10])
+})
+
+test('banker selection trims newer selected bankers when play limit shrinks', () => {
+  const selection = trimBankerSelection(
+    {
+      bankerNumbers: [3, 7, 9, 12],
+      bankerNumberOrder: [7, 3, 12, 9],
+      dragNumbers: [10, 11],
+    },
+    'pick3',
+  )
+
+  assert.deepEqual(selection.bankerNumbers, [3, 7])
+  assert.deepEqual(selection.bankerNumberOrder, [7, 3])
+  assert.deepEqual(selection.dragNumbers, [10, 11])
+})
+
 test('delete group button uses error style instead of ghost', () => {
   const buttonMatch = componentSource.match(/<button[\s\S]*?删除号码组[\s\S]*?<\/button>/)
 
@@ -89,6 +175,33 @@ test('number selection uses tabs inside each number group', () => {
   assert.match(componentSource, /class="tab-content bg-base-100 border-base-300 rounded-box p-4"/)
   assert.doesNotMatch(componentSource, /<div class="text-sm font-medium">胆码<\/div>/)
   assert.doesNotMatch(componentSource, /<div class="text-sm font-medium">拖码<\/div>/)
+})
+
+test('dantuo group header exposes bulk drag selection before the delete button', () => {
+  const groupHeaderMatch = componentSource.match(
+    /<div class="text-sm font-medium">号码组 \{\{ groupIndex \+ 1 \}\}<\/div>[\s\S]*?<div class="flex items-center gap-2">[\s\S]*?<\/div>/,
+  )
+  const dragTabMatch = componentSource.match(/aria-label="拖码"[\s\S]*?`drag-\$\{group\.id\}-\$\{number\}`/)
+
+  assert.ok(groupHeaderMatch, 'expected to find the number group header controls')
+  assert.ok(dragTabMatch, 'expected to find the drag tab content')
+  assert.match(groupHeaderMatch[0], /v-if="item\.selectionMode === DANTUO_MODE"/)
+  assert.match(
+    groupHeaderMatch[0],
+    /@click="toggleDragNumbers\(group\)"[\s\S]*@click="removeGroup\(item\.id, group\.id\)"/,
+  )
+  assert.match(groupHeaderMatch[0], /{{ getDragBulkButtonLabel\(group\) }}/)
+  assert.doesNotMatch(dragTabMatch[0], /@click="toggleDragNumbers\(group\)"/)
+})
+
+test('betting form keeps banker selection order temporary and trims it on play changes', () => {
+  const getDraftMatch = componentSource.match(/function getDraft\(\) \{[\s\S]*?function handleSubmit/)
+
+  assert.ok(getDraftMatch, 'expected to find getDraft')
+  assert.match(componentSource, /bankerNumberOrder: \[\.\.\.group\.bankerNumbers\]/)
+  assert.match(componentSource, /@change="handlePlayTypeChange\(item, \$event\.target\.value\)"/)
+  assert.match(componentSource, /applyBankerSelection\(group, trimBankerSelection\(group, playType\)\)/)
+  assert.doesNotMatch(getDraftMatch[0], /bankerNumberOrder/)
 })
 
 test('adding an item wires scroll, focus, and reduced-motion handling', () => {
