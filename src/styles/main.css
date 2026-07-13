@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    touch-action: manipulation;
+  }
+
   :where(
       button,
       input,
