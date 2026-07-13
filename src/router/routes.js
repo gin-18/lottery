@@ -2,7 +2,7 @@ export const routes = [
   {
     path: '/',
     name: 'Home',
-    meta: { title: '快乐8研究所' },
+    meta: { title: '快乐8研究所 - 福彩快乐8开奖数据分析与奖金计算' },
     component: () => import('@/views/home/Home.vue'),
   },
   {
