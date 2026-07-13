@@ -11,7 +11,6 @@ const statisticsViewPaths = [
 const statisticsViewSources = statisticsViewPaths.map((path) =>
   readFileSync(new URL(path, import.meta.url), 'utf8'),
 )
-const [intervalStatisticsSource, , tailStatisticsSource] = statisticsViewSources
 
 test('statistics views own their settings trigger and drawer', () => {
   for (const source of statisticsViewSources) {
@@ -32,8 +31,8 @@ test('the retired SettingBox component is removed', () => {
   assert.equal(existsSync(settingBoxUrl), false)
 })
 
-test('interval and tail settings drawers match the betting form width', () => {
-  for (const source of [intervalStatisticsSource, tailStatisticsSource]) {
+test('statistics settings drawers match the betting form width', () => {
+  for (const source of statisticsViewSources) {
     assert.match(source, /panel-class="md:w-1\/3 lg:w-1\/4"/)
   }
 })

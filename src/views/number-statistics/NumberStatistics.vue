@@ -80,7 +80,11 @@ provide('rawDataArray', rawDataArray)
     <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
   </button>
 
-  <LoDrawer v-model="isSettingsDrawerOpen" title="号码分析设置">
+  <LoDrawer
+    v-model="isSettingsDrawerOpen"
+    title="号码分析设置"
+    panel-class="md:w-1/3 lg:w-1/4"
+  >
     <CurrentNumberStatisticsSetting />
     <RepeatNumberStatisticsSetting />
     <NumberTimesStatisticsSetting />
