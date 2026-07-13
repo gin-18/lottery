@@ -15,14 +15,14 @@ import AttachedBet from './AttachedBet.vue'
         checked
         type="radio"
         name="my_tabs_2"
-        class="tab"
+        class="tab whitespace-nowrap"
         aria-label="复式"
       />
       <div class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <CompoundBet />
       </div>
 
-      <input type="radio" name="my_tabs_2" class="tab" aria-label="胆拖" />
+      <input type="radio" name="my_tabs_2" class="tab whitespace-nowrap" aria-label="胆拖" />
       <div class="tab-content bg-base-100 border-base-300 rounded-box p-6">
         <AttachedBet />
       </div>

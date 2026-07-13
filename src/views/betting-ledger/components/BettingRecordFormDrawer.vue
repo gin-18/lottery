@@ -537,7 +537,7 @@ onBeforeUnmount(() => {
                   aria-label="胆码"
                 />
                 <div class="tab-content bg-base-100 border-base-300 rounded-box p-4">
-                  <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(20,minmax(0,1fr))]">
+                  <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(10,minmax(0,1fr))]">
                     <button
                       v-for="number in allNumbers"
                       :key="`banker-${group.id}-${number}`"
@@ -562,7 +562,7 @@ onBeforeUnmount(() => {
                   aria-label="拖码"
                 />
                 <div class="tab-content bg-base-100 border-base-300 rounded-box p-4">
-                  <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(20,minmax(0,1fr))]">
+                  <div class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(10,minmax(0,1fr))]">
                     <button
                       v-for="number in allNumbers"
                       :key="`drag-${group.id}-${number}`"

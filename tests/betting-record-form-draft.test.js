@@ -177,6 +177,14 @@ test('number selection uses tabs inside each number group', () => {
   assert.doesNotMatch(componentSource, /<div class="text-sm font-medium">拖码<\/div>/)
 })
 
+test('betting form keeps every number selection grid at ten columns', () => {
+  const tenColumnGridClass =
+    'class="grid grid-cols-10 gap-2 md:grid-cols-[repeat(10,minmax(0,1fr))]"'
+  const tenColumnGridCount = componentSource.split(tenColumnGridClass).length - 1
+
+  assert.equal(tenColumnGridCount, 3)
+})
+
 test('dantuo group header exposes bulk drag selection before the delete button', () => {
   const groupHeaderMatch = componentSource.match(
     /<div class="text-sm font-medium">号码组 \{\{ groupIndex \+ 1 \}\}<\/div>[\s\S]*?<div class="flex items-center gap-2">[\s\S]*?<\/div>/,
