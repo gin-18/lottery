@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getDataByNum } from '@/assets/js/request'
+import { getDataByNum } from '@/api/lottery'
 
 export const useNumberDataStore = defineStore('number_data', {
   state: () => ({

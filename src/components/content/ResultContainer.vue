@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { formatDay, formatData } from '@/assets/js/utils'
+import { formatDay, formatData } from '@/utils/lottery-data'
 import Ball from '@/components/content/Ball.vue'
 
 const props = defineProps({

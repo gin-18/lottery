@@ -1,4 +1,4 @@
-import { formatData, generateAllNumbers } from './utils'
+import { formatData, generateAllNumbers } from './lottery-data'
 
 export function countRangeInGroupCode(groupDataArray, ranges, categories) {
   const datas = groupDataArray.map((item) =>

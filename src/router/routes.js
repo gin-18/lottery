@@ -2,7 +2,7 @@ export const routes = [
   {
     path: '/',
     name: 'Home',
-    meta: { title: '快乐8研究所' },
+    meta: { title: '快乐8研究所 - 福彩快乐8开奖数据分析与奖金计算' },
     component: () => import('@/views/home/Home.vue'),
   },
   {
@@ -26,9 +26,21 @@ export const routes = [
   },
   {
     path: '/tail',
-    name: 'tail',
+    name: 'Tail',
     meta: { title: '尾数分析' },
     component: () => import('@/views/tail-statistics/TailStatistics.vue'),
+  },
+  {
+    path: '/tools',
+    name: 'Tools',
+    meta: { title: '计算器' },
+    component: () => import('@/views/tool-box/ToolBox.vue'),
+  },
+  {
+    path: '/betting',
+    name: 'BettingLedger',
+    meta: { title: '投注记录' },
+    component: () => import('@/views/betting-ledger/BettingLedger.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

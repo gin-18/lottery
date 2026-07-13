@@ -1,6 +1,61 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@plugin "@iconify/tailwind4";
+@plugin "daisyui" {
+  themes: emerald --default;
+}
+
+@theme {
+  --animate-fade-in: fade-in 0.5s ease-in-out both;
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
+}
+
+@theme {
+  --animate-fade-out: fade-out 0.5s ease-in-out both;
+  @keyframes fade-out {
+    0% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+@theme {
+  --animate-slide-in-right: slide-in-right 0.5s ease-in-out both;
+  @keyframes slide-in-right {
+    0% {
+      transform: translateX(1000px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@theme {
+  --animate-slide-out-right: slide-out-right 0.5s ease-in-out both;
+  @keyframes slide-out-right {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(1000px);
+      opacity: 0;
+    }
+  }
+}
 
 main {
   @apply prose prose-sm mt-4 px-2 md:prose md:prose-base md:container md:mx-auto;

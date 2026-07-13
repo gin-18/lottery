@@ -1,7 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useRepeatNumberStatisticsStore } from '@/stores/number-statistics/repeat-number-statistics'
-import { formatData, setBallColorInRange } from '@/assets/js/utils'
+import { formatData, setBallColorInRange } from '@/utils/lottery-data'
 import Ball from '@/components/content/Ball.vue'
 import CodeDate from '@/components/content/CodeDate.vue'
 
@@ -40,7 +40,7 @@ function setBallColor(num) {
   <p>{{ description }}</p>
   <CodeDate v-if="currentCode" :data="[currentCode]" />
   <div class="overflow-x-auto">
-    <table v-if="result" class="table">
+    <table v-if="result" class="!table">
       <thead>
         <tr>
           <th scope="col">{{ thead }}</th>

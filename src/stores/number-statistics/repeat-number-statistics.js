@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { formatData } from '@/assets/js/utils'
+import { formatData } from '@/utils/lottery-data'
 
 export const useRepeatNumberStatisticsStore = defineStore(
   'repeat_number_statistics',

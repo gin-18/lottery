@@ -3,7 +3,7 @@ import {
   formatData,
   countNumberInData,
   generateAllNumbers,
-} from '@/assets/js/utils'
+} from '@/utils/lottery-data'
 
 export const useNumberDistributionStore = defineStore('number_distribution', {
   state: () => ({

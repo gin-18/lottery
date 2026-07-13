@@ -3,7 +3,7 @@ import {
   countRangeInGroupCode,
   generateIntervals,
   generateIntervalRanges,
-} from '@/assets/js/range_analyze'
+} from '@/utils/lottery-range'
 
 export const useIntervalTendencyStatisticsStore = defineStore(
   'interval-tendency-statistics',

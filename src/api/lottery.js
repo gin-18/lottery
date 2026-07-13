@@ -13,7 +13,12 @@ export async function getDataByNum(num) {
 }
 
 export async function getDataByCode(code) {
-  const response = await fetch(`${url}?type=klb&code=${code}`)
+  const queryCode = getCodeValue(code)
+  const response = await fetch(`${url}?type=klb&code=${encodeURIComponent(queryCode)}`)
   const result = await response.json()
   return result.data
+}
+
+function getCodeValue(value = '') {
+  return String(value).split('(')[0].trim()
 }

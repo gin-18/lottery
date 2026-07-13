@@ -17,8 +17,8 @@
 import { inject, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberFrequencyStatisticsStore } from '@/stores/number-statistics/number-frequency-statistics'
-import echarts from '@/assets/js/echarts'
-import { chartPalette } from '@/assets/js/palette'
+import echarts from '@/charts/echarts'
+import { chartPalette } from '@/charts/palette'
 import CodeDate from '@/components/content/CodeDate.vue'
 
 const numberFrequencyStatisticsStore = useNumberFrequencyStatisticsStore()
