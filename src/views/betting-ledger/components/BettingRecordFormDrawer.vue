@@ -378,7 +378,7 @@ onBeforeUnmount(() => {
     @update:model-value="handleDrawerChange"
   >
     <form id="betting-record-form" class="grid gap-4" @submit.prevent="handleSubmit">
-      <div class="grid gap-4 md:grid-cols-3">
+      <div class="grid gap-4">
         <fieldset class="fieldset w-full">
           <legend class="fieldset-legend">投注期次</legend>
           <select

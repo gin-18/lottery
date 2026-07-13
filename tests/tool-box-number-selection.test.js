@@ -10,6 +10,10 @@ const numberSelectionSource = readFileSync(
   new URL('../src/views/tool-box/components/number-selection/NumberSelection.vue', import.meta.url),
   'utf8',
 )
+const numberSelectionDrawerSource = readFileSync(
+  new URL('../src/views/tool-box/components/number-selection/NumberSelectionDrawer.vue', import.meta.url),
+  'utf8',
+)
 const compoundBetSource = readFileSync(
   new URL('../src/views/tool-box/CompoundBet.vue', import.meta.url),
   'utf8',
@@ -40,6 +44,10 @@ test('tool-box number selection keeps count button content on one line', () => {
   assert.match(buttonMatch[0], /whitespace-nowrap/)
   assert.match(buttonMatch[0], /shrink-0/)
   assert.match(buttonMatch[0], /<span class="whitespace-nowrap">{{ props\.selectedNumber }} 个<\/span>/)
+})
+
+test('tool-box number selection drawer matches the betting form width', () => {
+  assert.match(numberSelectionDrawerSource, /panel-class="md:w-1\/3 lg:w-1\/4"/)
 })
 
 test('attached bet keeps banker and drag labels on one line', () => {

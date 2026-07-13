@@ -36,6 +36,7 @@ function selectNumber(number) {
   <LoDrawer
     :model-value="props.modelValue"
     :title="props.title"
+    panel-class="md:w-1/3 lg:w-1/4"
     @update:model-value="$emit('update:modelValue', $event)"
   >
     <section>

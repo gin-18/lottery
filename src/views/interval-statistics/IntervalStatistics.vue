@@ -150,7 +150,11 @@ function loadIntervalTendencyStatistics() {
     <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
   </button>
 
-  <LoDrawer v-model="isSettingsDrawerOpen" title="区间统计设置">
+  <LoDrawer
+    v-model="isSettingsDrawerOpen"
+    title="区间统计设置"
+    panel-class="md:w-1/3 lg:w-1/4"
+  >
     <RepeatNumberStatisticsSetting />
     <IntervalNumberStatisticsSetting />
     <IntervalTimesStatisticsSetting />

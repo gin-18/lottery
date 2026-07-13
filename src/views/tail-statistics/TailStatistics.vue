@@ -150,7 +150,11 @@ function loadTailTendencyStatistics() {
     <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
   </button>
 
-  <LoDrawer v-model="isSettingsDrawerOpen" title="尾数统计设置">
+  <LoDrawer
+    v-model="isSettingsDrawerOpen"
+    title="尾数统计设置"
+    panel-class="md:w-1/3 lg:w-1/4"
+  >
     <RepeatStatisticsSetting />
     <TailNumberStatisticsSetting />
     <TailTimesStatisticsSetting />

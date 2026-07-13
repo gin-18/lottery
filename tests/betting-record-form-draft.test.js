@@ -159,6 +159,16 @@ test('add item button lives in the drawer footer', () => {
   assert.match(footerMatch[0], /<div class="flex items-center gap-2">[\s\S]*重置[\s\S]*保存/)
 })
 
+test('issue selection spans the full betting form width', () => {
+  const issueSelectionMatch = componentSource.match(
+    /<form id="betting-record-form"[\s\S]*?<legend class="fieldset-legend">投注期次<\/legend>[\s\S]*?<\/fieldset>\s*<\/div>/,
+  )
+
+  assert.ok(issueSelectionMatch, 'expected to find the issue selection section')
+  assert.match(issueSelectionMatch[0], /<div class="grid gap-4">/)
+  assert.doesNotMatch(issueSelectionMatch[0], /md:grid-cols-3/)
+})
+
 test('number selection uses tabs inside each number group', () => {
   assert.match(componentSource, /function getNumberTabName\(group\) \{\s+return `number-tabs-\$\{group\.id\}`\s+\}/)
   assert.match(
