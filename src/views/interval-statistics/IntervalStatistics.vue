@@ -1,12 +1,12 @@
 <script setup>
-import { provide, watch, computed, onMounted } from 'vue'
+import { provide, watch, computed, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useIntervalDataStore } from '@/stores/interval-statistics/interval-data'
 import { useIntervalNumberStatisticsStore } from '@/stores/interval-statistics/interval-number-statistics'
 import { useIntervalTimesStatisticsStore } from '@/stores/interval-statistics/interval-times-statistics'
 import { useIntervalTendencyStatisticsStore } from '@/stores/interval-statistics/interval-tendency-statistics'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
-import SettingBox from '@/components/content/SettingBox.vue'
+import LoDrawer from '@/components/content/LoDrawer.vue'
 import RepeatNumberStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
 import RepeatNumberStatisticsSetting from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
 import RangeNumberStatistics from '@/components/range/RangeNumberStatistics.vue'
@@ -45,6 +45,7 @@ const {
 } = storeToRefs(intervalTendencyStatisticsStore)
 
 const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+const isSettingsDrawerOpen = ref(false)
 
 watch(
   () => intervalNumberStatisticsCurrentCodeIndex.value,
@@ -140,10 +141,19 @@ function loadIntervalTendencyStatistics() {
     </LoadingWrapper>
   </section>
 
-  <SettingBox title="区间统计设置">
+  <button
+    type="button"
+    aria-label="打开设置"
+    class="btn fixed bottom-4 right-4"
+    @click="isSettingsDrawerOpen = true"
+  >
+    <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
+  </button>
+
+  <LoDrawer v-model="isSettingsDrawerOpen" title="区间统计设置">
     <RepeatNumberStatisticsSetting />
     <IntervalNumberStatisticsSetting />
     <IntervalTimesStatisticsSetting />
     <IntervalTendencyStatisticsSetting />
-  </SettingBox>
+  </LoDrawer>
 </template>

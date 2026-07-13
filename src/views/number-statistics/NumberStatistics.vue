@@ -1,9 +1,9 @@
 <script setup>
-import { computed, provide, onMounted } from 'vue'
+import { computed, provide, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useNumberDataStore } from '@/stores/number-statistics/number-data'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
-import SettingBox from '@/components/content/SettingBox.vue'
+import LoDrawer from '@/components/content/LoDrawer.vue'
 import CurrentNumberStatistics from './components/current-number-statistics/CurrentNumberStatistics.vue'
 import CurrentNumberStatisticsSetting from './components/current-number-statistics/CurrentNumberStatisticsSetting.vue'
 import RepeatNumberStatistics from './components/repeat-number-statistics/RepeatNumberStatistics.vue'
@@ -21,6 +21,7 @@ const numberDataStore = useNumberDataStore()
 const { rawDataArray } = storeToRefs(numberDataStore)
 
 const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+const isSettingsDrawerOpen = ref(false)
 
 onMounted(numberDataStore.initData)
 
@@ -70,12 +71,21 @@ provide('rawDataArray', rawDataArray)
     </LoadingWrapper>
   </section>
 
-  <SettingBox title="号码分析设置">
+  <button
+    type="button"
+    aria-label="打开设置"
+    class="btn fixed bottom-4 right-4"
+    @click="isSettingsDrawerOpen = true"
+  >
+    <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
+  </button>
+
+  <LoDrawer v-model="isSettingsDrawerOpen" title="号码分析设置">
     <CurrentNumberStatisticsSetting />
     <RepeatNumberStatisticsSetting />
     <NumberTimesStatisticsSetting />
     <NumberFrequencyStatisticsSetting />
     <CurrentOmissionStatisticsSetting />
     <NumberDistributionSetting />
-  </SettingBox>
+  </LoDrawer>
 </template>

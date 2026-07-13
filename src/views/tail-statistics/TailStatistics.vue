@@ -1,12 +1,12 @@
 <script setup>
-import { provide, computed, watch, onMounted } from 'vue'
+import { provide, computed, watch, onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTailDataStore } from '@/stores/tail-statistics/tail-data'
 import { useTailNumberStatisticsStore } from '@/stores/tail-statistics/tail-number-statistics'
 import { useTailTimesStatisticsStore } from '@/stores/tail-statistics/tail-times-statistics'
 import { useTailTendencyStatisticsStore } from '@/stores/tail-statistics/tail-tendency-statistics'
 import LoadingWrapper from '@/components/content/LoadingWrapper.vue'
-import SettingBox from '@/components/content/SettingBox.vue'
+import LoDrawer from '@/components/content/LoDrawer.vue'
 import RepeatStatistics from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatistics.vue'
 import RepeatStatisticsSetting from '@/views/number-statistics/components/repeat-number-statistics/RepeatNumberStatisticsSetting.vue'
 import RangeNumberStatistics from '@/components/range/RangeNumberStatistics.vue'
@@ -45,6 +45,7 @@ const {
 } = storeToRefs(tailTendencyStatisticsStore)
 
 const isLoading = computed(() => (rawDataArray.value.length ? false : true))
+const isSettingsDrawerOpen = ref(false)
 
 provide('rawDataArray', rawDataArray)
 
@@ -140,10 +141,19 @@ function loadTailTendencyStatistics() {
     </LoadingWrapper>
   </section>
 
-  <SettingBox title="尾数统计设置">
+  <button
+    type="button"
+    aria-label="打开设置"
+    class="btn fixed bottom-4 right-4"
+    @click="isSettingsDrawerOpen = true"
+  >
+    <span class="icon-[octicon--gear-16]" aria-hidden="true"></span>
+  </button>
+
+  <LoDrawer v-model="isSettingsDrawerOpen" title="尾数统计设置">
     <RepeatStatisticsSetting />
     <TailNumberStatisticsSetting />
     <TailTimesStatisticsSetting />
     <TailTendencyStatisticsSetting />
-  </SettingBox>
+  </LoDrawer>
 </template>
