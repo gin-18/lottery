@@ -373,7 +373,7 @@ onBeforeUnmount(() => {
 <template>
   <LoDrawer
     :model-value="isOpen"
-    :title="editingRecord ? '编辑投注' : '新增投注'"
+    :title="editingRecord ? '编辑投注记录' : '新增投注记录'"
     panel-class="md:w-1/3 lg:w-1/4"
     @update:model-value="handleDrawerChange"
   >

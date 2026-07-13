@@ -143,6 +143,13 @@ test('delete group button uses error style instead of ghost', () => {
   assert.doesNotMatch(buttonMatch[0], /btn-ghost/)
 })
 
+test('betting form drawer titles describe betting records', () => {
+  assert.match(
+    componentSource,
+    /:title="editingRecord \? '编辑投注记录' : '新增投注记录'"/,
+  )
+})
+
 test('add item button lives in the drawer footer', () => {
   const footerMatch = componentSource.match(/<template #footer>[\s\S]*?<\/template>/)
   const sourceBeforeFooter = componentSource.split('<template #footer>')[0]
