@@ -1,25 +1,72 @@
 # :chart_with_upwards_trend: 快乐8研究所
 
-根据本人的习惯，对福彩的快乐8开奖数据进行了一些统计，包括号码的分析，区间的分析和尾数的分析。
+快乐8研究所是一个面向快乐8用户的开奖数据研究工具，提供开奖查询、号码分析、区间与尾数分析、奖金计算和个人投注记录能力。项目不提供彩票投注、预测或选号推荐服务。
 
-## 号码分析
+![home](https://github.com/gin-18/pictures/blob/main/readme/lottery-8/home.png?raw=true)
 
-实现当前期次的开奖号码，当前期次与上一期次的重复号码的统计，根据开奖次数归类所有的号码，开奖次数的频率图，以及n期的号码分布。
+## 核心功能
 
-<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/number_analyze.png?raw=true" alt="number_analyze" />
+- **开奖数据**：查看最新开奖、近期开奖记录和下一期开奖信息。
+- **号码分析**：统计当前开奖、重号、出现次数、频率、遗漏和号码分布，并支持调整统计期数等参数。
+- **区间分析**：查看开奖号码和重号的区间分布、区间出现总数及区间走势。
+- **尾数分析**：查看开奖号码和重号的尾数分布、尾数出现总数及尾数走势。
+- **奖金计算器**：按快乐8玩法计算复式、胆拖的注数、投注成本和参考奖金。
+- **本地投注台账**：记录单式、复式和胆拖投注，计算注数与成本，根据开奖数据结算，并按月汇总投注成本、中奖金额和营收。
+- **台账备份**：将全部投注记录导出为 JSON 文件，或从导出的 JSON 文件恢复记录。
 
-## 区间分析
+[在线体验](https://lottery.gin-18.top)
 
-实现当前期次与上一期次的重复号码的统计，当前期次的开奖号码和重复号码落在各个区间的情况，以及每个区间开出号码的走势图。
+## 数据与隐私
 
-<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/interval_analyze.png?raw=true" alt="interval_analyze" />
+- 开奖数据来自第三方接口，接口可用性和数据准确性依赖上游服务；开奖结果及中奖情况请以官方公告和实际兑奖结果为准。
+- 投注台账存储在当前浏览器的 IndexedDB 中，不会在设备之间自动同步。清除浏览器站点数据可能导致记录丢失，请定期导出 JSON 文件备份。
+- 导入备份时，如果导入记录与本地记录的 ID 相同，导入内容会覆盖对应的本地记录。
 
-## 尾数分析
+## 本地开发
 
-实现当前期次与上一期次的重复号码的统计，当前期次的开奖号码和重复号码落在各个尾部的情况，以及每个尾部开出号码的走势图。
+项目使用 pnpm 10.6.2 管理依赖。准备好 Node.js 和 pnpm 后运行：
 
-<img src="https://github.com/gin-18/pictures/blob/master/readme/lottery-8/tail_analyze.png?raw=true" alt="tail_analyze" />
+```bash
+pnpm install
+pnpm dev
+```
+
+Vite 启动后会在终端输出本地访问地址。
+
+构建并预览生产版本：
+
+```bash
+pnpm build
+pnpm preview
+```
+
+## 技术栈
+
+- Vue 3、Vue Router、Pinia
+- Vite 5
+- Tailwind CSS、daisyUI
+- ECharts
+- Dexie.js、IndexedDB
+- Vercel Analytics、Speed Insights
+
+## 项目结构
+
+```text
+src/
+├── api/          # 开奖数据接口
+├── charts/       # 图表基础配置
+├── components/   # 通用组件
+├── stores/       # 页面状态与投注台账持久化
+├── utils/        # 开奖数据、区间和奖金规则
+└── views/        # 路由页面与页面私有组件
+tests/            # 自动化测试
+docs/             # 功能设计、架构决策与前端规范
+```
+
+## 使用边界
+
+本项目仅用于开奖数据展示、统计研究、奖金试算和个人记录。所有计算结果仅供参考，不构成投注建议，也不能替代官方开奖结果、奖金公告或实际兑奖结果。
 
 ## License
 
-[MIT](https://github.com/gin-18/lottery?tab=MIT-1-ov-file#readme)
+[MIT](./LICENSE)
